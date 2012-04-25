@@ -1,0 +1,31 @@
+<div class='well' style='margin-top:20px'><h2>Quotes</h2></div>
+<table class='table table-striped table-bordered'>
+	<tr>
+		<th style='text-align:center'>Quote</th>
+		<th style='text-align:center'>Citation</th>
+		<th style='text-align:center'>Book</th>
+		<th style='text-align:center'>Created At</th>
+		<th style='text-align:center'>Active</th>
+		<th style='text-align:center'>Action</th>
+	</tr>
+	<% @quotes.each do |quote| %>
+		<tr>
+			<td><%=quote.quote%></td>
+			<td><%=quote.citation%></td>
+			<td><%=quote.book%></td>
+			<td><%=quote.created_at.strftime("%m/%d/%Y")%></td>
+			<td>
+			  <% if quote.active %>
+			   	<div class='label label-success'>active</div>
+			  <%else%>
+				<div class='label label-important'><a href='/quotes/<%=quote.id%>/activate' style='color:white;text-decoration:none'> activate</a></div>
+			  <% end %>
+			</td>
+			<td>
+				<% unless quote.active %>
+					<div class='label'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit<a></div>
+				<%end%>
+			</td>
+		</tr>
+	<%end%>
+</table>
