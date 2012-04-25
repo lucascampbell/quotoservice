@@ -19,6 +19,7 @@ QuotesService::Application.configure do
 
   # Generate digests for assets URLs
   config.assets.digest = false
+  config.assets.precompile += %w( public.js public.css  )
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
