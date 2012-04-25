@@ -1,17 +1,5 @@
 ---
 bird.png: bird.png
 rails.png: rails.png
-api.js: api.js
 application.js: application.js
-jquery-1.7.1.js: jquery-1.7.1.js
-quotes.js: quotes.js
-api.css: api.css
 application.css: application.css
-bootstrap.css: bootstrap.css
-quotes.css: quotes.css
-jquery-ui.js: jquery-ui.js
-jquery-ui.min.js: jquery-ui.min.js
-jquery.js: jquery.js
-jquery.min.js: jquery.min.js
-jquery_ujs.js: jquery_ujs.js
-coffee-script.js: coffee-script.js
