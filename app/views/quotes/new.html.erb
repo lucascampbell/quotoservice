@@ -19,8 +19,15 @@
 	<%= f.label :citation %>
   	<%= f.text_field :citation %>
 	<%= f.label :book %>
-  	<%= f.text_field :book %><br/>
-  	
+  	<%= f.text_field :book %>
+	<%= f.label :topic %>
+  	<%= f.select(:topic,Quote::TOPIC,{:prompt=>"Select tags"}) %><br/>
+	<%= f.label :translation %>
+  	<%= f.text_field :translation %>
+	<%= f.label :abbreviation %>
+  	<%= f.text_field :abbreviation %>
+	<%= f.label :tags %>
+  	<%= f.text_field :tags%><br/>
 	<%= f.label :active,{:style=>'display:inline'} %>
 	<%= f.check_box :active %>
   </div>
