@@ -11,7 +11,8 @@ class QuotesController < ApplicationController
   end
   
   def create
-    @quote = Quote.new(params[:quote])
+    @quote    = Quote.new(params[:quote])
+    @quote.set_id
     if @quote.save
       flash[:notice] = "Quote saved successfully"
       redirect_to :action => :index

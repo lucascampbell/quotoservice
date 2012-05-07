@@ -5,6 +5,7 @@ QuotesService::Application.routes.draw do
   
   #API
   match 'api/v1/get_quotes' => 'api#get_quotes', :via=>:get
+  match 'api/v1/set_quote'  => 'api#set_quote',  :via=>:post
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

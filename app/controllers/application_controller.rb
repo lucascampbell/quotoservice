@@ -14,6 +14,10 @@ class ApplicationController < ActionController::Base
       render :json => {:text => "Internal Server Error"}.to_json, :status => 500
     end
     
+    def bad_data_error_action
+      render :json => {:text => "Bad data error"}.to_json, :status => 400
+    end
+    
     def not_found_action
       render :json => {:text => "Not Found."}.to_json, :status => 404
     end
