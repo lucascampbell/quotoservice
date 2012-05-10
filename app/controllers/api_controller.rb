@@ -4,9 +4,6 @@ class ApiController < ApplicationController
   
   def get_quotes
     return not_found_action unless params[:id]
-    Quote.all.each do |q|
-      puts q.id
-    end
     
     quotes = Quote.where("id > ? AND active = ?",params[:id],true).order("id ASC")
     if quotes.blank? 
