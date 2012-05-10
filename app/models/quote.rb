@@ -3,7 +3,7 @@ class Quote < ActiveRecord::Base
   validates :quote, :uniqueness => { :case_sensitive => false }
   #validates :book, :presence => true
   #validates :citation, :presence => true
-  has_and_belongs_to_many :tags
+  has_and_belongs_to_many :tag
   belongs_to :topic
   
   STARTING_ID = 5
