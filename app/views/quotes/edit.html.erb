@@ -21,12 +21,12 @@
 	<%= f.label :book %>
   	<%= f.text_field :book %><br/>
   	<%= f.label :topic %>
-  	<%= f.select(:topic,Quote::TOPIC,{:prompt=>"Select topic"}) %><br/>
+  	<%= f.select('topic_id',@topics.collect{|t| [t.name,t.id]},{:prompt=>"Select topic"}) %><br/>
 	<%= f.label :translation %>
   	<%= f.text_field :translation %>
 	<%= f.label :abbreviation %>
   	<%= f.text_field :abbreviation %>
-	<%= f.label :tags %>(Comma Separted)
+	<%= f.select("tags",@tags.collect{|t|[t.name,t.id]},{:prompt=>"Select topic"},{:multiple=>true}) %><br/>
   	<%= f.text_field :tags%><br/>
 	<%= f.label :active,{:style=>'display:inline'} %>
 	<%= f.check_box :active %>
