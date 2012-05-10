@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  skip_before_filter :authenticate_user!, :if => Proc.new { |c| c.request.format == 'application/json' }
+  skip_before_filter :authenticate_user!
   before_filter :authenticate_token
   
   def get_quotes
