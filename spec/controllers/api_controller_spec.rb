@@ -4,6 +4,7 @@ describe ApiController do
   before(:each) do
     request.env['HTTP_AUTHORIZATION'] = '&3!kZ1Ct:zh7GaM'
     Quote.delete_all
+    Tag.delete_all
   end
   
   it "should return 500 with bad token" do
@@ -32,21 +33,21 @@ describe ApiController do
      resp["id"].should == 2
   end
   
-  it "should return with uptodate" do
+  it "should return with noupdates" do
      Quote.create({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
      Quote.create( {:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
      get 'get_quotes',:id=>2
      response.status.should == 200
      resp = JSON.parse(response.body)
      resp["q"].count.should == 0
-     resp["id"].should == 'uptodate'
+     resp["id"].should == 'noupdates'
   end
    
   it "should set new quote and return original id" do
-     post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'3002',:id_last => '4000'}
+     post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'5',:id_last => '4000'}
      response.status.should == 200
      resp = JSON.parse(response.body)
-     resp['id'].should == 3002
+     resp['id'].should == 5
      resp['q'].should == 'noupdates'
      Quote.first.book.should == 'testbook'
   end
@@ -62,10 +63,10 @@ describe ApiController do
     q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
     q.set_id
     q.save
-    post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'3000',:id_last => '4000'}
+    post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'5',:id_last => '4000'}
     response.status.should == 200
     resp = JSON.parse(response.body)
-    resp['id'].should == 3001
+    resp['id'].should == 6
     resp['q'].should == 'noupdates'
     Quote.last.book.should == 'testbook'
   end
@@ -78,9 +79,22 @@ describe ApiController do
     q1.set_id
     q1.save
     
-    post "set_quote",{:quote => 'new test quote2', :book => 'new test book2', :citation =>'new test citations2', :id=>'3003',:id_last => '3000'}
+    post "set_quote",{:quote => 'new test quote2', :book => 'new test book2', :citation =>'new test citations2', :id=>'7',:id_last => '5'}
     resp = JSON.parse(response.body)
-    resp['id'].should == 3001
+    resp['id'].should == 6
     resp['q'].first['book'].should == 'new test book2'
+  end
+  
+  it "should merge tag ids into get quotes resp" do
+    q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+    q.set_id
+    t1 = Tag.create({:name=>'tag1',:id=>1})
+    t2 = Tag.create({:name=>'tag2',:id=>2})
+    q.tags << t1
+    q.tags << t2
+    q.save
+    get 'get_quotes',:id=>1
+    resp = JSON.parse(response.body)
+    resp["q"].first["tag_ids"].size.should == 2
   end
 end

@@ -2,17 +2,26 @@ class QuotesController < ApplicationController
   
   def index
     @tab = 'home'
-    @quotes = Quote.all
+    @quotes = Quote.all(:order=>'id DESC')
   end
   
   def new
     @tab = 'new'
     @quote = Quote.new
+    @tags   = Tag.all
+    @topics = Topic.all
   end
   
   def create
-    @quote    = Quote.new(params[:quote])
+    tags = params[:quote][:tags] ? params[:quote][:tags].dup : [] 
+    tags = tags.delete_if{|t|t == ""}
+    params[:quote].delete('tags')
+    @quote = Quote.new(params[:quote])
+    tags.each do |t_id|
+      @quote.tags << Tag.find_by_id(t_id)
+    end
     @quote.set_id
+    
     if @quote.save
       flash[:notice] = "Quote saved successfully"
       redirect_to :action => :index
@@ -39,8 +48,10 @@ class QuotesController < ApplicationController
     
   end
   
-  def delete
-    
+  def destroy
+    Quote.find(params[:id]).delete
+    flash[:notice] = "Quote deleted successfully"
+    redirect_to :action => :index
   end
   
   def activate

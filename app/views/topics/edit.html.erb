@@ -1,0 +1,24 @@
+<h2>Edit Topic</h2>
+
+<%= form_for @topic,:url=>"/topics/#{@topic.id}" do |f| %>
+  <% if @topic.errors.any? %>
+    <div class="alert alert-error">
+      <h3><%= pluralize(@topic.errors.count, "error") %> prohibited this post from being saved:</h3>
+
+      <ul>
+      <% @topic.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style='margin-top:10px'>
+	<%= f.label :name %>
+  	<%= f.text_field :name %><br/>
+	<%= f.label :visible,{:style=>'display:inline'} %>
+	<%= f.check_box :visible %>
+  </div>
+
+  <div><%= f.submit "Save",{:class=>'btn',:style=>'margin-top:10px'} %></div>
+<% end %>

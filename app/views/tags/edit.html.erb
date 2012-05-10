@@ -1,0 +1,24 @@
+<h2>Edit Tag</h2>
+
+<%= form_for @tag,:url=>"/tags/#{@tag.id}" do |f| %>
+  <% if @tag.errors.any? %>
+    <div class="alert alert-error">
+      <h3><%= pluralize(@tag.errors.count, "error") %> prohibited this post from being saved:</h3>
+
+      <ul>
+      <% @tag.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style='margin-top:10px'>
+	<%= f.label :name %>
+  	<%= f.text_field :name %><br/>
+	<%= f.label :visible,{:style=>'display:inline'} %>
+	<%= f.check_box :visible %>
+  </div>
+
+  <div><%= f.submit "Save",{:class=>'btn',:style=>'margin-top:10px'} %></div>
+<% end %>

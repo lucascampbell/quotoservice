@@ -8,9 +8,18 @@
 		Quotes
 		  </div>
 		  <ul class='nav pull-right'>
-			<li class='<%=@tab == 'home' ? "active" : ""%>'><a href='/quotes'>Home</a></li>
+			<li class='<%=@tab == 'home' ? "active" : ""%>'><a href='/quotes'>Quotes</a></li>
+			<li class='<%=@tab == 'topic' ? "active" : ""%>'><a href='/topics'>Topics</a></li>
+		    <li class='<%=@tab == 'tag' ? "active" : ""%>'><a href='/tags'>Tags</a></li>
 			<% if user_signed_in? %>
-				<li class='<%=@tab == 'New' ? "active" : ""%>'><a href='/quotes/new'>New</a></li>
+				<li class='dropdown'>
+					<a id='myTab' class='dropdown-toggle' data-toggle='dropdown' href='#'>New<b class='caret'></b></a>
+					<ul class='dropdown-menu' style='display:none'>
+						<li><a id='tab1' href='/quotes/new'>quote</a></li>
+						<li><a href='/tags/new'>tag</a></li>
+						<li><a href='/topics/new'>topic</a></li>
+					</ul>
+				</li>
 				<li><%=link_to "Logout",destroy_user_session_path, :method => :delete%></li>
 			<%end%>
 		  </ul>

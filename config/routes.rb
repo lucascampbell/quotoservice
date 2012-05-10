@@ -1,6 +1,8 @@
 QuotesService::Application.routes.draw do
   devise_for :users
   resources :quotes
+  resources :topics
+  resources :tags
   match 'quotes/:id/activate' => 'quotes#activate'
   
   #API

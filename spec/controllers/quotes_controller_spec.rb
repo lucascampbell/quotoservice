@@ -24,6 +24,18 @@ describe QuotesController do
     response.should redirect_to('/quotes')
   end
   
+  it "should create new quote with tags and redirect" do
+    Quote.delete_all
+    Tag.create({:name=>'tag1',:id=>1})
+    Tag.create({:name=>'tag2',:id=>2})
+    params = {:quote => {:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:tags=>["","1","2"]}}
+    post 'create',params
+    Quote.count.should == 1
+    q = Quote.first
+    q.tags.count.should == 2
+    response.should redirect_to('/quotes')
+  end
+  
   it "should update quote with new value" do
     quote = Quote.create({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book'})
     params = {:quote => {:quote => 'new edit test quote',},:id=>quote.id}

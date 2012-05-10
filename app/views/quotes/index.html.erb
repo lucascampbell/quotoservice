@@ -1,6 +1,7 @@
 <div class='well' style='margin-top:20px'><h2>Quotes</h2></div>
 <table class='table table-striped table-bordered'>
 	<tr>
+		<th style='text-align:center'>ID</th>
 		<th style='text-align:center'>Quote</th>
 		<th style='text-align:center'>Citation</th>
 		<th style='text-align:center'>Book</th>
@@ -14,16 +15,16 @@
 	</tr>
 	<% @quotes.each do |quote| %>
 		<tr>
+			<td><%=quote.id%></td>
 			<td><%=quote.quote%></td>
 			<td><%=quote.citation%></td>
 			<td><%=quote.book%></td>
-			<% tags = quote.tags ? quote.tags.split(',') : []%>
 			<td>
-			<% tags.each do |t| %>
-				<span class='label label-info'><%=t%></span>
+			<% quote.tags.each do |t| %>
+				<span class='label label-info'><%=t.name%></span>
 			<% end %>
 			</td>
-			<td><%=quote.topic%></td>
+			<td><%=quote.topic.name if quote.topic%></td>
 			<td><%=quote.translation%></td>
 			<td><%=quote.abbreviation%></td>
 			<td><%=quote.created_at.strftime("%m/%d/%Y")%></td>
@@ -31,12 +32,13 @@
 			  <% if quote.active %>
 			   	<div class='label label-success'>active</div>
 			  <%else%>
-				<div class='label label-important'><a href='/quotes/<%=quote.id%>/activate' style='color:white;text-decoration:none'> activate</a></div>
+				<div class='label label-warning'><a href='/quotes/<%=quote.id%>/activate' style='color:white;text-decoration:none'> activate</a></div>
 			  <% end %>
 			</td>
 			<td>
 				<% unless quote.active %>
-					<div class='label'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit<a></div>
+					<div class='label' style='display:inline'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
+					<div class='label label-important' style='display:inline'><%= link_to("Delete", quote, :method => :delete, :style => 'color:white;text-decoration:none') %></div>
 				<%end%>
 			</td>
 		</tr>
