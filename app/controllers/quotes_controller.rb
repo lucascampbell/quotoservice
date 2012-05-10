@@ -37,7 +37,16 @@ class QuotesController < ApplicationController
   end
   
   def update
+    tags = params[:quote][:tags] ? params[:quote][:tags].dup : [] 
+    tags = tags.delete_if{|t|t == ""}
+    params[:quote].delete('tags')
     @quote = Quote.find_by_id(params[:id])
+    if tags
+      @quote.tags = []
+      tags.each do |t_id|
+        @quote.tags << Tag.find_by_id(t_id)
+      end
+    end
     if @quote.update_attributes(params[:quote])
       flash[:notice] = "Quote updated successfully"
       redirect_to :action => :index
