@@ -32,6 +32,8 @@ class QuotesController < ApplicationController
   
   def edit
     @quote = Quote.find_by_id(params[:id])
+    @tags   = Tag.all
+    @topics = Topic.all
   end
   
   def update
