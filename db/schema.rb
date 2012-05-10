@@ -18,11 +18,6 @@ ActiveRecord::Schema.define(:version => 20120509022518) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "quote_tags", :id => false, :force => true do |t|
-    t.integer "quote_id"
-    t.integer "tag_id"
-  end
-
   create_table "quotes", :force => true do |t|
     t.text     "quote"
     t.string   "citation"
