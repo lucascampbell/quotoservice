@@ -1,0 +1,6 @@
+queue_customers_for_creation:
+  cron: "0 0 * * *"
+  class: ClientJob
+  queue: client
+  args: 
+  description: "This job deletes clients who have uninstalled app or opted out"

@@ -1,3 +1,4 @@
+require 'resque/server'
 QuotesService::Application.routes.draw do
   devise_for :users
   resources :quotes
@@ -8,6 +9,8 @@ QuotesService::Application.routes.draw do
   #API
   match 'api/v1/get_quotes' => 'api#get_quotes', :via=>:get
   match 'api/v1/set_quote'  => 'api#set_quote',  :via=>:post
+  
+  #mount Resque::Server.new, :at => "/resque"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
