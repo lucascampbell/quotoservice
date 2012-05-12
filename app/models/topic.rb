@@ -2,7 +2,7 @@ class Topic < ActiveRecord::Base
   validates :name, :presence => true
   validates :name, :uniqueness => { :case_sensitive => false }
   STARTING_ID = 5
-  has_many :quotes
+  has_and_belongs_to_many :quotes
   
    def set_id
      t = Topic.last

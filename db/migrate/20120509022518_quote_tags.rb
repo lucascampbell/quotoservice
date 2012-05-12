@@ -7,6 +7,6 @@ class QuoteTags < ActiveRecord::Migration
   end
 
   def down
-    drop_table :quote_tags
+    drop_table :quotes_tags
   end
 end

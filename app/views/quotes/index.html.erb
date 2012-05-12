@@ -6,7 +6,7 @@
 		<th style='text-align:center'>Citation</th>
 		<th style='text-align:center'>Book</th>
 		<th style='text-align:center'>Tags</th>
-		<th style='text-align:center'>Topic</th>
+		<th style='text-align:center'>Topics</th>
 		<th style='text-align:center'>Translation</th>
 		<th style='text-align:center'>Abbreviation</th>
 		<th style='text-align:center'>Created At</th>
@@ -24,7 +24,11 @@
 				<span class='label label-info'><%=t.name%></span>
 			<% end %>
 			</td>
-			<td><%=quote.topic.name if quote.topic%></td>
+			<td>
+			  <% quote.topics.each do |t| %>
+				<span class='label label-info'><%=t.name%></span>
+			  <% end %>
+			</td>
 			<td><%=quote.translation%></td>
 			<td><%=quote.abbreviation%></td>
 			<td><%=quote.created_at.strftime("%m/%d/%Y")%></td>

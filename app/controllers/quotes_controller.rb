@@ -13,13 +13,17 @@ class QuotesController < ApplicationController
   end
   
   def create
-    tags = params[:quote][:tags] ? params[:quote][:tags].dup : [] 
-    tags = tags.delete_if{|t|t == ""}
-    params[:quote].delete('tags')
-    @quote = Quote.new(params[:quote])
+    p,tags,topics = normalize_quote(params)
+
+    @quote = Quote.new(p[:quote])
     tags.each do |t_id|
       @quote.tags << Tag.find_by_id(t_id)
     end
+    
+    topics.each do |tp_id|
+       @quote.topics << Topic.find_by_id(tp_id)
+     end
+     
     @quote.set_id
     
     if @quote.save
@@ -37,26 +41,28 @@ class QuotesController < ApplicationController
   end
   
   def update
-    tags = params[:quote][:tags] ? params[:quote][:tags].dup : [] 
-    tags = tags.delete_if{|t|t == ""}
-    params[:quote].delete('tags')
-    @quote = Quote.find_by_id(params[:id])
+    p,tags,topics = normalize_quote(params)
+    @quote = Quote.find_by_id(p[:id])
     if tags
       @quote.tags = []
       tags.each do |t_id|
         @quote.tags << Tag.find_by_id(t_id)
       end
     end
+    
+    if topics
+      @quote.topics = []
+      topics.each do |tp_id|
+         @quote.topics << Topic.find_by_id(tp_id)
+       end
+    end
+    
     if @quote.update_attributes(params[:quote])
       flash[:notice] = "Quote updated successfully"
       redirect_to :action => :index
     else
       render :action => :edit
     end
-  end
-  
-  def show
-    
   end
   
   def destroy
@@ -72,4 +78,19 @@ class QuotesController < ApplicationController
     flash[:notice] = "Quote activated successfully"
     redirect_to :action => :index
   end
+  
+  private
+
+  def normalize_quote(p)
+    tags = p["quote"]["tags"] ? p["quote"]["tags"].dup : [] 
+    tags = tags.delete_if{|t|t == ""}
+    p["quote"].delete("tags")
+    
+    topics = p["quote"]["topics"] ? p["quote"]["topics"].dup : [] 
+    topics = topics.delete_if{|t|t == ""}
+    p["quote"].delete("topics")
+    
+    return p,tags,topics
+  end
+    
 end
