@@ -10,11 +10,8 @@ class ApiController < ApplicationController
       q_json = {:q =>"noupdates",:id => nil}
     else
       #loop through quotes and insert tag ids for json resp.  DEPRECATION WARNING is thrown, alternative is to overwrite json method 
-      quotes.each do |qt|
-        ids = qt.tags.collect(&:id)
-        qt[:tag_ids] = ids
-      end
-      q_json = {:q => quotes, :id => quotes.last.id}
+      q_formatted = format_quotes(quotes)
+      q_json = {:q => q_formatted, :id => quotes.last.id}
     end
     render :json => q_json
   end
@@ -34,7 +31,8 @@ class ApiController < ApplicationController
     else
       if quote.errors['quote'].first == 'has already been taken'
         quotes = Quote.where("id > ? AND active = ?",params['id_last'],true).order("id ASC")
-        q_json = quotes.blank? ? {:q =>"noupdates",:id => nil} : {:q => quotes, :id => quotes.last.id}
+        q_formatted = format_quotes(quotes)
+        q_json = quotes.blank? ? {:q =>"noupdates",:id => nil} : {:q => q_formatted, :id => q_formatted.last.id}
         render :json => q_json
       else
         return bad_data_error_action
@@ -42,8 +40,20 @@ class ApiController < ApplicationController
     end
   end
   
+  private
+  
   def authenticate_token
     return internal_error_action unless request.env["HTTP_AUTHORIZATION"] == '&3!kZ1Ct:zh7GaM'
+  end
+  
+  def format_quotes(quotes)
+    quotes.each do |qt|
+      t_ids  = qt.tags.collect(&:id)
+      tp_ids = qt.topics.collect(&:id)
+      qt[:tag_ids] = t_ids
+      qt[:topic_ids] = tp_ids
+    end
+    quotes
   end
   
 end

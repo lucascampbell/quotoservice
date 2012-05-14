@@ -5,6 +5,7 @@ describe ApiController do
     request.env['HTTP_AUTHORIZATION'] = '&3!kZ1Ct:zh7GaM'
     Quote.delete_all
     Tag.delete_all
+    Topic.delete_all
   end
   
   it "should return 500 with bad token" do
@@ -39,15 +40,15 @@ describe ApiController do
      get 'get_quotes',:id=>2
      response.status.should == 200
      resp = JSON.parse(response.body)
-     resp["q"].count.should == 0
-     resp["id"].should == 'noupdates'
+     resp["q"].should == "noupdates"
+     resp["id"].should == nil
   end
    
   it "should set new quote and return original id" do
      post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'5',:id_last => '4000'}
      response.status.should == 200
      resp = JSON.parse(response.body)
-     resp['id'].should == 5
+     resp['id'].should == 1666
      resp['q'].should == 'noupdates'
      Quote.first.book.should == 'testbook'
   end
@@ -66,7 +67,7 @@ describe ApiController do
     post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'5',:id_last => '4000'}
     response.status.should == 200
     resp = JSON.parse(response.body)
-    resp['id'].should == 6
+    resp['id'].should == 1667
     resp['q'].should == 'noupdates'
     Quote.last.book.should == 'testbook'
   end
@@ -79,9 +80,9 @@ describe ApiController do
     q1.set_id
     q1.save
     
-    post "set_quote",{:quote => 'new test quote2', :book => 'new test book2', :citation =>'new test citations2', :id=>'7',:id_last => '5'}
+    post "set_quote",{:quote => 'new test quote2', :book => 'new test book2', :citation =>'new test citations2', :id_last => '1666'}
     resp = JSON.parse(response.body)
-    resp['id'].should == 6
+    resp['id'].should == 1667
     resp['q'].first['book'].should == 'new test book2'
   end
   
@@ -96,5 +97,18 @@ describe ApiController do
     get 'get_quotes',:id=>1
     resp = JSON.parse(response.body)
     resp["q"].first["tag_ids"].size.should == 2
+  end
+  
+  it "should merge tag ids into get quotes resp" do
+    q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+    q.set_id
+    t1 = Topic.create({:name=>'topic1',:id=>1})
+    t2 = Topic.create({:name=>'topic2',:id=>2})
+    q.topics << t1
+    q.topics << t2
+    q.save
+    get 'get_quotes',:id=>1
+    resp = JSON.parse(response.body)
+    resp["q"].first["topic_ids"].size.should == 2
   end
 end
