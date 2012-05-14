@@ -48,7 +48,7 @@ namespace :db do
              :quote        => row["Quotes"],
              :rating       => row["Rate"],
              :abbreviation => row["Abbreviation"],
-             :translation  => row["Translation"],
+             :translation  => row["Translation"]
          })
          quote.id = row["ID"]
          quote.topics << Topic.find_by_name(row["Topic"])
