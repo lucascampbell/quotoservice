@@ -39,7 +39,12 @@ namespace :db do
       quote = Quote.find_by_quote(row["Quotes"])
       if(quote)
         puts "quote found -- adding new topic #{row['Topic']}"
-        quote.topics << Topic.find_by_name(row["Topic"])
+        topic = Topic.find_by_name(row["Topic"])
+        exst  = quote.topics.collect(&:id).include? topic.id
+        puts "topic #{topic.name} exst says #{exst}"
+        unless exst
+          quote.topics << topic
+        end
       else
         quote = Quote.new({
              :book         => row["Book"],
@@ -56,7 +61,8 @@ namespace :db do
            puts "tag is #{t}"
            tag = Tag.find_by_name(t)
            puts "tag is -- #{tag}"
-           quote.tags << tag if tag
+           exst  = quote.tags.collect(&:id).include? tag.id if tag
+           quote.tags << tag if tag and !exst
          end
       end
       puts "quote to save is ---- #{quote.id}"
