@@ -42,12 +42,13 @@ namespace :db do
         quote.topics << Topic.find_by_name(row["Topic"])
       else
         quote = Quote.new({
-             :book        => row["Book"],
-             :author      => row["Author"],
-             :citation    => row["Citation"],
-             :quote       => row["Quotes"],
-             :rating      => row["Rate"],
-             :translation => row["Translation"]
+             :book         => row["Book"],
+             :author       => row["Author"],
+             :citation     => row["Citation"],
+             :quote        => row["Quotes"],
+             :rating       => row["Rate"],
+             :abbreviation => row["Abbreviation"],
+             :translation  => row["Translation"],
          })
          quote.id = row["ID"]
          quote.topics << Topic.find_by_name(row["Topic"])
@@ -57,11 +58,55 @@ namespace :db do
            puts "tag is -- #{tag}"
            quote.tags << tag if tag
          end
-       end
-       puts "quote to save is ---- #{quote.id}"
-       quote.save!
-       puts "quote saved"
+      end
+      puts "quote to save is ---- #{quote.id}"
+      quote.save!
+      puts "quote saved"
     end
+  end
+  
+  task :export_flat do
+    file = File.join(File.dirname(__FILE__),"../../public/object_values.txt")
+    File.open(file, 'w') do |f|
+      f.puts "source_name|attrib|object|value"
+      f.puts  "Live|image_count|39000000000|57|"
+      f.puts  "Live|id_last|39000000000|1|"
+      object_id = 1
+      Tag.all.each do |t|
+        f.puts "Tag|id|#{object_id}|#{t.id}|"
+        f.puts "Tag|name|#{object_id}|#{t.name}|"
+        f.puts "Tag|visible|#{object_id}|#{t.visible}|"
+        object_id += 1
+      end
+      Topic.all.each do |t|
+        f.puts "Topic|id|#{object_id}|#{t.id}|"
+        f.puts "Topic|name|#{object_id}|#{t.name}|"
+        f.puts "Topic|visible|#{object_id}|#{t.visible}|"
+        object_id += 1
+      end
+     
+      Quote.all.each do |q|
+        f.puts "Quote|id|#{object_id}|#{q.id}|"
+        f.puts "Quote|quote|#{object_id}|#{q.quote}|"
+        f.puts "Quote|citation|#{object_id}|#{q.citation}|"
+        f.puts "Quote|book|#{object_id}|#{q.book}|"
+        f.puts "Quote|author|#{object_id}|#{q.author}|" if q.author
+        f.puts "Quote|translation|#{object_id}|#{q.translation}|" if q.translation
+        f.puts "Quote|abbreviation|#{object_id}|#{q.abbreviation}|" if q.abbreviation
+        q.tags.each do |t|
+          object_id += 1
+          f.puts "QuoteTag|quote_id|#{object_id}|#{q.id}|"
+          f.puts "QuoteTag|tag_id|#{object_id}|#{t.id}|"
+        end
+        q.topics.each do |t|
+          object_id += 1
+          f.puts "QuoteTopic|quote_id|#{object_id}|#{q.id}|"
+          f.puts "QuoteTopic|topic_id|#{object_id}|#{t.id}|"
+        end
+        object_id += 1
+      end
+    end
+    
   end
   
 end

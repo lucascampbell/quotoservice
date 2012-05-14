@@ -20,6 +20,8 @@
   	<%= f.text_field :citation %>
 	<%= f.label :book %>
   	<%= f.text_field :book %><br/>
+	<%= f.label :author %>
+  	<%= f.text_field :author %><br/>
   	<%= f.label :topic %>
   	<%= f.select('topics',@topics.collect{|t| [t.name,t.id]},{:prompt=>"Select topic"},{:multiple=>true})  if @topics%><br/>
 	<%= f.label :translation %>

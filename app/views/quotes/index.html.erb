@@ -5,6 +5,7 @@
 		<th style='text-align:center'>Quote</th>
 		<th style='text-align:center'>Citation</th>
 		<th style='text-align:center'>Book</th>
+		<th style='text-align:center'>Author</th>
 		<th style='text-align:center'>Tags</th>
 		<th style='text-align:center'>Topics</th>
 		<th style='text-align:center'>Translation</th>
@@ -19,6 +20,7 @@
 			<td><%=quote.quote%></td>
 			<td><%=quote.citation%></td>
 			<td><%=quote.book%></td>
+			<td><%=quote.author%></td>
 			<td>
 			<% quote.tags.each do |t| %>
 				<span class='label label-info'><%=t.name%></span>
