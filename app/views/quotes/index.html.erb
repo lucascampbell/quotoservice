@@ -10,6 +10,7 @@
 		<th style='text-align:center'>Topics</th>
 		<th style='text-align:center'>Translation</th>
 		<th style='text-align:center'>Abbreviation</th>
+		<th style='text-align:center'>Rating</th>
 		<th style='text-align:center'>Created At</th>
 		<th style='text-align:center'>Active</th>
 		<th style='text-align:center'>Action</th>
@@ -33,6 +34,7 @@
 			</td>
 			<td><%=quote.translation%></td>
 			<td><%=quote.abbreviation%></td>
+			<td><%=quote.rating%></td>
 			<td><%=quote.created_at.strftime("%m/%d/%Y")%></td>
 			<td>
 			  <% if quote.active %>

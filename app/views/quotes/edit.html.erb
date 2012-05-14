@@ -28,6 +28,8 @@
   	<%= f.text_field :translation %>
 	<%= f.label :abbreviation %>
   	<%= f.text_field :abbreviation %>
+	<%= f.label :rating %>
+  	<%= f.text_field :rating %>
 	<%= f.label :tags %>
 	<%= f.select("tags",@tags.collect{|t|[t.name,t.id]},{:prompt=>"Select tag"},{:multiple=>true}) if @tags%><br/>
 	<%= f.label :active,{:style=>'display:inline'} %>
