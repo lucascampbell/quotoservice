@@ -3,6 +3,7 @@ namespace :db do
   require 'csv' 
   
   task :load_tags do
+    Tag.delete_all
     f = File.join(File.dirname(__FILE__),"../../public/db_tags.csv")
     csv_text = File.read(f)
     csv = CSV.parse(csv_text, :headers => true)
@@ -11,12 +12,17 @@ namespace :db do
       puts "row is -- #{row}"
       t = Tag.find_by_name(row["tag"])
       puts "tag found -- #{t.name}" if t
-      Tag.create!(:name=>row["tag"],:visible=>row["vis"],:id=>row[index]) unless t
+      unless t
+        tg = Tag.new(:name=>row["tag"],:visible=>row["vis"],:id=>index)
+        tg.id = index + 1
+        tg.save!
+      end
     end
     
   end
   
   task :load_topics do
+    Topic.delete_all
     f = File.join(File.dirname(__FILE__),"../../public/db_topics.csv")
     csv_text = File.read(f)
     csv = CSV.parse(csv_text, :headers => true)
@@ -25,11 +31,17 @@ namespace :db do
       puts "row is -- #{row}"
       t = Topic.find_by_name(row["topic"])
       puts "topic found -- #{t.name}" if t
-      Topic.create!(:name=>row["topic"],:visible=>row["vis"],:id=>row[index]) unless t
+      unless t
+        tp = Topic.new(:name=>row["topic"],:visible=>row["vis"]) 
+        tp.id = index + 1
+        tp.save!
+      end
     end
   end
   
   task :load_quotes do
+    Quote.all.each{|q|q.tags.delete_all;q.topics.delete_all}
+    Quote.delete_all
     f = File.join(File.dirname(__FILE__),"../../public/db_quotes.csv")
     csv_text = File.read(f)
     csv = CSV.parse(csv_text, :headers => true)
@@ -38,12 +50,14 @@ namespace :db do
       puts "row is -- #{row}"
       quote = Quote.find_by_quote(row["Quotes"])
       if(quote)
-        puts "quote found -- adding new topic #{row['Topic']}"
-        topic = Topic.find_by_name(row["Topic"])
-        exst  = quote.topics.collect(&:id).include? topic.id
-        puts "topic #{topic.name} exst says #{exst}"
-        unless exst
-          quote.topics << topic
+        puts "quote found -- adding new topic #{row['Topics']}"
+        if row['Topics']
+          topic = Topic.find_by_name(row["Topics"])
+          exst  = quote.topics.collect(&:id).include? topic.id
+          puts "topic #{topic.name} exst says #{exst}"
+          unless exst
+            quote.topics << topic
+          end
         end
       else
         quote = Quote.new({
@@ -56,14 +70,19 @@ namespace :db do
              :translation  => row["Translation"]
          })
          quote.id = row["ID"]
-         quote.topics << Topic.find_by_name(row["Topic"])
-         row["Tags"].split(',').each do |t|
-           puts "tag is #{t}"
-           tag = Tag.find_by_name(t)
-           puts "tag is -- #{tag}"
-           exst  = quote.tags.collect(&:id).include? tag.id if tag
-           quote.tags << tag if tag and !exst
+         if row['Topics']
+           topic = Topic.find_by_name(row["Topics"]) 
+           quote.topics << topic if topic
          end
+         if row["Tags"]
+           row["Tags"].split(',').each do |t|
+             puts "tag is #{t}"
+             tag = Tag.find_by_name(t)
+             puts "tag is -- #{tag}"
+             exst  = quote.tags.collect(&:id).include? tag.id if tag
+             quote.tags << tag if tag and !exst
+           end
+        end
       end
       puts "quote to save is ---- #{quote.id}"
       quote.save!

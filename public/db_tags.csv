@@ -1,35 +1,38 @@
 vis,tag
 1,Ability
+0,Abortion
 1,Abroad
 1,Abstinence
 1,Abundance
 1,Abuse
 1,Academics
 1,Acceptance
-1,Accident
 1,Accidents
 1,Achievement
 1,Acknowledgement
 1,Act
 1,Action
 1,Addiction
+0,Adultery
 1,Adventure
 1,Adversity
 1,Advice
 1,Affection
-1,Affections
 1,Afraid
 1,After Death
 1,Afterlife
 1,Air
 1,Alcohol
+0,Alcoholism
 1,Allness
 1,All-seeing
 1,Alone
+0,Also Tab
 1,Ambition
 1,Ancestor
 1,Angels
 1,Anger
+0,Anorexia
 1,Answers
 1,Anxiety
 1,Appetite
@@ -51,6 +54,7 @@ vis,tag
 1,Author
 1,Authority
 1,Awareness
+1,Awe
 1,Baptism
 1,Beauty
 1,Beer
@@ -60,7 +64,7 @@ vis,tag
 1,Betrayal
 1,Bible
 1,Birth
-1,Blessing
+0,Bixexual
 1,Blessings
 1,Blood
 1,Body
@@ -68,15 +72,16 @@ vis,tag
 1,Bones
 1,Boss
 1,Bosses
-1,Botherhood
 1,Bounty
 1,Brain
 1,Break-ups
 1,Broken
 1,Brother
 1,Brotherhood
+0,Bulimia
 1,Bully
 1,Bullying
+0,Caffeine
 1,Calm
 1,Capability
 1,Capable
@@ -86,6 +91,7 @@ vis,tag
 1,Celebrate
 1,Celebrity
 1,Challenges
+1,Change
 1,Character
 1,Charity
 1,Charm
@@ -104,9 +110,9 @@ vis,tag
 1,Clash
 1,Clash Assault
 1,Clean
+1,Cleanse
 1,Climate
 1,Climate Change
-1,Clique
 1,Cliques
 1,Clothes
 1,College
@@ -115,8 +121,6 @@ vis,tag
 1,Commitment
 1,Communication
 1,Community
-1,Compaionship
-1,Companion
 1,Companions
 1,Companionship
 1,Comparison
@@ -124,12 +128,11 @@ vis,tag
 1,Competition
 1,Completeness
 1,Compromise
+0,Compulsive Eating
 1,Confidence
 1,Conflict
 1,Conflict Resolution
-1,Conflicts
 1,Confusion
-1,Confustion
 1,Connection
 1,Consciousness
 1,Contagion
@@ -152,19 +155,19 @@ vis,tag
 1,Criticism
 1,Crowd Mentality
 1,Culture
-1,Cultures
 1,Cursing
+0,Cutting
 1,Dance
 1,Danger
 1,Dark
 1,Darkness
+0,Date Rape
 1,Dating
 1,Daughter
 1,Death
 1,Deathless
 1,Debt
 1,Debts
-1,Decision
 1,Decisions
 1,Defence
 1,Demon
@@ -177,10 +180,14 @@ vis,tag
 1,Despair
 1,Desperate
 1,Destination
+1,Destruction
 1,Determination
+0,Devil
+0,Devil Worship
 1,Dictator
 1,Didication
 1,Diet
+0,Dieting
 1,Difference
 1,Different
 1,Diligence
@@ -194,20 +201,25 @@ vis,tag
 1,Discouragement
 1,Disease
 1,Divine Love
+1,Divinity
 1,Divorce
 1,Doctor
 1,Dominion
 1,Doubt
 1,Dream
+0,Dreams
 1,Drinking
 1,Drought
+0,Drug
 1,Drugs
 1,Drunk
 1,Duality
 1,Ears
 1,Earth
 1,Earthquake
+1,Eath
 1,Eating
+0,Eating Disorder
 1,Education
 1,Efficiency
 1,Ego
@@ -240,26 +252,29 @@ vis,tag
 1,Fasting
 1,Father
 1,Fear
-1,Feeling
+1,Feel
 1,Feelings
 1,Feelings Afraid
 1,Feet
 1,Fellowship
 1,Female
 1,Feminine
+1,Fever
 1,Fighting
 1,Flaw
 1,Flaws
+1,Flesh
 1,Flood
 1,Flower
-1,Flowers
+1,Flu
+0,Flunking
 1,Flying
 1,Focus
 1,Follow
 1,Food
 1,Foreign
+1,Forgive
 1,Forgiveness
-1,Forgivness
 1,Form
 1,Form Outline
 1,Foundation
@@ -271,9 +286,16 @@ vis,tag
 1,Fruit
 1,Fruitage
 1,Frustration
+1,Full
 1,Future
+0,Gangs
+0,Gay
+0,Gay Marriage
+0,Gay Rights
 1,Gender
 1,Generosity
+0,Getting Drunk
+0,Ghosts
 1,Gift
 1,Gifts
 1,Giving
@@ -306,6 +328,7 @@ vis,tag
 1,Happy
 1,Harmony
 1,Hate
+1,Hatred
 1,Hazards
 1,Heal
 1,Healing
@@ -340,28 +363,28 @@ vis,tag
 1,Illusion
 1,Image
 1,Image And Likeness
+1,Immoral
 1,Immortal
 1,Immortality
 1,Immunity
 1,Improvisation
-1,Indentity
 1,Individuality
 1,Indulge
+0,Infidelity
 1,Infinite
 1,Infinity
 1,Inflammation
 1,Influence
 1,Inheritance
-1,Inifinite
 1,Injured
 1,Injury
 1,Innocence
 1,Innovation
 1,Inspiration
+1,Intact
 1,Intelligence
 1,Interfaith
 1,Intuitions
-1,Jealous
 1,Jealousy
 1,Jesus
 1,Jesus Christ
@@ -379,7 +402,10 @@ vis,tag
 1,Laugh
 1,Law
 1,Laws
+1,Leadership
 1,Learning
+0,Lesbian
+0,Lgtb
 1,Liar
 1,Lie
 1,Lies
@@ -401,13 +427,18 @@ vis,tag
 1,Loving
 1,Loyal
 1,Loyalty
+0,Lust
+0,Lying
 1,Magic
 1,Maker
 1,Male
 1,Man
 1,Manhood
+0,Manipulating
+0,Manipulation
 1,Mankind
 1,Marriage
+1,Mary Baker Eddy
 1,Masculine
 1,Materialism
 1,Materiality
@@ -439,10 +470,10 @@ vis,tag
 1,Morning
 1,Mother
 1,Motivation
-1,Motive
 1,Motives
 1,Mourn
 1,Movement
+0,Murder
 1,Muscles
 1,Music
 1,Myth
@@ -450,8 +481,8 @@ vis,tag
 1,Need
 1,Needs
 1,Neighbor
-1,Neighbors
 1,Newness
+0,Nightmares
 1,Obedience
 1,Obsession
 1,Obstacles
@@ -460,18 +491,19 @@ vis,tag
 1,Omnipresent
 1,Omniscience
 1,Oneness
+1,Operation
 1,Opinion
 1,Opportunity
 1,Options
 1,Organs
 1,Origin
 1,Originality
+1,Overcoming Death
 1,Overwhelmed
 1,Owing
 1,Pain
 1,Panic
 1,Papers
-1,Parent
 1,Parents
 1,Passion
 1,Past
@@ -484,16 +516,16 @@ vis,tag
 1,Perfection
 1,Perfect Model
 1,Performance
-1,Performancy
 1,Permenance
 1,Perseverance
-1,Persistance
 1,Persistence
 1,Perspective
 1,Petition
 1,Pharmacy
+0,Physical Abuse
 1,Physician
 1,Physics
+1,Pity
 1,Place
 1,Plan
 1,Plans
@@ -501,11 +533,10 @@ vis,tag
 1,Pollution
 1,Poor
 1,Pop Culture
-1,Pop-culture
-1,Pop Cultures
 1,Pop Cutlure
 1,Popular
 1,Popularity
+0,Porn
 1,Pornography
 1,Possession
 1,Possible
@@ -516,10 +547,11 @@ vis,tag
 1,Praise
 1,Pray
 1,Prayer
-1,Prayers
 1,Preach
 1,Precious
 1,Pregnancy
+0,Prejudice
+0,Premarital Sex
 1,Presence
 1,Present
 1,Preserve
@@ -535,8 +567,10 @@ vis,tag
 1,Proof
 1,Prosperity
 1,Protection
+0,Puberty
 1,Punishment
 1,Pure
+0,Purging
 1,Purification
 1,Purity
 1,Purpose
@@ -547,12 +581,12 @@ vis,tag
 1,Rape
 1,Real
 1,Reality
+1,Redemption
 1,Reflect
 1,Reflection
 1,Refresh
 1,Refuge
 1,Regeneration
-1,Relationship
 1,Relationships
 1,Reliance
 1,Religion
@@ -600,6 +634,7 @@ vis,tag
 1,Self-knowledge
 1,Self-less
 1,Selflessness
+0,Self-mutilation
 1,Self Worth
 1,Self-worth
 1,Sense
@@ -607,19 +642,25 @@ vis,tag
 1,Sensitivity
 1,Serve
 1,Service
+0,Sex
+1,Shameful
 1,Shape
 1,Sharing
 1,Sheep
 1,Shelter
 1,Shepherd
+0,Shop-lifting
 1,Siblings
 1,Sick
 1,Sickness
+0,Signs
 1,Sin
 1,Sincerity
+1,Skin
 1,Slaves
 1,Sleep
 1,Smart
+0,Smoking
 1,Snakes
 1,Social Justice
 1,Son
@@ -636,7 +677,6 @@ vis,tag
 1,Spiritual Growth
 1,Spirituality
 1,Spiritualization
-1,Spiritualiztion
 1,Spiritual Knowledge
 1,Spiritual Law
 1,Spiritual Models
@@ -649,7 +689,10 @@ vis,tag
 1,Start
 1,Status
 1,Status. Friends
+0,Stealing
 1,Steps
+0,Steroids
+1,Still
 1,Stillness
 1,Storm
 1,Stranger
@@ -662,14 +705,14 @@ vis,tag
 1,Substance Abuse
 1,Success
 1,Suffering
+0,Suicide
+1,Supernatural
 1,Supply
 1,Support
 1,Swearing
 1,Swollen
 1,Symptoms
 1,Talent
-1,Talents
-1,Teacher
 1,Teachers
 1,Teaching
 1,Team
@@ -683,8 +726,8 @@ vis,tag
 1,Thanks
 1,Theology
 1,The Way
+1,Think
 1,Thought
-1,Thoughts
 1,Time
 1,Tired
 1,Tomorrow
@@ -696,6 +739,9 @@ vis,tag
 1,Tradition
 1,Tragedy
 1,Training
+0,Tramsgemder. Bi
+0,Transgender
+0,Transsexual
 1,Trap
 1,Travel
 1,Treasure
@@ -726,7 +772,7 @@ vis,tag
 1,Value
 1,Vanity
 1,Victim
-1,Victor
+1,Victory
 1,View
 1,Violence
 1,Vision
@@ -735,6 +781,7 @@ vis,tag
 1,War
 1,Washing
 1,Watch
+1,Waves
 1,Way Shower
 1,Weakness
 1,Wealth
@@ -742,6 +789,7 @@ vis,tag
 1,Weight
 1,Whole
 1,Willfulness
+1,Wind
 1,Winning
 1,Wisdom
 1,Wizards
@@ -757,91 +805,3 @@ vis,tag
 1,Worth
 1,Wound
 1,Yearning
-0,Abortion
-0,Abuse
-0,Addiction
-0,Adultery
-0,Alcoholism
-0,Also Tab
-0,Anger
-0,Anorexia
-0,Anorexic
-0,Bixexual
-0,Bulimia
-0,Bullying
-0,Caffeine
-0,Cheating
-0,Compulsive Eating
-0,Conflict
-0,Cutting
-0,Date Rape
-0,Death
-0,Desire
-0,Devil
-0,Devil Worship
-0,Diet
-0,Dieting
-0,Disease
-0,Divorce
-0,Dreams
-0,Drug
-0,Drugs
-0,Eating Disorder
-0,Eating Disorders
-0,Failure
-0,Family
-0,Fighting
-0,Flunking
-0,Gangs
-0,Gay
-0,Gay Marriage
-0,Gay Rights
-0,Gender
-0,Getting Drunk
-0,Ghosts
-0,Healing
-0,Infidelity
-0,Judgement
-0,Lesbian
-0,Lgtb
-0,Lust
-0,Lying
-0,Manipulating
-0,Manipulation
-0,Marriage
-0,Murder
-0,Nightmares
-0,Obsession
-0,Passion
-0,Peer Pressure
-0,Peer-pressure
-0,Physical Abuse
-0,Porn
-0,Pornography
-0,Pregnancy
-0,Prejudice
-0,Premarital Sex
-0,Puberty
-0,Purging
-0,Rape
-0,Revenge
-0,Self-hate
-0,Self-mutilation
-0,Sex
-0,Shop-lifting
-0,Siblings
-0,Signs
-0,Sin
-0,Smoking
-0,Stealing
-0,Steroids
-0,Substance Abuse
-0,Suicide
-0,Tramsgemder. Bi
-0,Transexual
-0,Transgender
-0,Transsexual
-0,Ugly
-0,Violence
-0,War
-0,Weight
