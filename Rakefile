@@ -6,9 +6,9 @@ require File.expand_path('../config/application', __FILE__)
 
 QuotesService::Application.load_tasks
 
-# require 'resque'
+require 'resque'
 # require 'resque_scheduler'
-# require 'resque/tasks'
+require 'resque/tasks'
 # require 'resque_scheduler/tasks'
 # task "resque:setup" do |t, args|
 #   require 'resque'
