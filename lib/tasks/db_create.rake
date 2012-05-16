@@ -1,5 +1,6 @@
 namespace :db do
-  #require File.join(File.dirname(__FILE__),'/../../config/environment')
+  #uncomment this line to run rake tasks, comment if precompiling assets as env is loaded twice
+  require File.join(File.dirname(__FILE__),'/../../config/environment')
   require 'csv' 
   
   task :load_tags do
