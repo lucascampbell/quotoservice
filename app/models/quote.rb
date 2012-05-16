@@ -7,6 +7,7 @@ class Quote < ActiveRecord::Base
   has_and_belongs_to_many :topics
   
   STARTING_ID = 1666
+  self.per_page = 200
   
   def set_id
     q = Quote.last

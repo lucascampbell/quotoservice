@@ -1,7 +1,8 @@
 class Tag < ActiveRecord::Base
   validates :name, :presence => true
   validates :name, :uniqueness => { :case_sensitive => false }
-  STARTING_ID = 1625
+  STARTING_ID = 807
+  self.per_page = 200
   has_and_belongs_to_many :quote
   
    def set_id

@@ -2,7 +2,7 @@ class QuotesController < ApplicationController
   
   def index
     @tab = 'home'
-    @quotes = Quote.all(:order=>'id DESC')
+    @quotes = Quote.paginate(:page=>params[:page]).order('id DESC')
   end
   
   def new

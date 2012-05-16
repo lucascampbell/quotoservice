@@ -10,3 +10,5 @@ user = User.create! :email => 'lucas.campbellrossen@gmail.com', :password => 'pa
 puts 'New user created: ' << user.email
 user = User.create! :email => 'justin.sinichko@gmail.com', :password => 'passW@rd', :password_confirmation => 'passW@rd'
 puts 'New user created: ' << user.email
+user = User.create! :email => 'justinsinichko+tmc@gmail.com', :password => 'passW@rd', :password_confirmation => 'passW@rd'
+puts 'New user created: ' << user.email

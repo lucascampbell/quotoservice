@@ -95,17 +95,17 @@ namespace :db do
     File.open(file, 'w') do |f|
       f.puts "source_name|attrib|object|value"
       f.puts  "Live|image_count|39000000000|57|"
-      f.puts  "Live|id_last|39000000000|1|"
+      f.puts  "Live|id_last|39000000000|1665|"
       object_id = 1
       Tag.all.each do |t|
         f.puts "Tag|id|#{object_id}|#{t.id}|"
-        f.puts "Tag|name|#{object_id}|#{t.name}|"
+        f.puts "Tag|name|#{object_id}|#{t.name.downcase}|"
         f.puts "Tag|visible|#{object_id}|#{t.visible}|"
         object_id += 1
       end
       Topic.all.each do |t|
         f.puts "Topic|id|#{object_id}|#{t.id}|"
-        f.puts "Topic|name|#{object_id}|#{t.name}|"
+        f.puts "Topic|name|#{object_id}|#{t.name.downcase}|"
         f.puts "Topic|visible|#{object_id}|#{t.visible}|"
         object_id += 1
       end
@@ -115,6 +115,7 @@ namespace :db do
         f.puts "Quote|quote|#{object_id}|#{q.quote}|"
         f.puts "Quote|citation|#{object_id}|#{q.citation}|"
         f.puts "Quote|book|#{object_id}|#{q.book}|"
+        f.puts "Quote|rating|#{object_id}|#{q.rating}|"
         f.puts "Quote|author|#{object_id}|#{q.author}|" if q.author
         f.puts "Quote|translation|#{object_id}|#{q.translation}|" if q.translation
         f.puts "Quote|abbreviation|#{object_id}|#{q.abbreviation}|" if q.abbreviation

@@ -10,6 +10,7 @@ gem 'json'
 gem 'resque'
 gem 'resque-scheduler'
 gem 'thin'
+gem 'will_paginate', '~> 3.0'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
   def index
     @tab = 'tag'
-    @tags = Tag.all(:order=>'id DESC')
+    @tags = Tag.paginate(:page=>params[:page]).order('id DESC')
   end
   
   def new

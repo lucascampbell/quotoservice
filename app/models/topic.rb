@@ -1,7 +1,7 @@
 class Topic < ActiveRecord::Base
   validates :name, :presence => true
   validates :name, :uniqueness => { :case_sensitive => false }
-  STARTING_ID = 56
+  STARTING_ID = 57
   has_and_belongs_to_many :quotes
   
    def set_id
