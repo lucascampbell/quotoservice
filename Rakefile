@@ -7,22 +7,22 @@ require File.expand_path('../config/application', __FILE__)
 QuotesService::Application.load_tasks
 
 require 'resque'
-# require 'resque_scheduler'
+require 'resque_scheduler'
 require 'resque/tasks'
-# require 'resque_scheduler/tasks'
-# task "resque:setup" do |t, args|
-#   require 'resque'
-#   require 'resque_scheduler'
-#   require 'resque/tasks'
-#   require 'resque_scheduler/tasks'
-#   ENV['RACK_ENV'] ||= args[:environment] || 'development'
-#   ENV['QUEUE'] = 'update_instance, customers, provision_resource'
-#   require 'environment'
-# end
-# 
-# task "jobs:work" => "resque:work"
-# 
-# desc "run resque jobs for update queue"
-# task :run do  |t|
-#   sh "rake resque:work"
-# end
+require 'resque_scheduler/tasks'
+task "resque:setup" do |t, args|
+  require 'resque'
+  require 'resque_scheduler'
+  require 'resque/tasks'
+  require 'resque_scheduler/tasks'
+  ENV['RACK_ENV'] ||= args[:environment] || 'development'
+  ENV['QUEUE'] = 'update_instance, customers, provision_resource'
+  require 'environment'
+end
+
+task "jobs:work" => "resque:work"
+
+desc "run resque jobs for update queue"
+task :run do  |t|
+  sh "rake resque:work"
+end

@@ -1,5 +1,5 @@
 namespace :db do
-  require File.join(File.dirname(__FILE__),'/../../config/environment')
+  #require File.join(File.dirname(__FILE__),'/../../config/environment')
   require 'csv' 
   
   task :load_tags do
