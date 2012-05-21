@@ -1,6 +1,6 @@
-# queue_customers_for_creation:
-#   cron: "0 0 * * *"
-#   class: ClientJob
-#   queue: client
-#   args: 
-#   description: "This job deletes clients who have uninstalled app or opted out"
+queue_group_notification_for_push:
+  cron: "0 7 * * *"
+  class: PushJob
+  queue: push_job
+  args: 
+  description: "This job sends out daily apple quote pushes"

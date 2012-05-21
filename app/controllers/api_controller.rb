@@ -45,8 +45,10 @@ class ApiController < ApplicationController
     return not_found_action unless params[:id]
     begin
       app = APN::App.first
-      app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "") unless app
+      app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "") unless app
       a = APN::Device.create(:token => params[:id],:app_id => app.id)
+      gr = Group.find_by_name("Apple")
+      gr.devices << a
       resp = a.errors.count > 0 ? "failure" : "success"
       render :json => {:text => a.errors}
     rescue Exception => e

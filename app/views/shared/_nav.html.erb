@@ -21,6 +21,7 @@
 					</ul>
 				</li>
 				<li><a class='<%=@tab == 'push' ? "active" : ""%>' href='/push/index'>Push</a></li>
+				<li><a href='/resque'>Resque</a></li>
 				<li><%=link_to "Logout",destroy_user_session_path, :method => :delete%></li>
 			<%end%>
 		  </ul>

@@ -115,7 +115,7 @@ describe ApiController do
   it "should return failure if app and token exist" do
      APN::App.delete_all
      token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
-     app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "")
+     app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "")
      a = APN::Device.create(:token => token,:app_id => app.id)
      get 'register_device', :id => token
      resp = JSON.parse(response.body)
@@ -133,7 +133,7 @@ describe ApiController do
       APN::App.delete_all
       APN::Device.delete_all
       token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
-      app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "")
+      app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "")
       #a = APN::Device.create(:token => token,:app_id => app.id)
       get 'register_device', :id => token
       resp = JSON.parse(response.body)

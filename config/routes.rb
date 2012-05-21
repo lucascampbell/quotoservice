@@ -15,7 +15,7 @@ QuotesService::Application.routes.draw do
   match 'push/index'           => 'push#index'
   match 'push/send_push'       => 'push#send_push', :via=>:post
  
-  #mount Resque::Server.new, :at => "/resque"
+  mount Resque::Server.new, :at => "/resque"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -93,6 +93,7 @@ namespace :db do
   end
   
   task :export_flat do
+    require File.join(File.dirname(__FILE__),'/../../config/environment')
     file = File.join(File.dirname(__FILE__),"../../public/object_values.txt")
     File.open(file, 'w') do |f|
       f.puts "source_name|attrib|object|value"
@@ -113,6 +114,7 @@ namespace :db do
       end
      
       Quote.all.each do |q|
+        qt = q.quote.gsub!("\n",'')
         f.puts "Quote|id|#{object_id}|#{q.id}|"
         f.puts "Quote|quote|#{object_id}|#{q.quote}|"
         f.puts "Quote|citation|#{object_id}|#{q.citation}|"

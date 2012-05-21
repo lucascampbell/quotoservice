@@ -10,15 +10,14 @@ require 'resque'
 require 'resque_scheduler'
 require 'resque/tasks'
 require 'resque_scheduler/tasks'
-# task "resque:setup" do |t, args|
-#   require 'resque'
-#   require 'resque_scheduler'
-#   require 'resque/tasks'
-#   require 'resque_scheduler/tasks'
-#   ENV['RACK_ENV'] ||= args[:environment] || 'development'
-#   ENV['QUEUE'] = 'update_instance, customers, provision_resource'
-#   require 'environment'
-# end
+task "resque:setup" do |t, args|
+  require File.join(File.dirname(__FILE__),'/../../config/environment')
+  require 'resque'
+  require 'resque_scheduler'
+  require 'resque/tasks'
+  require 'resque_scheduler/tasks'
+  ENV['QUEUE'] = '*'
+end
 
 task "jobs:work" => "resque:work"
 
