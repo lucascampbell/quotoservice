@@ -1,7 +1,7 @@
 class ChangeJoinFields < ActiveRecord::Migration
   def up
-    #drop_table :quotes_tags
-    #drop_table :quotes_topics
+    drop_table :quotes_tags
+    drop_table :quotes_topics
     create_table :quotes_tags, :id => false do |t|
         t.references :quote
         t.references :tag             
