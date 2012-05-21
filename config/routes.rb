@@ -7,9 +7,14 @@ QuotesService::Application.routes.draw do
   match 'quotes/:id/activate' => 'quotes#activate'
   
   #API
-  match 'api/v1/get_quotes' => 'api#get_quotes', :via=>:get
-  match 'api/v1/set_quote'  => 'api#set_quote',  :via=>:post
-  
+  match 'api/v1/get_quotes'      => 'api#get_quotes',      :via=>:get
+  match 'api/v1/set_quote'       => 'api#set_quote',       :via=>:post
+  match 'api/v1/register_device' => 'api#register_device', :via =>:post
+   
+  #Push
+  match 'push/index'           => 'push#index'
+  match 'push/send_push'       => 'push#send_push', :via=>:post
+ 
   #mount Resque::Server.new, :at => "/resque"
   # The priority is based upon order of creation:
   # first created -> highest priority.

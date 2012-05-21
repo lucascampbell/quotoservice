@@ -1,9 +1,8 @@
 namespace :db do
-  #uncomment this line to run rake tasks, comment if precompiling assets as env is loaded twice
-  require File.join(File.dirname(__FILE__),'/../../config/environment')
   require 'csv' 
   
   task :load_tags do
+    require File.join(File.dirname(__FILE__),'/../../config/environment')
     Tag.delete_all
     f = File.join(File.dirname(__FILE__),"../../public/db_tags.csv")
     csv_text = File.read(f)
@@ -23,6 +22,7 @@ namespace :db do
   end
   
   task :load_topics do
+    require File.join(File.dirname(__FILE__),'/../../config/environment')
     Topic.delete_all
     f = File.join(File.dirname(__FILE__),"../../public/db_topics.csv")
     csv_text = File.read(f)
@@ -41,6 +41,7 @@ namespace :db do
   end
   
   task :load_quotes do
+    require File.join(File.dirname(__FILE__),'/../../config/environment')
     Quote.all.each{|q|q.tags.delete_all;q.topics.delete_all}
     Quote.delete_all
     f = File.join(File.dirname(__FILE__),"../../public/db_quotes.csv")
@@ -53,7 +54,7 @@ namespace :db do
       if(quote)
         puts "quote found -- adding new topic #{row['Topics']}"
         if row['Topics']
-          topic = Topic.find_by_name(row["Topics"])
+          topic = Topic.find_by_name(row["Topics"].strip)
           exst  = quote.topics.collect(&:id).include? topic.id
           puts "topic #{topic.name} exst says #{exst}"
           unless exst
@@ -72,13 +73,13 @@ namespace :db do
          })
          quote.id = row["ID"]
          if row['Topics']
-           topic = Topic.find_by_name(row["Topics"]) 
+           topic = Topic.find_by_name(row["Topics"].strip) 
            quote.topics << topic if topic
          end
          if row["Tags"]
            row["Tags"].split(',').each do |t|
              puts "tag is #{t}"
-             tag = Tag.find_by_name(t)
+             tag = Tag.find_by_name(t.strip)
              puts "tag is -- #{tag}"
              exst  = quote.tags.collect(&:id).include? tag.id if tag
              quote.tags << tag if tag and !exst

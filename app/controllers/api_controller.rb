@@ -40,9 +40,24 @@ class ApiController < ApplicationController
     end
   end
   
+  def register_device
+    puts "params are -- #{params[:id]}"
+    return not_found_action unless params[:id]
+    begin
+      app = APN::App.first
+      app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "") unless app
+      a = APN::Device.create(:token => params[:id],:app_id => app.id)
+      resp = a.errors.count > 0 ? "failure" : "success"
+      render :json => {:text => a.errors}
+    rescue Exception => e
+      render :json => {:text => 'failure'}
+    end
+  end
+  
   private
   
   def authenticate_token
+    puts "http is  --- #{request.env['HTTP_AUTHORIZATION']}"
     return internal_error_action unless request.env["HTTP_AUTHORIZATION"] == '&3!kZ1Ct:zh7GaM'
   end
   

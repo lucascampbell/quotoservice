@@ -26,3 +26,9 @@ desc "run resque jobs for update queue"
 task :run do  |t|
   sh "rake resque:work"
 end
+
+begin
+   require 'apn_on_rails_tasks'
+rescue MissingSourceFile => e
+   puts e.message
+end

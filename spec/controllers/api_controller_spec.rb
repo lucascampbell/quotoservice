@@ -111,4 +111,46 @@ describe ApiController do
     resp = JSON.parse(response.body)
     resp["q"].first["topic_ids"].size.should == 2
   end
+  
+  it "should return failure if app and token exist" do
+     APN::App.delete_all
+     token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
+     app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "")
+     a = APN::Device.create(:token => token,:app_id => app.id)
+     get 'register_device', :id => token
+     resp = JSON.parse(response.body)
+     resp["text"].should == 'failure'
+  end
+  
+  it "should return not found if no id passed" do
+     APN::App.delete_all
+     get 'register_device'
+     resp = JSON.parse(response.body)
+     resp['text'].should == 'Not Found.'
+  end
+  
+  it "should return register device if new" do
+      APN::App.delete_all
+      APN::Device.delete_all
+      token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
+      app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "")
+      #a = APN::Device.create(:token => token,:app_id => app.id)
+      get 'register_device', :id => token
+      resp = JSON.parse(response.body)
+      resp["text"].should == 'success'
+      APN::Device.count.should == 1
+      APN::App.count.should == 1
+   end
+   
+   it "should return register device if new and create app if none" do
+       APN::App.delete_all
+       APN::Device.delete_all
+       token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
+       #a = APN::Device.create(:token => token,:app_id => app.id)
+       get 'register_device', :id => token
+       resp = JSON.parse(response.body)
+       resp["text"].should == 'success'
+       APN::Device.count.should == 1
+       APN::App.count.should == 1
+    end
 end

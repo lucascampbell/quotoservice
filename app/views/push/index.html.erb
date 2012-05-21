@@ -1,0 +1,26 @@
+<h2>Push Message</h2>
+
+<%= form_for @push,:url=>"/push/send_push" do |f| %>
+  <% if @push.errors.any? %>
+    <div class="alert alert-error">
+      <h3><%= pluralize(@push.errors.count, "error") %> prohibited this post from being saved:</h3>
+
+      <ul>
+      <% @push.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style='margin-top:10px'>
+	<%= f.label :badge, :style=>"display:inline"%>&nbsp;<span>(alert message)</span><br/>
+  	<%= f.text_field :badge %><br/>
+	<%= f.label :alert %>
+  	<%= f.text_field :alert %><br/>
+	<%= f.label 'Quote ID' %>
+  	<%= text_field :quote,:id%><br/>
+  </div>
+
+  <div><%= f.submit "Send",{:class=>'btn',:style=>'margin-top:10px'} %></div>
+<% end %>
