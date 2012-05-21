@@ -1,9 +1,10 @@
+
 class PushController < ApplicationController
   
   def index
     @tab = 'push'
     @quotes = Quote.all
-    @notifications = APN::GroupNotification.where("sent_at IS NOT NULL")
+    @notifications = APN::GroupNotification.find(:all,:order=>"id DESC",:conditions=>["sent_at IS NULL"])
     @push = Push.new
   end
   
@@ -25,12 +26,13 @@ class PushController < ApplicationController
        quote = Quote.find(quote_id.to_i)
        
        notification = APN::GroupNotification.new   
-       notification.group = Group.find_by_name("Apple")
+       notification.group = APN::Group.find_by_name("Apple")
        notification.badge = badge   
        notification.sound = 'true'   
        notification.alert = alert
        notification.custom_properties = {:quote => quote.id}  
-       notification.save
+       notification.save!
+       #APN::App.send_group_notifications
        flash[:notice] = "Successfully pushed"
        Resque.enqueue(PushJob)
      rescue Exception => e

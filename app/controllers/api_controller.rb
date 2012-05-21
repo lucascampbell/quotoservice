@@ -47,9 +47,14 @@ class ApiController < ApplicationController
       app = APN::App.first
       app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "") unless app
       a = APN::Device.create(:token => params[:id],:app_id => app.id)
-      gr = Group.find_by_name("Apple")
-      gr.devices << a
-      resp = a.errors.count > 0 ? "failure" : "success"
+      a.errors.count > 0
+        resp = "failure"
+        gr = Group.find_by_name("Apple")
+        gr.devices << a
+      else
+        resp = "success"
+      end
+      
       render :json => {:text => a.errors}
     rescue Exception => e
       render :json => {:text => 'failure'}
