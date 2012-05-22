@@ -5,9 +5,8 @@ class PushJob
 
   def self.perform()
     begin
-      gnoty = APN::GroupNotification.first
       app   = APN::App.first
-      app.send_group_notification(gnoty)
+      app.send_daily_group_notification
       
       #APN::App.process_devices
     rescue Exception => e

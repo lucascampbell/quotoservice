@@ -20,9 +20,9 @@ class PushController < ApplicationController
      #app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "")  
      #device = APN::Device.create!(:token =>"460df5a14f8728c5953bca65731f89e447b74025",:app_id => app.id)
      begin
-       badge = params[:push][:badge] || 5
-       alert = params[:push][:alert] || "Daily Quote"
-       quote_id = params[:push][:quote_id] || 1
+       badge = 5
+       alert = "Daily Quote"
+       quote_id = params[:id]
        quote = Quote.find(quote_id.to_i)
        
        notification = APN::GroupNotification.new   
@@ -40,7 +40,7 @@ class PushController < ApplicationController
        msg = e.message.size > 200 ? e.message[0..200] : e.message
        flash[:notice] = "Failed to push: #{msg}"
      end
-    redirect_to :action => 'index'
+    redirect_to :controller=>'quotes',:action => 'index'
   end
   
 end
