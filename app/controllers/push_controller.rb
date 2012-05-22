@@ -25,6 +25,7 @@ class PushController < ApplicationController
        quote_id = params[:id]
        quote = Quote.find(quote_id.to_i)
        
+       alert += "<br/>#{quote.quote}"
        notification = APN::GroupNotification.new   
        notification.group = APN::Group.find_by_name("Apple")
        notification.badge = badge   
