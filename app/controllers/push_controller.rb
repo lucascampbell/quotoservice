@@ -32,7 +32,7 @@ class PushController < ApplicationController
        notification.alert = alert
        notification.custom_properties = {:quote => quote.id}  
        notification.save!
-       #APN::App.send_group_notifications
+       APN::App.send_group_notifications
        flash[:notice] = "Successfully pushed"
        #Resque.enqueue(PushJob)
      rescue Exception => e

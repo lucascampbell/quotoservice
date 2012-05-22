@@ -2,4 +2,4 @@
 # 
 # Example:
 #   configatron.file.storage = :s3
-configatron.apn.cert = File.join('config', 'apple_push_development.pem')
+configatron.apn.cert = File.join(Rails.root,'config', 'apple_push_development.pem')
