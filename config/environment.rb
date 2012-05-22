@@ -9,6 +9,4 @@ resque_file =  File.expand_path(File.join(File.dirname(__FILE__),'resque_schedul
 Resque.redis = "redis://redistogo:7c19be812d96996defafd43d673ac96a@lab.redistogo.com:9393/"
 Resque.schedule = YAML.load_file(resque_file)
 # Initialize the rails application
-Encoding.default_external = Encoding::UTF_8
-Encoding.default_internal = Encoding::UTF_8
 QuotesService::Application.initialize!
