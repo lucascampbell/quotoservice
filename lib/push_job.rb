@@ -9,6 +9,7 @@ class PushJob
       #APN::App.process_devices
     rescue Exception => e
       puts "error #{e.message}"
+      raise e
     end
   end
 end
