@@ -17,6 +17,7 @@ task "resque:setup" do |t, args|
   require 'resque/tasks'
   require 'resque_scheduler/tasks'
   ENV['QUEUE'] = 'push_job'
+  Resque.before_fork = Proc.new { ActiveRecord::Base.establish_connection }
 end
 
 task "jobs:work" => "resque:work"
