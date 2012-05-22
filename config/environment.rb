@@ -10,3 +10,4 @@ Resque.redis = "redis://redistogo:7c19be812d96996defafd43d673ac96a@lab.redistogo
 Resque.schedule = YAML.load_file(resque_file)
 # Initialize the rails application
 QuotesService::Application.initialize!
+Encoding.default_external = Encoding::UTF_8
