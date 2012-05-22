@@ -44,7 +44,7 @@ class ApiController < ApplicationController
     return not_found_action unless params[:id]
     begin
       app = APN::App.first
-      app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "") unless app
+      #app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "") unless app
       a = APN::Device.create(:token => params[:id],:app_id => app.id)
       
       if a.errors.count > 0
