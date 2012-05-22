@@ -41,22 +41,23 @@ class ApiController < ApplicationController
   end
   
   def register_device
-    puts "params are -- #{params[:id]}"
     return not_found_action unless params[:id]
     begin
       app = APN::App.first
       app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "") unless app
       a = APN::Device.create(:token => params[:id],:app_id => app.id)
+      
       if a.errors.count > 0
-        resp = "failure"
-        gr = Group.find_by_name("Apple")
-        gr.devices << a
+        resp = a.errors[:token].first =~ /has already been taken/ ? "success" : "failure"
       else
         resp = "success"
+        gr = APN::Group.find_by_name("Apple")
+        gr.devices << a
       end
       
-      render :json => {:text => a.errors}
+      render :json => {:text => resp}
     rescue Exception => e
+      puts "excep- #{e.message}"
       render :json => {:text => 'failure'}
     end
   end
@@ -64,7 +65,6 @@ class ApiController < ApplicationController
   private
   
   def authenticate_token
-    puts "http is  --- #{request.env['HTTP_AUTHORIZATION']}"
     return internal_error_action unless request.env["HTTP_AUTHORIZATION"] == '&3!kZ1Ct:zh7GaM'
   end
   

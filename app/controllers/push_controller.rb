@@ -34,7 +34,7 @@ class PushController < ApplicationController
        notification.save!
        #APN::App.send_group_notifications
        flash[:notice] = "Successfully pushed"
-       Resque.enqueue(PushJob)
+       #Resque.enqueue(PushJob)
      rescue Exception => e
        puts "#{e.message} \n #{e.backtrace}"
        msg = e.message.size > 200 ? e.message[0..200] : e.message

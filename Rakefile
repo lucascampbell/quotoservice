@@ -11,12 +11,12 @@ require 'resque_scheduler'
 require 'resque/tasks'
 require 'resque_scheduler/tasks'
 task "resque:setup" do |t, args|
-  require File.join(File.dirname(__FILE__),'/../../config/environment')
+  require File.join(File.dirname(__FILE__),'config/environment')
   require 'resque'
   require 'resque_scheduler'
   require 'resque/tasks'
   require 'resque_scheduler/tasks'
-  ENV['QUEUE'] = '*'
+  ENV['QUEUE'] = 'push_job'
 end
 
 task "jobs:work" => "resque:work"

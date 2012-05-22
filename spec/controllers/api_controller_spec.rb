@@ -153,4 +153,25 @@ describe ApiController do
        APN::Device.count.should == 1
        APN::App.count.should == 1
     end
+    
+    it "should return success if error is that it already exists" do
+         APN::App.delete_all
+         APN::Device.delete_all
+         APN::Group.delete_all
+         g = APN::Group.create!({:name=>'Apple',:app_id => 1})
+     
+         token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
+         #a = APN::Device.create(:token => token,:app_id => app.id)
+         get 'register_device', :id => token
+         resp = JSON.parse(response.body)
+         resp["text"].should == 'success'
+         APN::Device.count.should == 1
+         APN::App.count.should == 1
+         
+         get 'register_device', :id => token
+         resp = JSON.parse(response.body)
+         resp["text"].should == 'success'
+         APN::Device.count.should == 1
+         APN::App.count.should == 1
+      end
 end

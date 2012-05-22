@@ -2,6 +2,7 @@
 require File.expand_path('../application', __FILE__)
 require 'resque'
 require 'resque_scheduler'
+require 'resque_scheduler/server'
 require 'apn_on_rails'
 
 resque_file =  File.expand_path(File.join(File.dirname(__FILE__),'resque_schedule.yml'))
