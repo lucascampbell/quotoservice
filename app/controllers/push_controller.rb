@@ -21,11 +21,10 @@ class PushController < ApplicationController
      #device = APN::Device.create!(:token =>"460df5a14f8728c5953bca65731f89e447b74025",:app_id => app.id)
      begin
        badge = 5
-       alert = "Daily Quote"
        quote_id = params[:id]
        quote = Quote.find(quote_id.to_i)
+       alert += quote.quote
        
-       alert += "<br/>#{quote.quote}"
        notification = APN::GroupNotification.new   
        notification.group = APN::Group.find_by_name("Apple")
        notification.badge = badge   
