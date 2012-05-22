@@ -6,7 +6,8 @@ class PushJob
   def self.perform()
     begin
       puts "about to send group notification"
-      APN::App.send_group_notifications
+      gr = APN::GroupNotification.first
+      APN::App.send_group_notifications(gr)
       puts "sent notification"
       #APN::App.process_devices
     rescue Exception => e
