@@ -213,6 +213,7 @@ DEPENDENCIES
   launchy (>= 2.1.0)
   pg
   rails (= 3.2.2)
+  redis
   resque
   resque-scheduler
   rspec-rails (~> 2.6)

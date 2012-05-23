@@ -12,6 +12,7 @@ gem 'resque-scheduler'
 gem 'thin'
 gem 'will_paginate', '~> 3.0'
 gem 'apn_on_rails', :git => 'git@github.com:lucascampbell/apn_on_rails.git'
+gem 'redis'
 
 # Gems used only for assets and not required
 # in production environments by default.
