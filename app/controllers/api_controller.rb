@@ -41,8 +41,9 @@ class ApiController < ApplicationController
   end
   
   def register_device
-    return not_found_action unless params[:id]
+    return not_found_action unless params[:id] and params[:platform]
     begin
+      platform = params[:platform]
       app = APN::App.first
       #app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "") unless app
       a = APN::Device.create(:token => params[:id],:app_id => app.id)
@@ -51,7 +52,7 @@ class ApiController < ApplicationController
         resp = a.errors[:token].first =~ /has already been taken/ ? "success" : "failure"
       else
         resp = "success"
-        gr = APN::Group.find_by_name("Apple")
+        gr = APN::Group.find_by_name(platform.strip)
         gr.devices << a
       end
       

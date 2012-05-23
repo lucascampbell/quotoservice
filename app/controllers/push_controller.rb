@@ -26,7 +26,7 @@ class PushController < ApplicationController
        alert = quote.quote
        
        notification = APN::GroupNotification.new   
-       notification.group = APN::Group.find_by_name("Apple")
+       notification.group = APN::Group.find_by_name("APPLE")
        notification.badge = badge   
        notification.sound = 'true'   
        notification.alert = alert
