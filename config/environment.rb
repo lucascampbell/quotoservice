@@ -6,7 +6,7 @@ require 'resque_scheduler/server'
 require 'apn_on_rails'
 
 resque_file =  File.expand_path(File.join(File.dirname(__FILE__),'resque_schedule.yml'))
-Resque.redis = "redis://redistogo:7c19be812d96996defafd43d673ac96a@lab.redistogo.com:9393/"
+Resque.redis = "redis://redistogo:ef7b93c9efa962a832a49c8435de7b95@scat.redistogo.com:9034/"
 Resque.schedule = YAML.load_file(resque_file)
 # Initialize the rails application
 QuotesService::Application.initialize!
