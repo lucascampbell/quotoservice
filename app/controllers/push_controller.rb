@@ -20,7 +20,7 @@ class PushController < ApplicationController
      #app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "")  
      #device = APN::Device.create!(:token =>"460df5a14f8728c5953bca65731f89e447b74025",:app_id => app.id)
      begin
-       badge = 5
+       badge = 1
        quote_id = params[:id]
        quote = Quote.find(quote_id.to_i)
        alert = quote.quote
