@@ -10,13 +10,15 @@ require 'resque'
 require 'resque_scheduler'
 require 'resque/tasks'
 require 'resque_scheduler/tasks'
+
 task "resque:setup" do |t, args|
-  require File.join(File.dirname(__FILE__),'config/environment')
   require 'resque'
   require 'resque_scheduler'
   require 'resque/tasks'
+  require 'resque/scheduler'
   require 'resque_scheduler/tasks'
   ENV['QUEUE'] = 'push_job'
+  require File.join(File.dirname(__FILE__),'config/environment')
   Resque.before_fork = Proc.new { ActiveRecord::Base.establish_connection }
 end
 
