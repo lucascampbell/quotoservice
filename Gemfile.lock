@@ -145,16 +145,16 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     redis (2.2.2)
-    redis-namespace (1.1.0)
+    redis-namespace (1.0.2)
       redis (< 3.0.0)
-    resque (1.8.2)
-      redis
-      redis-namespace
+    resque (1.20.0)
+      multi_json (~> 1.0)
+      redis-namespace (~> 1.0.2)
       sinatra (>= 0.9.2)
-      vegas (>= 0.1.2)
-    resque-scheduler (1.9.9)
+      vegas (~> 0.1.2)
+    resque-scheduler (2.0.0)
       redis (>= 2.0.1)
-      resque (>= 1.8.0)
+      resque (>= 1.20.0)
       rufus-scheduler
     rspec (2.10.0)
       rspec-core (~> 2.10.0)
@@ -231,9 +231,9 @@ DEPENDENCIES
   launchy (>= 2.1.0)
   pg
   rails (= 3.2.2)
-  redis (~> 2.2.2)
+  redis
   redis-namespace (>= 1.0)
-  resque
+  resque (>= 1.20.0)
   resque-scheduler
   rspec-rails (~> 2.6)
   sass-rails (~> 3.2.3)
