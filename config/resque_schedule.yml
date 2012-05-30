@@ -1,5 +1,5 @@
 queue_group_notification_for_push:
-  cron: "0 12 * * *"
+  cron: "0 10 * * *"
   class: PushJob
   queue: push_job
   args: 
