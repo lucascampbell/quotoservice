@@ -12,7 +12,7 @@ gem 'resque-scheduler'
 gem 'thin'
 gem 'will_paginate', '~> 3.0'
 gem 'apn_on_rails', :git => 'git@github.com:lucascampbell/apn_on_rails.git'
-gem 'redis'
+gem 'redis', '~>2.2.2'
 gem 'redis-namespace', '>= 1.0'
 gem 'c2dm_on_rails', :git => 'git@github.com:lucascampbell/c2dm_on_rails.git'
 
