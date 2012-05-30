@@ -25,6 +25,7 @@ class PushController < ApplicationController
        quote = Quote.find(quote_id.to_i)
        alert = quote.quote
        
+       #create notification for apple
        notification = APN::GroupNotification.new   
        notification.group = APN::Group.find_by_name("APPLE")
        notification.badge = badge   
@@ -32,9 +33,14 @@ class PushController < ApplicationController
        notification.alert = alert
        notification.custom_properties = {:quote => quote.id}  
        notification.save!
-       #APN::App.send_group_notifications
+       
+       #create notification for android
+       #c2dm = C2dm::Notification.new
+       #c2dm.key = alert
+       #c2dm.device = APN::Device.find(1)
+       #c2dm.save
+       
        flash[:notice] = "Successfully pushed"
-       #Resque.enqueue(PushJob)
      rescue Exception => e
        puts "#{e.message} \n #{e.backtrace}"
        msg = e.message.size > 200 ? e.message[0..200] : e.message

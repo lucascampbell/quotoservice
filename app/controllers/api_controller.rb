@@ -44,16 +44,26 @@ class ApiController < ApplicationController
     return not_found_action unless params[:id] and params[:platform]
     begin
       platform = params[:platform]
-      app = APN::App.first
-      #app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "") unless app
-      a = APN::Device.create(:token => params[:id],:app_id => app.id)
+      
+      if platform == 'APPLE'
+        app = APN::App.first
+        a = APN::Device.create(:token => params[:id],:app_id => app.id)
+      else
+        a = C2dm::Device.create(:registration_id=> params[:id])
+      end
       
       if a.errors.count > 0
-        resp = a.errors[:token].first =~ /has already been taken/ ? "success" : "failure"
+        resp = a.errors[:token].first =~ /has already been taken/ ? "success" : "failure" if platform == 'APPLE'
+        resp = a.errors[:registration_id].first =~ /has already been taken/ ? "success" : "failure" unless platform == 'APPLE'
       else
         resp = "success"
         gr = APN::Group.find_by_name(platform.strip)
-        gr.devices << a
+        
+        if platform == "APPLE"
+          gr.devices << a 
+        else
+          gr.c2_devices << a
+        end
       end
       
       render :json => {:text => resp}

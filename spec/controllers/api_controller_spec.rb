@@ -112,14 +112,15 @@ describe ApiController do
     resp["q"].first["topic_ids"].size.should == 2
   end
   
-  it "should return failure if app and token exist" do
+  it "should return success even if app and token exist" do
      APN::App.delete_all
      token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
      app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "")
      a = APN::Device.create(:token => token,:app_id => app.id)
-     get 'register_device', :id => token
+     APN::Group.create(:app_id => app.id,:name=>"APPLE")
+     get 'register_device', {:id => token,:platform=>'APPLE'}
      resp = JSON.parse(response.body)
-     resp["text"].should == 'failure'
+     resp["text"].should == 'success'
   end
   
   it "should return not found if no id passed" do
@@ -134,44 +135,88 @@ describe ApiController do
       APN::Device.delete_all
       token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
       app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "")
-      #a = APN::Device.create(:token => token,:app_id => app.id)
-      get 'register_device', :id => token
+      APN::Group.create(:app_id => app.id,:name=>"APPLE")
+      get 'register_device', {:id => token,:platform=>'APPLE'}
       resp = JSON.parse(response.body)
       resp["text"].should == 'success'
       APN::Device.count.should == 1
       APN::App.count.should == 1
    end
    
-   it "should return register device if new and create app if none" do
+   it "should return register device if new" do
        APN::App.delete_all
        APN::Device.delete_all
        token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
+       app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "")
+       APN::Group.create(:app_id => app.id,:name=>"APPLE")
        #a = APN::Device.create(:token => token,:app_id => app.id)
-       get 'register_device', :id => token
+       get 'register_device', {:id => token,:platform=>'APPLE'}
        resp = JSON.parse(response.body)
        resp["text"].should == 'success'
        APN::Device.count.should == 1
        APN::App.count.should == 1
     end
     
-    it "should return success if error is that it already exists" do
-         APN::App.delete_all
-         APN::Device.delete_all
-         APN::Group.delete_all
-         g = APN::Group.create!({:name=>'Apple',:app_id => 1})
-     
-         token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
-         #a = APN::Device.create(:token => token,:app_id => app.id)
-         get 'register_device', :id => token
-         resp = JSON.parse(response.body)
-         resp["text"].should == 'success'
-         APN::Device.count.should == 1
-         APN::App.count.should == 1
-         
-         get 'register_device', :id => token
-         resp = JSON.parse(response.body)
-         resp["text"].should == 'success'
-         APN::Device.count.should == 1
-         APN::App.count.should == 1
-      end
+    it "should return success if error is that it already exists for apple" do
+       APN::App.delete_all
+       APN::Device.delete_all
+       APN::Group.delete_all
+       app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "")
+       g = APN::Group.create!({:name=>'APPLE',:app_id => app.id})
+   
+       token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
+       #a = APN::Device.create(:token => token,:app_id => app.id)
+       get 'register_device', {:id => token,:platform=>'APPLE'}
+       resp = JSON.parse(response.body)
+       resp["text"].should == 'success'
+       APN::Device.count.should == 1
+       APN::App.count.should == 1
+       
+       get 'register_device', {:id => token,:platform=>'APPLE'}
+       resp = JSON.parse(response.body)
+       resp["text"].should == 'success'
+       APN::Device.count.should == 1
+       APN::App.count.should == 1
+    end
+    
+    it "should add device to android group" do
+      APN::App.delete_all
+      APN::Device.delete_all
+      C2dm::Device.delete_all
+      
+      token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
+      app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "")
+      APN::Group.create(:app_id => app.id,:name=>"ANDROID")
+      get 'register_device', {:id => token,:platform=>'ANDROID'}
+      resp = JSON.parse(response.body)
+      resp["text"].should == 'success'
+      C2dm::Device.count.should == 1
+      gr = APN::Group.find(:first)
+      gr.c2_devices.count.should == 1
+    end
+    
+    it "should return success if error is that it already exists for android" do
+      APN::App.delete_all
+      APN::Device.delete_all
+      C2dm::Device.delete_all
+      
+      token = '5gxadhy6 6zmtxfl6 5zpbcxmw ez3w7ksf qscpr55t trknkzap 7yyt45sc g6jrw7qz'
+      app = APN::App.create!(:apn_dev_cert => "apple_push_development.pem", :apn_prod_cert => "")
+      APN::Group.create(:app_id => app.id,:name=>"ANDROID")
+      get 'register_device', {:id => token,:platform=>'ANDROID'}
+      resp = JSON.parse(response.body)
+      resp["text"].should == 'success'
+      C2dm::Device.count.should == 1
+      gr = APN::Group.find(:first)
+      gr.c2_devices.count.should == 1
+      
+      get 'register_device', {:id => token,:platform=>'ANDROID'}
+      resp = JSON.parse(response.body)
+      resp["text"].should == 'success'
+      C2dm::Device.count.should == 1
+      gr = APN::Group.find(:first)
+      gr.c2_devices.count.should == 1
+    end
+      
+      
 end

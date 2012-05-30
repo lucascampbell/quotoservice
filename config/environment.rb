@@ -4,6 +4,7 @@ require 'resque'
 require 'resque_scheduler'
 require 'resque_scheduler/server'
 require 'apn_on_rails'
+require 'c2dm_on_rails'
 require 'uri'
 
 resque_file =  File.expand_path(File.join(File.dirname(__FILE__),'resque_schedule.yml'))

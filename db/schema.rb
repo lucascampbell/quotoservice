@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120521153625) do
+ActiveRecord::Schema.define(:version => 20120529213532) do
 
   create_table "apn_apps", :force => true do |t|
     t.text     "apn_dev_cert"
@@ -85,6 +85,28 @@ ActiveRecord::Schema.define(:version => 20120521153625) do
     t.boolean  "launch_notification"
   end
 
+  create_table "c2dm_devices", :force => true do |t|
+    t.string   "registration_id",    :null => false
+    t.integer  "group_id"
+    t.datetime "last_registered_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "c2dm_devices", ["registration_id"], :name => "index_c2dm_devices_on_registration_id", :unique => true
+
+  create_table "c2dm_notifications", :force => true do |t|
+    t.integer  "device_id",        :null => false
+    t.string   "collapse_key",     :null => false
+    t.text     "data"
+    t.boolean  "delay_while_idle"
+    t.datetime "sent_at"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "c2dm_notifications", ["device_id"], :name => "index_c2dm_notifications_on_device_id"
+
   create_table "comments", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -95,11 +117,6 @@ ActiveRecord::Schema.define(:version => 20120521153625) do
     t.string   "platform"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "quote_tags", :id => false, :force => true do |t|
-    t.integer "quote_id"
-    t.integer "tag_id"
   end
 
   create_table "quotes", :force => true do |t|
