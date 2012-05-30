@@ -36,8 +36,8 @@ class PushController < ApplicationController
        
        #create notification for android
        #c2dm = C2dm::Notification.new
-       #c2dm.key = alert
-       #c2dm.device = APN::Device.find(1)
+       #c2dm.data = alert
+       #c2dm.device_id = 5 
        #c2dm.save
        
        flash[:notice] = "Successfully pushed"
