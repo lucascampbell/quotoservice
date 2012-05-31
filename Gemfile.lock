@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git@github.com:lucascampbell/c2dm_on_rails.git
-  revision: 081d49d29618aeb9ec0b15f4e54f4fe459ce25c6
+  revision: 883281b9cc5158adb66269145c9c26e86988871d
   specs:
     c2dm_on_rails (0.2.0)
       configatron
