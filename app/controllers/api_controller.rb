@@ -55,10 +55,11 @@ class ApiController < ApplicationController
       if a.errors.count > 0
         resp = a.errors[:token].first =~ /has already been taken/ ? "success" : "failure" if platform == 'APPLE'
         resp = a.errors[:registration_id].first =~ /has already been taken/ ? "success" : "failure" unless platform == 'APPLE'
+        #touch last registered at date so android doesn't remove device
+        a.save if platform == "ANDROID" and resp == "success"
       else
         resp = "success"
         gr = APN::Group.find_by_name(platform.strip)
-        
         if platform == "APPLE"
           gr.devices << a 
         else
