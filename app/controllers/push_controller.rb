@@ -1,4 +1,3 @@
-require 'c2dm_on_rails'
 class PushController < ApplicationController
   
   def index
@@ -36,6 +35,7 @@ class PushController < ApplicationController
        
        #create notification for android
        c2dm = C2dm::Notification.new
+       c2dm.data = {}
        c2dm.data['alert'] = alert
        c2dm.data['sound'] = 'welcome.mp3'
        c2dm.data['vibrate'] = '3'
