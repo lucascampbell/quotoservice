@@ -1,4 +1,4 @@
-
+require 'c2dm_on_rails'
 class PushController < ApplicationController
   
   def index
