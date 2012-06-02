@@ -35,12 +35,12 @@ class PushController < ApplicationController
        
        #create notification for android
        c2dm = C2dm::Notification.new
+       c2dm.collapse_key = (rand * 100000000).to_i.to_s
        c2dm.data = {}
        c2dm.data['alert'] = alert
        c2dm.data['sound'] = 'welcome.mp3'
        c2dm.data['vibrate'] = '3'
        c2dm.data['quote'] = quote
-       
        c2dm.device_id = 5 
        c2dm.save
        
