@@ -9,7 +9,7 @@ class PushJob
       app   = APN::App.first
       app.send_daily_apple_group_notification
       #send for android
-      C2dm::Notification.send_daily_notification
+      #C2dm::Notification.send_daily_notification
       #APN::App.process_devices
     rescue Exception => e
       puts "error #{e.message}"
