@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:lucascampbell/apn_on_rails.git
+  remote: git://github.com/lucascampbell/apn_on_rails.git
   revision: 1584093c9023cb7d20ea09a59b94ed316804f6bc
   specs:
     apn_on_rails (0.5.1)
@@ -8,7 +8,7 @@ GIT
       configatron
 
 GIT
-  remote: git@github.com:lucascampbell/c2dm_on_rails.git
+  remote: git://github.com/lucascampbell/c2dm_on_rails.git
   revision: 7442fd775f2fee2be304aed4762930ba78bb23bb
   specs:
     c2dm_on_rails (0.2.0)

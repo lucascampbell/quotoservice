@@ -11,10 +11,10 @@ gem 'resque', '>=1.20.0'
 gem 'resque-scheduler'
 gem 'thin'
 gem 'will_paginate', '~> 3.0'
-gem 'apn_on_rails', :git => 'git@github.com:lucascampbell/apn_on_rails.git'
+gem 'apn_on_rails', :git => 'git://github.com/lucascampbell/apn_on_rails.git'
 gem 'redis'
 gem 'redis-namespace', '>= 1.0'
-gem 'c2dm_on_rails', :git => 'git@github.com:lucascampbell/c2dm_on_rails.git'
+gem 'c2dm_on_rails', :git => 'git://github.com/lucascampbell/c2dm_on_rails.git'
 
 # Gems used only for assets and not required
 # in production environments by default.
