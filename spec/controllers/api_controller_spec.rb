@@ -10,14 +10,14 @@ describe ApiController do
   
   it "should return 500 with bad token" do
     request.env['HTTP_AUTHORIZATION'] = 'badtoken'
-    get 'get_quotes',:id=>1
+    get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
     response.status.should == 500
   end
   
   it "should return with 2 correct quotes" do
     Quote.create({:quote => "new test quote1", :citation => "new test citations1", :book => "new test book1", :active=>true})
     Quote.create( {:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
-    get 'get_quotes',:id=>0
+    get 'get_quotes',{:id=>0,:delete_id=>0,:update_id=>0}
     response.status.should == 200
     resp = JSON.parse(response.body)
     resp["q"].count.should == 2
@@ -27,7 +27,7 @@ describe ApiController do
   it "should return with 1 correct quotes" do
      Quote.create({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
      Quote.create( {:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
-     get 'get_quotes',:id=>1
+     get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
      response.status.should == 200
      resp = JSON.parse(response.body)
      resp["q"].count.should == 1
@@ -37,7 +37,7 @@ describe ApiController do
   it "should return with noupdates" do
      Quote.create({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
      Quote.create( {:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
-     get 'get_quotes',:id=>2
+     get 'get_quotes',{:id=>2,:delete_id=>0,:update_id=>0}
      response.status.should == 200
      resp = JSON.parse(response.body)
      resp["q"].should == "noupdates"
@@ -94,7 +94,7 @@ describe ApiController do
     q.tags << t1
     q.tags << t2
     q.save
-    get 'get_quotes',:id=>1
+    get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
     resp = JSON.parse(response.body)
     resp["q"].first["tag_ids"].size.should == 2
   end
@@ -107,7 +107,7 @@ describe ApiController do
     q.topics << t1
     q.topics << t2
     q.save
-    get 'get_quotes',:id=>1
+    get 'get_quotes',{:id=>1,:delete_id=>3,:update_id=>0}
     resp = JSON.parse(response.body)
     resp["q"].first["topic_ids"].size.should == 2
   end
@@ -218,5 +218,51 @@ describe ApiController do
       gr.c2_devices.count.should == 1
     end
       
+    it "should return updates for deleted quotes" do
+      q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q.set_id
+      q.save
+      q_id = q.id.to_s
+      q1 = Quote.new({:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
+      q1.set_id
+      q1.save
+      q1_id = q1.id.to_s
+      q.destroy
+
+      get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
+      resp = JSON.parse(response.body)
+      resp["delete"]["ids"].should == q_id.to_s
+      resp["delete"]["last_id"].should == "1"
+      
+      get 'get_quotes',{:id=>1,:delete_id=>1,:update_id=>0}
+      resp = JSON.parse(response.body)
+      resp["delete"].should == nil
+      
+      q1.destroy
+      ids_ar = [q_id,q1_id].join(',')
+      get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
+      resp = JSON.parse(response.body)
+      resp["delete"]["ids"].should == ids_ar
+      resp["delete"]["last_id"].should == "2"
+    end
+    
+    it "should return updates for updated quotes" do
+      q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q.set_id
+      q.save
+      q_id = q.id.to_s
+      q1 = Quote.new({:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
+      q1.set_id
+      q1.save
+      q1_id = q1.id.to_s
+      
+      q.update_attributes(:quote=>'new test quote1 updated')
+
+      get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
+      resp = JSON.parse(response.body)
+      puts resp
+      #resp["update"]["ids"].should == q_id.to_s
+      #resp["delete"]["last_id"].should == "1"
+    end
       
 end

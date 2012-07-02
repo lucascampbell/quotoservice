@@ -3,8 +3,9 @@ class ApiController < ApplicationController
   before_filter :authenticate_token
   
   def get_quotes
-    return not_found_action unless params[:id]
+    return not_found_action unless params[:id] and params[:delete_id] and params[:update_id]
     
+    #check for new quotes
     quotes = Quote.where("id > ? AND active = ?",params[:id],true).order("id ASC")
     if quotes.blank? 
       q_json = {:q =>"noupdates",:id => nil}
@@ -12,6 +13,26 @@ class ApiController < ApplicationController
       #loop through quotes and insert tag ids for json resp.  DEPRECATION WARNING is thrown, alternative is to overwrite json method 
       q_formatted = format_quotes(quotes)
       q_json = {:q => q_formatted, :id => quotes.last.id}
+    end
+    
+    #check for deleted quotes
+    qd = QuoteDelete.where("id > ?",params[:delete_id]).order("id ASC")
+    
+    unless qd.blank?
+      ids = qd.collect(&:quote_id).join(',')
+      delete = {:ids => ids, :last_id => qd.last.id.to_s}
+      q_json[:delete] = delete
+    end
+    
+    #check for updated quotes
+    qu = QuoteUpdate.where("id > ?", params[:update_id]).order("id ASC")
+    updates = []
+    qu.each do |quote|
+      updates << quote.attributes.to_options.delete_if{|key,value| value == 'no' || key == :created_at || key == :updated_at}
+    end
+    unless updates.blank?
+      q_json[:update] = updates
+      q_json[:update] << {:last_id => qu.last.id}
     end
     render :json => q_json
   end

@@ -5,6 +5,8 @@ class Quote < ActiveRecord::Base
   #validates :citation, :presence => true
   has_and_belongs_to_many :tags
   has_and_belongs_to_many :topics
+  before_destroy :log_destroy
+  after_update :log_update
   
   STARTING_ID = 1666
   self.per_page = 200
@@ -12,6 +14,26 @@ class Quote < ActiveRecord::Base
   def set_id
     q = Quote.last
     self.id = q.blank? ? STARTING_ID : (q.id + 1)
+  end
+  
+  def log_update
+    qu = QuoteUpdate.new
+    qu.quote_id = self.id
+    qu.quote = self.quote if self.quote_changed?
+    qu.citation = self.citation if self.citation_changed?
+    qu.book = self.book if self.book_changed?
+    qu.author = self.author if self.author_changed?
+    qu.translation = self.translation if self.translation_changed?
+    qu.abbreviation = self.abbreviation if self.abbreviation_changed?
+    qu.rating = self.rating if self.rating_changed?
+    qu.active = self.active if self.active_changed?
+    qu.tags = self.tags.collect(&:id).join(',') if self.tags
+    qu.topics = self.topics.collect(&:id).join(',') if self.topics
+    qu.save
+  end
+  
+  def log_destroy
+    QuoteDelete.create(:quote_id => self.id)
   end
   
 end
