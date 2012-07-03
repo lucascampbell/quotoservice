@@ -7,7 +7,7 @@ class ApiController < ApplicationController
     
     #check for new quotes
     quotes = Quote.where("id > ? AND active = ?",params[:id],true).order("id ASC")
-    if quotes.blank? 
+    if quotes.blank?
       q_json = {:q =>"noupdates",:id => nil}
     else
       #loop through quotes and insert tag ids for json resp.  DEPRECATION WARNING is thrown, alternative is to overwrite json method 
@@ -28,7 +28,7 @@ class ApiController < ApplicationController
     qu = QuoteUpdate.where("id > ?", params[:update_id]).order("id ASC")
     updates = []
     qu.each do |quote|
-      updates << quote.attributes.to_options.delete_if{|key,value| value == 'no' || key == :created_at || key == :updated_at}
+      updates << quote.attributes.to_options.delete_if{|key,value| value == 'no' || key == :created_at || key == :updated_at || key == :id}
     end
     unless updates.blank?
       q_json[:update] = updates
@@ -70,7 +70,7 @@ class ApiController < ApplicationController
         app = APN::App.first
         a = APN::Device.create(:token => params[:id],:app_id => app.id)
       else
-        a = C2dm::Device.create(:registration_id=> params[:id])
+        a = C2dm::Device.create(:registration_id => params[:id])
       end
       
       if a.errors.count > 0

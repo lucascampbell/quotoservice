@@ -47,12 +47,12 @@
 			  <% end %>
 			</td>
 			<td>
-				<% unless quote.active %>
+				<%# unless quote.active %>
 					<div class='label' style='display:inline'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
 					<div class='label label-important' style='display:inline'><%= link_to("Delete", quote, :method => :delete, :style => 'color:white;text-decoration:none') %></div>
-			    <% else %>
+			    <%# else %>
 					<div class='label'><a href="/push/send_push?id=<%=quote.id%>" style='color:white;text-decoration:none'>push</a></div>
-				<%end%>
+				<%#end%>
 			</td>
 		</tr>
 	<%end%>

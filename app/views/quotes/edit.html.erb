@@ -4,7 +4,6 @@
   <% if @quote.errors.any? %>
     <div class="alert alert-error">
       <h3><%= pluralize(@quote.errors.count, "error") %> prohibited this post from being saved:</h3>
-
       <ul>
       <% @quote.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
@@ -23,7 +22,7 @@
 	<%= f.label :author %>
   	<%= f.text_field :author %><br/>
   	<%= f.label :topic %>
-  	<%= f.select('topics',@topics.collect{|t| [t.name,t.id]},{:prompt=>"Select topic"},{:multiple=>true})  if @topics%><br/>
+	<%=f.select 'topics', options_for_select(@topics.collect{|t| [t.name,t.id]}, @quote.topics.map {|t| t.id}),{},{:multiple=>true,:prompt => 'Select topic'}%><br/>
 	<%= f.label :translation %>
   	<%= f.text_field :translation %>
 	<%= f.label :abbreviation %>
@@ -31,7 +30,7 @@
 	<%= f.label :rating %>
   	<%= f.text_field :rating %>
 	<%= f.label :tags %>
-	<%= f.select("tags",@tags.collect{|t|[t.name,t.id]},{:prompt=>"Select tag"},{:multiple=>true}) if @tags%><br/>
+	<%=f.select 'tags', options_for_select(@tags.collect{|t| [t.name,t.id]}, @quote.tags.map {|t| t.id}),{},{:multiple=>true,:prompt => 'Select topic'}%><br/>
 	<%= f.label :active,{:style=>'display:inline'} %>
 	<%= f.check_box :active %>
   </div>

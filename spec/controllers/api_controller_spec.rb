@@ -242,6 +242,7 @@ describe ApiController do
       ids_ar = [q_id,q1_id].join(',')
       get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
       resp = JSON.parse(response.body)
+      puts resp
       resp["delete"]["ids"].should == ids_ar
       resp["delete"]["last_id"].should == "2"
     end
@@ -260,9 +261,9 @@ describe ApiController do
 
       get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
       resp = JSON.parse(response.body)
-      puts resp
-      #resp["update"]["ids"].should == q_id.to_s
-      #resp["delete"]["last_id"].should == "1"
+      #puts resp
+      resp["update"].first["quote_id"].should == q_id.to_i
+      resp["update"].last["last_id"].should == 1
     end
       
 end
