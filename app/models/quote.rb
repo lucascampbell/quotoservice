@@ -17,6 +17,7 @@ class Quote < ActiveRecord::Base
   end
   
   def log_update
+    return unless self.active == true
     qu = QuoteUpdate.new
     qu.quote_id = self.id
     qu.quote = self.quote if self.quote_changed?
@@ -33,6 +34,7 @@ class Quote < ActiveRecord::Base
   end
   
   def log_destroy
+    return unless self.active == true
     QuoteDelete.create(:quote_id => self.id)
   end
   
