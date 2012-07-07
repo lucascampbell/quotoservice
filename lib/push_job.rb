@@ -7,6 +7,7 @@ class PushJob
     begin
       #send for iphone
       app   = APN::App.first
+      app.process_devices
       count = app.devices.count
       puts "apn device count is #{loops}"
       loops = count/90
@@ -24,7 +25,6 @@ class PushJob
       end
       #send for android
       C2dm::Notification.send_daily_notification
-      app.process_devices
     rescue Exception => e
       puts "error #{e.message}"
       raise e
