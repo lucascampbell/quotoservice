@@ -66,7 +66,7 @@ class QuotesController < ApplicationController
   end
   
   def destroy
-    Quote.find(params[:id]).delete
+    Quote.find(params[:id]).destroy
     flash[:notice] = "Quote deleted successfully"
     redirect_to :action => :index
   end
