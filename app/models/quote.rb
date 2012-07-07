@@ -34,8 +34,9 @@ class Quote < ActiveRecord::Base
   end
   
   def log_destroy
+    puts "self active is #{self.active}"
     return unless self.active == true
-    QuoteDelete.create(:quote_id => self.id)
+    QuoteDelete.create!(:quote_id => self.id)
   end
   
 end
