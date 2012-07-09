@@ -67,6 +67,8 @@ class QuotesController < ApplicationController
   
   def destroy
     Quote.find(params[:id]).destroy
+    qc = QuoteCreate.find_by_quote_id(params[:id])
+    qc.destroy if qc
     flash[:notice] = "Quote deleted successfully"
     redirect_to :action => :index
   end
@@ -75,6 +77,9 @@ class QuotesController < ApplicationController
     @quote = Quote.find_by_id(params[:id])
     @quote.active = true
     @quote.save
+    qc = QuoteCreate.find_by_quote_id(params[:id])
+    qc.active = true
+    qc.save
     flash[:notice] = "Quote activated successfully"
     redirect_to :action => :index
   end

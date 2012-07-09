@@ -6,13 +6,16 @@ class ApiController < ApplicationController
     return not_found_action unless params[:id] and params[:delete_id] and params[:update_id]
     
     #check for new quotes
-    quotes = Quote.where("id > ? AND active = ?",params[:id],true).order("id ASC")
+    #quotes = Quote.where("id > ? AND active = ?",params[:id],true).order("id ASC")
+    qc     = QuoteCreate.where("id > ? and active = ?",params[:id],true).order("id ASC")
+    puts qc.count
+    quotes = Quote.where(:id => qc.collect(&:quote_id)) if qc
     if quotes.blank?
       q_json = {:q =>"noupdates",:id => nil}
     else
       #loop through quotes and insert tag ids for json resp.  DEPRECATION WARNING is thrown, alternative is to overwrite json method 
       q_formatted = format_quotes(quotes)
-      q_json = {:q => q_formatted, :id => quotes.last.id}
+      q_json = {:q => q_formatted, :id => qc.last.id}
     end
     
     #check for deleted quotes

@@ -94,7 +94,7 @@ describe ApiController do
     q.tags << t1
     q.tags << t2
     q.save
-    get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
+    get 'get_quotes',{:id=>0,:delete_id=>0,:update_id=>0}
     resp = JSON.parse(response.body)
     resp["q"].first["tag_ids"].size.should == 2
   end
@@ -107,7 +107,7 @@ describe ApiController do
     q.topics << t1
     q.topics << t2
     q.save
-    get 'get_quotes',{:id=>1,:delete_id=>3,:update_id=>0}
+    get 'get_quotes',{:id=>0,:delete_id=>3,:update_id=>0}
     resp = JSON.parse(response.body)
     resp["q"].first["topic_ids"].size.should == 2
   end

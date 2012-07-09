@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120529213532) do
+ActiveRecord::Schema.define(:version => 20120708233930) do
 
   create_table "apn_apps", :force => true do |t|
     t.text     "apn_dev_cert"
@@ -117,6 +117,40 @@ ActiveRecord::Schema.define(:version => 20120529213532) do
     t.string   "platform"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "quote_creates", :force => true do |t|
+    t.integer  "quote_id",                    :null => false
+    t.string   "active",     :default => "f"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  create_table "quote_deletes", :force => true do |t|
+    t.integer  "quote_id",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "quote_tags", :id => false, :force => true do |t|
+    t.integer "quote_id"
+    t.integer "tag_id"
+  end
+
+  create_table "quote_updates", :force => true do |t|
+    t.integer  "quote_id",                       :null => false
+    t.string   "quote",        :default => "no"
+    t.string   "citation",     :default => "no"
+    t.string   "book",         :default => "no"
+    t.string   "author",       :default => "no"
+    t.string   "topics",       :default => "no"
+    t.string   "tags",         :default => "no"
+    t.string   "translation",  :default => "no"
+    t.string   "abbreviation", :default => "no"
+    t.string   "rating",       :default => "no"
+    t.string   "active",       :default => "no"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   create_table "quotes", :force => true do |t|
