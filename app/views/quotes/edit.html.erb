@@ -1,6 +1,6 @@
 <h2>Edit Quote</h2>
 
-<%= form_for @quote,:url=>"/quotes/#{@quote.id}" do |f| %>
+<% form_for @quote,:url=>"/quotes/#{@quote.id}" do |f| %>
   <% if @quote.errors.any? %>
     <div class="alert alert-error">
       <h3><%= pluralize(@quote.errors.count, "error") %> prohibited this post from being saved:</h3>
@@ -32,7 +32,11 @@
 	<%= f.label :tags, :style=>"display:inline" %><span>( hold cmd so you do not loose previously selected tags)</span><br/>
 	<%=f.select 'tags', options_for_select(@tags.collect{|t| [t.name,t.id]}, @quote.tags.map {|t| t.id}),{},{:multiple=>true,:prompt => 'Select topic'}%><br/>
 	<%= f.label :active,{:style=>'display:inline'} %>
-	<%= f.check_box :active %>
+	<% if @quote.active %>
+		<%= f.check_box :active, :disabled => true %>
+	<% else %>
+		<%= f.check_box :active %>
+	<% end %>
   </div>
 
   <div><%= f.submit "Save",{:class=>'btn',:style=>'margin-top:10px'} %></div>
