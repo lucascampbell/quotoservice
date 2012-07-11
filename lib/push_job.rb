@@ -8,7 +8,14 @@ class PushJob
       #send for iphone
       app   = APN::App.first
       app.process_devices
-      app.send_daily_apple_group_notification
+      
+      count = app.devices.count
+      puts "apn device count is #{loops}"
+      loops = count/90
+      remaining = count % 90
+      loops += 1 if remaining > 0
+      
+      app.send_daily_apple_group_notification(loops)
       #send for android
       #C2dm::Notification.send_daily_notification
       
