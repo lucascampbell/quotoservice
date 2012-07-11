@@ -10,7 +10,6 @@ class PushJob
       app.process_devices
       
       count = app.devices.count
-      puts "apn device count is #{loops}"
       loops = count/90
       remaining = count % 90
       loops += 1 if remaining > 0
