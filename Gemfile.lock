@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/lucascampbell/apn_on_rails.git
-  revision: bcb727946d96ae4bfda5216d1b746af1c3398efd
+  revision: b5ce7b8d9b0c9be92a3e7053379daa8e63367052
   specs:
     apn_on_rails (0.5.1)
       actionpack
