@@ -49,7 +49,7 @@
 			<td>
 				<% if quote.active %>
 					<div class='label' style='display:inline'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
-					<div class='label label-important' style='display:inline'><%= link_to("Delete", quote, :method => :delete, :style => 'color:white;text-decoration:none') %></div>
+					<div class='label label-important' style='display:inline'><%= link_to("Delete", quote, :method => :delete, :style => 'color:white;text-decoration:none',:confirm=>"Are you sure you want to delete?") %></div>
 						<div class='label'><a href="/push/send_push?id=<%=quote.id%>" style='color:white;text-decoration:none'>push</a></div>
 			    <% else %>
 					<div class='label' style='display:inline'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
