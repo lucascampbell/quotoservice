@@ -17,7 +17,7 @@ class PushJob
       
       app.send_daily_apple_group_notification(loops,BATCH_SIZE)
       #send for android
-      #C2dm::Notification.send_daily_notification
+      C2dm::Notification.send_daily_notification
       
     rescue Exception => e
       puts "error #{e.message}"
