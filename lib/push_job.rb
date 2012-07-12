@@ -2,7 +2,7 @@ require 'apn_on_rails'
 require File.join(File.dirname(__FILE__),'../config/environment')
 class PushJob
   @queue = :push_job
-  BATCH_SIZE = 90
+  BATCH_SIZE = 50
   
   def self.perform()
     begin
