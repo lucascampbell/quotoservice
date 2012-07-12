@@ -20,12 +20,16 @@
   	<%= f.text_field :citation %>
 	<%= f.label :book %>
   	<%= f.text_field :book %>
+	<%= f.label :author %>
+  	<%= f.text_field :author %>
 	<%= f.label :topic %>
   	<%= f.select('topics',@topics.collect{|t| [t.name,t.id]},{:prompt=>"Select topic"},{:multiple=>true}) %><br/>
 	<%= f.label :translation %>
   	<%= f.text_field :translation %>
 	<%= f.label :abbreviation %>
   	<%= f.text_field :abbreviation %>
+	<%= f.label :rating %>
+  	<%= f.text_field :rating %>
 	<%= f.label :tags %>
     <%= f.select("tags",@tags.collect{|t|[t.name,t.id]},{:prompt=>"Select tag"},{:multiple=>true}) %><br/>
 	<%= f.label :active,{:style=>'display:inline'} %>
