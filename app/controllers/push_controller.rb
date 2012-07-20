@@ -22,7 +22,7 @@ class PushController < ApplicationController
        badge = 1
        quote_id = params[:id]
        quote = Quote.find(quote_id.to_i)
-       alert = quote.quote
+       alert = quote.quote.to_s.force_encoding("UTF-8")
        
        #create notification for apple
        notification = APN::GroupNotification.new   

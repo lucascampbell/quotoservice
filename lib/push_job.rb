@@ -2,29 +2,23 @@ require 'apn_on_rails'
 require File.join(File.dirname(__FILE__),'../config/environment')
 class PushJob
   @queue = :push_job
-
+  BATCH_SIZE = 50
+  
   def self.perform()
     begin
       #send for iphone
       app   = APN::App.first
       app.process_devices
+      
       count = app.devices.count
-      puts "apn device count is #{loops}"
-      loops = count/90
-      remaining = count % 90
+      loops = count/BATCH_SIZE
+      remaining = count % BATCH_SIZE
+      loops += 1 if remaining > 0
       
-      loop_arr = []
-      loops.times do |index|
-        loop_arr << 90 * (index + 1)
-      end
-      loop_arr << remaining + loop_arr.last if remaining > 0
-      puts "loop_ar is #{loop_arr}"
-      
-      loop_arr.each do |limit|
-        app.send_daily_apple_group_notification(limit)
-      end
+      app.send_daily_apple_group_notification(loops,BATCH_SIZE)
       #send for android
       C2dm::Notification.send_daily_notification
+      
     rescue Exception => e
       puts "error #{e.message}"
       raise e
