@@ -7,7 +7,7 @@ class ApiController < ApplicationController
     
     #check for new quotes
     #quotes = Quote.where("id > ? AND active = ?",params[:id],true).order("id ASC")
-    idd = 0 if params[:id] == 'id'
+    idd = params[:id] == 'id' ? 0 : params[:id]
     qc     = QuoteCreate.where("id > ? and active = ?",idd,true).order("id ASC")
     puts qc.count
     quotes = Quote.where(:id => qc.collect(&:quote_id)) if qc
