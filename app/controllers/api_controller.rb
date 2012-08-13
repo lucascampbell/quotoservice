@@ -112,7 +112,9 @@ class ApiController < ApplicationController
       tp_ids = qt.topics.collect(&:id)
       qt[:tag_ids] = t_ids
       qt[:topic_ids] = tp_ids
+      puts "qt is #{qt}"
     end
+    puts "quotes is #{quotes}"
     quotes
   end
   
