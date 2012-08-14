@@ -38,7 +38,7 @@ class ApiController < ApplicationController
       q_json[:update] = updates
       q_json[:update] << {:last_id => qu.last.id}
     end
-    puts "return hash #{q_json}"
+    
     render :json => q_json
   end
   
@@ -54,15 +54,14 @@ class ApiController < ApplicationController
     # quote should only fail if quote already exists if so return updates
     if quote.save
       render :json => {:q => 'noupdates', :id => quote.id}
+    # else
+    #       if quote.errors['quote'].first == 'has already been taken'
+    #         quotes = Quote.where("id > ? AND active = ?",params['id_last'],true).order("id ASC")
+    #         q_formatted = format_quotes(quotes)
+    #         q_json = quotes.blank? ? {:q =>"noupdates",:id => nil} : {:q => q_formatted, :id => q_formatted.last.id}
+    #         render :json => q_json
     else
-      if quote.errors['quote'].first == 'has already been taken'
-        quotes = Quote.where("id > ? AND active = ?",params['id_last'],true).order("id ASC")
-        q_formatted = format_quotes(quotes)
-        q_json = quotes.blank? ? {:q =>"noupdates",:id => nil} : {:q => q_formatted, :id => q_formatted.last.id}
-        render :json => q_json
-      else
-        return bad_data_error_action
-      end
+      return bad_data_error_action unless quote.errors['quote'].first == 'has already been taken'
     end
   end
   
@@ -112,9 +111,7 @@ class ApiController < ApplicationController
       tp_ids = qt.topics.collect(&:id)
       qt[:tag_ids] = t_ids
       qt[:topic_ids] = tp_ids
-      puts "qt is #{qt}"
     end
-    puts "quotes is #{quotes}"
     quotes
   end
   
