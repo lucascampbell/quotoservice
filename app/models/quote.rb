@@ -46,7 +46,7 @@ class Quote < ActiveRecord::Base
   end
   
   def log_create
-    qd = QuoteDelete.find_all_by_quote_id(self.id)
+    qd = QuoteDelete.find(:all,:conditions=>{:quote_id => self.id})
     qd.first.destroy if qd.first != nil
     QuoteCreate.create!(:quote_id => self.id, :active => true)
   end
