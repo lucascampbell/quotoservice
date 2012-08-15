@@ -7,7 +7,7 @@ class Quote < ActiveRecord::Base
   has_and_belongs_to_many :topics
   before_destroy :log_destroy
   after_update :log_update
-  after_create :log_create
+  #after_create :log_create
   
   STARTING_ID = 1666
   self.per_page = 200
@@ -39,7 +39,15 @@ class Quote < ActiveRecord::Base
     QuoteDelete.create!(:quote_id => self.id)
   end
   
+  def log_deactivate
+    qc = QuoteCreate.find_by_quote_id(self.id)
+    qc.destroy if qc
+    QuoteDelete.create!(:quote_id => self.id)
+  end
+  
   def log_create
-    QuoteCreate.create!(:quote_id => self.id, :active => self.active)
+    qd = QuoteDelete.find_by_quote_id(self.id)
+    qd.destroy if qd
+    QuoteCreate.create!(:quote_id => self.id, :active => true)
   end
 end

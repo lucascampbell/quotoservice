@@ -62,6 +62,11 @@ class ApiController < ApplicationController
     #         render :json => q_json
     else
       return bad_data_error_action unless quote.errors['quote'].first == 'has already been taken'
+      # if quote.errors['quote'].first == 'has already been taken'
+      #         render :json => {:q => 'Quote already exists'}
+      #       else
+      #         return bad_data_error_action
+      #       end
     end
   end
   

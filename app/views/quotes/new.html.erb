@@ -32,8 +32,6 @@
   	<%= f.text_field :rating %>
 	<%= f.label :tags %>
     <%= f.select("tags",@tags.collect{|t|[t.name,t.id]},{:prompt=>"Select tag"},{:multiple=>true}) %><br/>
-	<%= f.label :active,{:style=>'display:inline'} %>
-	<%= f.check_box :active %>
   </div>
 
   <div><%= f.submit "Save",{:class=>'btn',:style=>'margin-top:10px'} %></div>

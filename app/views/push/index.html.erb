@@ -2,7 +2,6 @@
 <table class='table table-striped table-bordered'>
 	<tr>
 		<th style='text-align:center'>ID</th>
-		<th style='text-align:center'>Group</th>
 		<th style='text-align:center'>Alert</th>
 		<th style='text-align:center'>Badge</th>
 		<th style='text-align:center'>Custom URL</th>
@@ -11,7 +10,6 @@
 	<% @notifications.each do |gn| %>
 		<tr>
 			<td><%=gn.id%></td>
-			<td><%=gn.group.name%></td>
 			<td><%=gn.alert%></td>
 			<td><%=gn.badge%></td>
 			<td><%=gn.custom_properties%></td>

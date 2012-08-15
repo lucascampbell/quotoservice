@@ -5,6 +5,7 @@ QuotesService::Application.routes.draw do
   resources :topics
   resources :tags
   match 'quotes/:id/activate' => 'quotes#activate'
+  match 'quotes/:id/deactivate' => 'quotes#deactivate'
   
   #API
   match 'api/v1/get_quotes'      => 'api#get_quotes',      :via=>:get

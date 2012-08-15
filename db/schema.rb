@@ -132,11 +132,6 @@ ActiveRecord::Schema.define(:version => 20120708233930) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "quote_tags", :id => false, :force => true do |t|
-    t.integer "quote_id"
-    t.integer "tag_id"
-  end
-
   create_table "quote_updates", :force => true do |t|
     t.integer  "quote_id",                       :null => false
     t.string   "quote",        :default => "no"

@@ -77,10 +77,17 @@ class QuotesController < ApplicationController
     @quote = Quote.find_by_id(params[:id])
     @quote.active = true
     @quote.save
-    qc = QuoteCreate.find_by_quote_id(params[:id])
-    qc.active = true
-    qc.save
+    @quote.log_create
     flash[:notice] = "Quote activated successfully"
+    redirect_to :action => :index
+  end
+  
+  def deactivate
+    @quote = Quote.find_by_id(params[:id])
+    @quote.active = false
+    @quote.save
+    @quote.log_deactivate
+    flash[:notice] = "Quote deactivated successfully"
     redirect_to :action => :index
   end
   
