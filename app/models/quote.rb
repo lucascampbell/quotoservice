@@ -40,7 +40,7 @@ class Quote < ActiveRecord::Base
   end
   
   def log_deactivate
-    qc = QuoteCreate.find_all_by_quote_id(self.id)
+    qc = QuoteCreate.find(:all,:conditions=>{:quote_id => self.id})
     qc.first.destroy if qc.first != nil
     QuoteDelete.create!(:quote_id => self.id)
   end
