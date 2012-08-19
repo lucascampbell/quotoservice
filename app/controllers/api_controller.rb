@@ -44,7 +44,7 @@ class ApiController < ApplicationController
   
   def set_quote
     #quote,citation,book fields passed
-    return bad_data_error_action if params['quote'].blank? or params['id_last'].blank? or params['citation'].blank? or params['book'].blank?
+    return bad_data_error_action if params['quote'].blank? or params['citation'].blank? or params['book'].blank?
     quote = Quote.new
     quote.quote = params['quote']
     quote.citation = params['citation']
