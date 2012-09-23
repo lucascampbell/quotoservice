@@ -46,7 +46,7 @@ class ApiController < ApplicationController
     #quote,citation,book fields passed
     return bad_data_error_action if params['quote'].blank? or params['citation'].blank? or params['book'].blank?
     quote = Quote.new
-    quote.quote = params['quote']
+    quote.quote = CGI.escapeHTML(params['quote'])
     quote.citation = params['citation']
     quote.book = params['book']
     quote.set_id
