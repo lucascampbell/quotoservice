@@ -14,10 +14,9 @@ class QuotesController < ApplicationController
   
   def create
     p,tags,topics = normalize_quote(params)
-    puts "quote is #{p[:quote]}"
-    p[:quote] = p[:quote]["quote"].gsub(/(\r\n|\n|\r)/,' ')
     
     @quote = Quote.new(p[:quote])
+    @quote.quote = @quote.quote.gsub(/(\r\n|\n|\r)/,' ')
     tags.each do |t_id|
       @quote.tags << Tag.find_by_id(t_id)
     end
