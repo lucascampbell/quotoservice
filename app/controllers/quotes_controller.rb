@@ -44,7 +44,7 @@ class QuotesController < ApplicationController
   def update
     p,tags,topics = normalize_quote(params)
     @quote = Quote.find_by_id(p[:id])
-    p[:quote] = p[:quote]["quote"].gsub(/(\r\n|\n|\r)/,' ')
+    @quote.quote = @quote.quote.gsub(/(\r\n|\n|\r)/,' ')
     if tags
       @quote.tags = []
       tags.each do |t_id|
