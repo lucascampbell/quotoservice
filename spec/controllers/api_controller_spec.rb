@@ -15,18 +15,23 @@ describe ApiController do
   end
   
   it "should return with 2 correct quotes" do
-    Quote.create({:quote => "new test quote1", :citation => "new test citations1", :book => "new test book1", :active=>true})
-    Quote.create( {:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
+    q = Quote.create!({:quote => "new test quote1", :citation => "new test citations1", :book => "new test book1", :active=>true})
+    q.log_create
+    q1 = Quote.create!( {:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
+    q1.log_create
     get 'get_quotes',{:id=>0,:delete_id=>0,:update_id=>0}
     response.status.should == 200
     resp = JSON.parse(response.body)
+    puts resp
     resp["q"].count.should == 2
     resp["id"].should == 2
   end
   
   it "should return with 1 correct quotes" do
-     Quote.create({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
-     Quote.create( {:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
+     q = Quote.create({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+     q.log_create
+     q1 = Quote.create( {:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
+     q1.log_create
      get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
      response.status.should == 200
      resp = JSON.parse(response.body)
@@ -54,7 +59,7 @@ describe ApiController do
   end
   
   it "should return bad data error if missing field" do
-    post "set_quote",{:book => 'testbook', :citation =>'testcitation', :id=>'3002',:id_last => '4000'}
+    post "set_quote",{:book => 'testbook', :citation =>'testcitation', :id=>'3002'}
     response.status.should == 400
     resp = JSON.parse(response.body)
     resp['text'].should == "Bad data error"
@@ -64,7 +69,7 @@ describe ApiController do
     q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
     q.set_id
     q.save
-    post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'5',:id_last => '4000'}
+    post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'5'}
     response.status.should == 200
     resp = JSON.parse(response.body)
     resp['id'].should == 1667
@@ -80,6 +85,7 @@ describe ApiController do
     q.tags << t1
     q.tags << t2
     q.save
+    q.log_create
     get 'get_quotes',{:id=>0,:delete_id=>0,:update_id=>0}
     resp = JSON.parse(response.body)
     resp["q"].first["tag_ids"].size.should == 2
@@ -93,8 +99,10 @@ describe ApiController do
     q.topics << t1
     q.topics << t2
     q.save
+    q.log_create
     get 'get_quotes',{:id=>0,:delete_id=>3,:update_id=>0}
     resp = JSON.parse(response.body)
+    puts resp
     resp["q"].first["topic_ids"].size.should == 2
   end
   
@@ -247,7 +255,7 @@ describe ApiController do
 
       get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
       resp = JSON.parse(response.body)
-      #puts resp
+      puts resp
       resp["update"].first["quote_id"].should == q_id.to_i
       resp["update"].last["last_id"].should == 1
     end

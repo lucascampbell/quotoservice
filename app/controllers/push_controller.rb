@@ -1,23 +1,25 @@
 class PushController < ApplicationController
-  
+  API_TOKEN = '41b34acb018529a92603a5b28aadc8ca7dd369d13b3be272e6'
+  URL       = 'https://secure.pushhero.com/api/v1'
   def index
     @tab = 'push'
-    @quotes = Quote.all
     @notifications = APN::GroupNotification.find(:all,:order=>"id DESC",:conditions=>["sent_at IS NULL"])
-    @push = Push.new
+    resp = RestClient.get(URL + '/scheduled_notifications?app_name=goverse',{:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json})
+    @remote_notifications = JSON.parse(resp)
+    puts @remote_notifications
+  end
+  
+  def send_remote_push(params)
+    s_time = time_set
+    params_apn = set_apn_params
+    params_apn[:notification].merge(:date=>s_time)
+    #params_c2dm = set_c2dm_params
+    #params_c2dm[:notification].merge(:date=>s_time)
+    RestClient.post URL + '/push', params_apn.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
+    #RestClient.post URL + '/push', params_c2dm.to_json, {:AUTHORIZATION => API_TOKEN}
   end
   
   def send_push
-     #THESE CONFIGURATIONS ARE DEFAULT, IF YOU WANT TO CHANGE UNCOMMENT LINES YOU WANT TO CHANGE   
-     #configatron.apn.passphrase  = ''   
-     #configatron.apn.port = 2195   
-     #configatron.apn.host  = 'gateway.sandbox.push.apple.com'   
-     #configatron.apn.cert = File.join(Rails.root, 'config', 'apple_push_development.pem')    
-     #THE CONFIGURATIONS BELOW ARE FOR PRODUCTION PUSH SERVICES, IF YOU WANT TO CHANGE UNCOMMENT LINES YOU WANT TO CHANGE   
-     #configatron.apn.host = 'gateway.push.apple.com'  
-     #configatron.apn.cert = File.join(RAILS_ROOT, 'config', 'apple_push_notification_production.pem')
-     #app = APN::App.create!(:apn_dev_cert => "apple_push_notification_development.pem", :apn_prod_cert => "")  
-     #device = APN::Device.create!(:token =>"460df5a14f8728c5953bca65731f89e447b74025",:app_id => app.id)
      begin
        badge = 1
        quote_id = params[:id]
@@ -25,7 +27,7 @@ class PushController < ApplicationController
        alert = quote.quote.to_s.force_encoding("UTF-8")
        
        #create notification for apple
-       notification = APN::GroupNotification.new   
+       notification = APN::GroupNotification.new
        notification.group = APN::Group.find_by_name("APPLE")
        notification.badge = badge   
        notification.sound = 'true'   
@@ -38,9 +40,6 @@ class PushController < ApplicationController
        c2dm.collapse_key = (rand * 100000000).to_i.to_s
        c2dm.data = {}
        c2dm.data['alert'] = alert
-       #c2dm.data['sound'] = 'welcome.mp3'
-       #c2dm.data['vibrate'] = '3'
-       #c2dm.data['quote'] = quote.id.to_s
        c2dm.device_id = 5 
        c2dm.save
        
@@ -50,7 +49,31 @@ class PushController < ApplicationController
        msg = e.message.size > 200 ? e.message[0..200] : e.message
        flash[:notice] = "Failed to push: #{msg}"
      end
+    #send_remote_push(params)
     redirect_to :controller=>'quotes',:action => 'index'
   end
   
+  private
+  
+  def set_apn_params(params)
+   quote = Quote.find(params[:id].to_i)
+   alert = quote.quote.to_s.force_encoding("UTF-8")
+   {:notification=>{:badge => 1,:custom_properties =>{:quote_id =>params[:id]},:alert=>alert},:group=>'APN_DEV',:app_name=>'goverse'}
+  end
+  
+  def set_c2dm_params(params)
+    {:notification=>{:data=>params[:data]},:group=>'C2DM',:app_name=>'goverse'}
+  end
+  
+  def time_set
+    resp = RestClient.get(URL + '/scheduled_notifications?app_name=goverse',{:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json})
+    notifications = JSON.parse(resp)
+    days   = notifications.size
+    mytime = days.from_now
+    year   = mytime.year
+    month  = mytime.month
+    day    = mytime.day
+    hour   = 12
+    Time.new(year,month,day,hour)
+  end
 end

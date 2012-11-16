@@ -15,7 +15,7 @@ gem 'apn_on_rails', :git => 'git://github.com/lucascampbell/apn_on_rails.git'
 gem 'redis'
 gem 'redis-namespace', '>= 1.0'
 gem 'c2dm_on_rails', :git => 'git://github.com/lucascampbell/c2dm_on_rails.git'
-
+gem 'rest-client'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

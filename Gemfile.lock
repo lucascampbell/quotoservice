@@ -156,6 +156,8 @@ GEM
       redis (>= 2.0.1)
       resque (>= 1.20.0)
       rufus-scheduler
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec (2.11.0)
       rspec-core (~> 2.11.0)
       rspec-expectations (~> 2.11.0)
@@ -234,6 +236,7 @@ DEPENDENCIES
   redis-namespace (>= 1.0)
   resque (>= 1.20.0)
   resque-scheduler
+  rest-client
   rspec-rails (~> 2.6)
   sass-rails (~> 3.2.3)
   sqlite3

@@ -17,3 +17,20 @@
 		</tr>
 	<%end%>
 </table>
+
+<table class='table table-striped table-bordered'>
+	<tr>
+		<th style='text-align:center'>Alert</th>
+		<th style='text-align:center'>Badge</th>
+		<th style='text-align:center'>Custom URL</th>
+		<th style='text-align:center'>Create At</th>
+	</tr>
+	<% @remote_notifications.each do |gn| %>
+		<tr>
+			<td><%=gn['alert']%></td>
+			<td><%=gn['badge']%></td>
+			<td><%=gn['custom_properties']%></td>
+			<td><%=Date.parse(gn['created_at']).strftime("%m/%d/%Y")%></td>
+		</tr>
+	<%end%>
+</table>
