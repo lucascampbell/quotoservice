@@ -13,10 +13,10 @@ class PushController < ApplicationController
     s_time = time_set
     params_apn = set_apn_params
     params_apn[:notification].merge(:date=>s_time)
-    #params_c2dm = set_c2dm_params
-    #params_c2dm[:notification].merge(:date=>s_time)
-    RestClient.post URL + '/push', params_apn.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
-    #RestClient.post URL + '/push', params_c2dm.to_json, {:AUTHORIZATION => API_TOKEN}
+    params_c2dm = set_c2dm_params
+    params_c2dm[:notification].merge(:date=>s_time)
+    RestClient.post URL + '/notification', params_apn.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
+    RestClient.post URL + '/notification', params_c2dm.to_json, {:AUTHORIZATION => API_TOKEN}
   end
   
   def send_push
