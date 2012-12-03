@@ -60,7 +60,8 @@ class PushController < ApplicationController
         msg = "Failed to push: #{msg}"
     end
     #send_remote_push(params)
-    render :json => {:text =>msg}
+    #render :json => {:text =>msg}
+    redirect_to :index
   end
   
   private
