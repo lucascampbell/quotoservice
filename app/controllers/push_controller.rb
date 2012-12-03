@@ -61,7 +61,7 @@ class PushController < ApplicationController
     end
     #send_remote_push(params)
     #render :json => {:text =>msg}
-    redirect_to :index
+    redirect_to :action=>:index
   end
   
   private
