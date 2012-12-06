@@ -17,6 +17,7 @@ gem 'redis-namespace', '>= 1.0'
 gem 'c2dm_on_rails', :git => 'git://github.com/lucascampbell/c2dm_on_rails.git'
 gem 'rest-client'
 gem 'hirefireapp'
+gem 'aws-s3'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -27,6 +28,7 @@ group :assets do
   # gem 'therubyracer'
 
   gem 'uglifier', '>= 1.0.3'
+  gem "asset_sync"
 end
 
 gem 'jquery-rails'
