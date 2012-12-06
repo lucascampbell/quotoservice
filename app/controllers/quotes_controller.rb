@@ -1,8 +1,24 @@
 class QuotesController < ApplicationController
-  
+  helper_method :sort_column,:sort_direction
   def index
     @tab = 'home'
-    @quotes = Quote.paginate(:page=>params[:page]).order('id DESC')
+    @search_type = 'quote'
+    @quotes = Quote.paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+  end
+  
+  def search
+    @search      = params[:search]
+    @search_type = search_type
+    @tab = 'home'
+    case @search_type
+    when 'tag'
+      @quotes = Quote.includes(:tags).select("quotes.id").where("tags.name like ?","%#{@search}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+    when 'topic'
+      @quotes = Quote.includes(:topics).select("quotes.id").where("topics.name like ?","%#{@search}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+    else
+      @quotes = Quote.where("#{search_type} LIKE ?","%#{@search}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+    end
+    render :action => :index
   end
   
   def new
@@ -105,6 +121,18 @@ class QuotesController < ApplicationController
     p["quote"].delete("topics")
     
     return p,tags,topics
+  end
+  
+  def sort_column
+    Quote.column_names.include?(params[:sort]) ? params[:sort] : 'quotes.id'
+  end
+  
+  def sort_direction
+    ['asc','desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+  
+  def search_type
+    ['quote','author','book','citation','topic','tag'].include?(params[:search_type]) ? params[:search_type] : 'quote'
   end
     
 end

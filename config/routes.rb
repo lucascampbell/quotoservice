@@ -1,21 +1,24 @@
 require 'resque/server'
 QuotesService::Application.routes.draw do
   devise_for :users
+
+  match 'quotes/:id/activate' => 'quotes#activate'
+  match 'quotes/:id/deactivate' => 'quotes#deactivate'
+  match 'quotes/search'         => 'quotes#search', :via=>[:post,:get]
   resources :quotes
   resources :topics
   resources :tags
-  match 'quotes/:id/activate' => 'quotes#activate'
-  match 'quotes/:id/deactivate' => 'quotes#deactivate'
   
   #API
   match 'api/v1/get_quotes'      => 'api#get_quotes',      :via=>:get
   match 'api/v1/set_quote'       => 'api#set_quote',       :via=>:post
   match 'api/v1/register_device' => 'api#register_device', :via =>:post
-   
+  
   #Push
-  match 'push/index'           => 'push#index'
-  match 'push/send_push'       => 'push#send_push', :via=>:get
- 
+  match 'push/index'                    => 'push#index'
+  match 'push/send_push'                => 'push#send_push',       :via=>:get
+  match 'push/delete/:id'               => 'push#delete',          :via=>:delete
+  match 'push/delete_remote/:id/:name'  => 'push#delete_remote',   :via=>:delete
   mount Resque::Server.new, :at => "/resque"
   # The priority is based upon order of creation:
   # first created -> highest priority.

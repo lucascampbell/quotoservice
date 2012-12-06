@@ -9,13 +9,14 @@
 </head>
 <body>
 <%= render :partial => 'shared/nav'%>
-<div class='container' style='margin-top:50px'>
+<div class='container' style='margin-top:50px;width:75%'>
 	<% if notice %>
 		<p class="notice alert alert-success"><%= notice %></p>
 	<% end %>
 	<% if alert %>
 		<p class="alert alert-error"><%= alert %></p>
 	<% end %>
+	<%= render :partial => 'shared/flashes'%>
 	<div class='row-fluid'>
 		<%= yield %>
 	</div>

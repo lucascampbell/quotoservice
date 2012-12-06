@@ -10,7 +10,7 @@ class Quote < ActiveRecord::Base
   #after_create :log_create
   
   STARTING_ID = 1666
-  self.per_page = 200
+  self.per_page = 100
   
   def set_id
     q = Quote.last
