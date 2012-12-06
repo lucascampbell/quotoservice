@@ -10,7 +10,7 @@ class QuotesController < ApplicationController
     @search      = params[:search]
     @search_type = search_type
     @tab         = 'home'
-    search_ci    = ""
+    search_ci    = nil
     search_ci    = @search.downcase if @search
     case @search_type
     when 'tag'
