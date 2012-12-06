@@ -12,11 +12,11 @@ class QuotesController < ApplicationController
     @tab = 'home'
     case @search_type
     when 'tag'
-      @quotes = Quote.includes(:tags).select("quotes.id").where("tags.name like ?","%#{@search}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+      @quotes = Quote.includes(:tags).select("quotes.id").where("lower(tags.name) like ?","%#{@search.downcase}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     when 'topic'
-      @quotes = Quote.includes(:topics).select("quotes.id").where("topics.name like ?","%#{@search}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+      @quotes = Quote.includes(:topics).select("quotes.id").where("lower(topics.name) like ?","%#{@search.downcase}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     else
-      @quotes = Quote.where("#{search_type} LIKE ?","%#{@search}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+      @quotes = Quote.where("lower(#{search_type}) LIKE ?","%#{@search.downcase}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     end
     render :action => :index
   end
