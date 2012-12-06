@@ -9,14 +9,16 @@ class QuotesController < ApplicationController
   def search
     @search      = params[:search]
     @search_type = search_type
-    @tab = 'home'
+    @tab         = 'home'
+    search_ci    = ""
+    search_ci    = @search.downcase if @search
     case @search_type
     when 'tag'
-      @quotes = Quote.includes(:tags).select("quotes.id").where("lower(tags.name) like ?","%#{@search.downcase}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+      @quotes = Quote.includes(:tags).select("quotes.id").where("lower(tags.name) like ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     when 'topic'
-      @quotes = Quote.includes(:topics).select("quotes.id").where("lower(topics.name) like ?","%#{@search.downcase}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+      @quotes = Quote.includes(:topics).select("quotes.id").where("lower(topics.name) like ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     else
-      @quotes = Quote.where("lower(#{search_type}) LIKE ?","%#{@search.downcase}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+      @quotes = Quote.where("lower(#{search_type}) LIKE ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     end
     render :action => :index
   end
