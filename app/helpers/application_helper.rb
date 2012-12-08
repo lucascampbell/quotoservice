@@ -7,7 +7,7 @@ module ApplicationHelper
     link_to title, {:sort=>column, :direction=>direction, :page => params[:page]}, {:class => css_class}
   end
   
-  def options_for_select
+  def options_for_select_custom
     "<option #{@search_type == 'quote' ? 'selected' : ''}>quote</option><option #{@search_type == 'author' ? 'selected' : ''}> \n
     author</option><option #{@search_type == 'citation' ? 'selected' : ''}> \n
     citation</option><option #{@search_type == 'book' ? 'selected' : ''}> \n

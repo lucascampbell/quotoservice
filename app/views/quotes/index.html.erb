@@ -2,7 +2,7 @@
 
 <%=form_tag("/quotes/search", :class=>"form-search") do%>
   <%=text_field_tag :search, @search,:class=>"input-large search-query"%>
-	<%=select_tag(:search_type,options_for_select,:style=>"width:100px")%>
+	<%=select_tag(:search_type,options_for_select_custom,:style=>"width:100px")%>
   <%=submit_tag "Search", :class=>"btn"%><br/>
 <%end%>
 <div class="digg_pagination" style='margin-bottom:10px'>
