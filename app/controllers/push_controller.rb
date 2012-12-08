@@ -1,6 +1,6 @@
 class PushController < ApplicationController
-  API_TOKEN = '41b34acb018529a92603a5b28aadc8ca7dd369d13b3be272e6'
-  #b6e04f6b8833a50edd3768f773899f4f3a61dbbdb1c241cc73
+  API_TOKEN = 'b6e04f6b8833a50edd3768f773899f4f3a61dbbdb1c241cc73'
+  #41b34acb018529a92603a5b28aadc8ca7dd369d13b3be272e6
   URL       = 'https://secure.pushhero.com/api/v1'
   KINGS_DAY = Time.parse("09-10-1979")
   
@@ -48,13 +48,13 @@ class PushController < ApplicationController
        notification.save!
        
        #create notification for android
-       c2dm = C2dm::Notification.new
-       c2dm.collapse_key = (rand * 100000000).to_i.to_s
-       c2dm.data = {}
-       c2dm.data['alert'] = alert
-       c2dm.data['q_id'] = notification.id
-       c2dm.device_id = 5 
-       c2dm.save
+       # c2dm = C2dm::Notification.new
+       #  c2dm.collapse_key = (rand * 100000000).to_i.to_s
+       #  c2dm.data = {}
+       #  c2dm.data['alert'] = alert
+       #  c2dm.data['q_id'] = notification.id
+       #  c2dm.device_id = 5 
+       #  c2dm.save
        
        msg = "Successfully pushed"
      rescue Exception => e
@@ -62,8 +62,8 @@ class PushController < ApplicationController
        msg = e.message.size > 200 ? e.message[0..200] : e.message
        msg = "Failed to push: #{msg}"
      end
-    #send_remote_push(params)
-    render :json => {:text =>msg}
+    send_remote_push(params)
+    #render :json => {:text =>msg}
   end
   
   def delete
@@ -74,7 +74,7 @@ class PushController < ApplicationController
        c2_gn = c2 if c2.data['q_id'].to_i == id 
     end
     gn.destroy
-    c2_gn.destroy
+    c2_gn.destroy if c2_gn
     redirect_to :action=>'index'
   end
   
