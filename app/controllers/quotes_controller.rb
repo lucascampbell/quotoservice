@@ -7,7 +7,9 @@ class QuotesController < ApplicationController
   end
   
   def search
-    @search      = params[:search]
+    @search      = params[:search] || session[:search]
+    session[:search] = @search
+    #session.delete[:search]
     @search_type = search_type
     @tab         = 'home'
     search_ci    = nil
@@ -57,6 +59,7 @@ class QuotesController < ApplicationController
     @quote = Quote.find_by_id(params[:id])
     @tags   = Tag.all
     @topics = Topic.all
+    session[:return_to] = request.referer
   end
   
   def update
@@ -79,7 +82,8 @@ class QuotesController < ApplicationController
     
     if @quote.update_attributes(params[:quote])
       flash[:notice] = "Quote updated successfully"
-      redirect_to :action => :index
+      #redirect_to :action => :index
+      redirect_to session.delete(:return_to)
     else
       render :action => :edit
     end
