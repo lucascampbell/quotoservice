@@ -92,7 +92,7 @@ class PushController < ApplicationController
   def set_apn_params(params)
    quote = Quote.find(params[:id].to_i)
    alert = quote.quote.to_s.force_encoding("UTF-8")
-   {:notification=>{:badge => 1,:custom_properties =>{:quote_id =>params[:id]},:alert=>alert},:group=>'APN_DEV',:app_name=>'goverse'}
+   {:notification=>{:badge => 1,:custom_properties =>{:quote_id =>params[:id]},:alert=>alert},:group=>'APN_PROD',:app_name=>'goverse'}
   end
   
   def set_c2dm_params(params)
