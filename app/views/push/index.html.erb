@@ -37,7 +37,7 @@
 		<tr>
 			<td><%=gn['id']%></td>
 			<td><%=gn['name']%></td>
-			<td><%=gn['alert']%></td>
+			<td><%=gn['name'] == 'APN_PROD' ? gn['alert'] : gn['data']%></td>
 			<td><%=gn['badge']%></td>
 			<td><%=gn['custom_properties']%></td>
 			<td><%=Date.parse(gn['created_at']).strftime("%m/%d/%Y")%></td>

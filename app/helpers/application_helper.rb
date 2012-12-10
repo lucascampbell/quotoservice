@@ -12,6 +12,7 @@ module ApplicationHelper
     author</option><option #{@search_type == 'citation' ? 'selected' : ''}> \n
     citation</option><option #{@search_type == 'book' ? 'selected' : ''}> \n
     book</option><option #{@search_type == 'tag' ? 'selected' : ''}>tag</option>
-    <option #{@search_type == 'topic' ? 'selected' : ''}>topic</option>".html_safe
+    <option #{@search_type == 'topic' ? 'selected' : ''}>topic</option> \n
+    <option #{@search_type == 'duplicate' ? 'selected' : ''}>duplicates</option>".html_safe
   end
 end

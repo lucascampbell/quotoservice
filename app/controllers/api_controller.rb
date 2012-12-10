@@ -9,7 +9,6 @@ class ApiController < ApplicationController
     idd = params[:id] == 'id' ? 0 : params[:id]
     
     qc     = QuoteCreate.where("id > ? and active = ?",idd,true).order("id ASC")
-    puts qc.count
     quotes = Quote.where(:id => qc.collect(&:quote_id)) if qc
     if quotes.blank?
       q_json = {:q =>"noupdates",:id => nil}
