@@ -45,7 +45,7 @@ class QuotesController < ApplicationController
     
     topics.each do |tp_id|
        @quote.topics << Topic.find_by_id(tp_id)
-     end
+    end
      
     @quote.set_id
     

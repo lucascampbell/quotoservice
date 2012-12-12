@@ -14,6 +14,9 @@ class Tag < ActiveRecord::Base
   end
    
   def log_destroy
+    #if you destroy topic after create look for old create and remove
+    td = TagCreate.find(:first,:conditions=>{:tag_id => self.id})
+    td.destroy if td != nil
     TagDelete.create!(:tag_id => self.id)
   end
 

@@ -13,6 +13,9 @@ class Topic < ActiveRecord::Base
   end
   
   def log_destroy
+    #if you destroy topic after create look for old create and remove
+    td = TopicCreate.find(:first,:conditions=>{:topic_id => self.id})
+    td.destroy if td != nil
     TopicDelete.create!(:topic_id => self.id)
   end
 
