@@ -30,6 +30,7 @@
 		<th style='text-align:center'>Alert</th>
 		<th style='text-align:center'>Badge</th>
 		<th style='text-align:center'>Custom URL</th>
+		<th style='text-align:center'>Priority</th>
 		<th style='text-align:center'>Create At</th>
 		<th style='text-align:center'>Action</th>
 	</tr>
@@ -40,6 +41,11 @@
 			<td><%=gn['name'] == 'APN_PROD' ? gn['alert'] : gn['data']%></td>
 			<td><%=gn['badge']%></td>
 			<td><%=gn['custom_properties']%></td>
+			<td>
+				<input type='text' style='width:20px' id='priority_<%=gn["id"]%>' value='<%=gn["priority"]%>' />
+				<input type='hidden' id='klss_<%=gn["id"]%>' value='<%=gn["name"]%>' />
+				<a id='<%=gn["id"]%>' class='btn btn-primary priority_edit' style='display:inline'>save</a>
+			</td>
 			<td><%=Date.parse(gn['created_at']).strftime("%m/%d/%Y")%></td>
 			<td>
 				<div class='label label-important' style='display:inline'><%= link_to("Delete",  "/push/delete_remote/#{gn['id']}/#{gn['name']}", :method => :delete, :style => 'color:white;text-decoration:none') %></div>

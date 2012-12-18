@@ -62,4 +62,24 @@ $(function() {
 		})
 		return false;
 	})
+	$('.priority_edit').click(function(){
+		var id = this.id;
+		var klss = $('#klss_' + id ).val();
+		var priority = $('#priority_' + id ).val();
+		$.ajax({ 
+				url: '/push/edit_priority',
+				type:"GET",
+				data: {id:id,klss:klss,priority:priority}, 
+				dataType: "json",
+				success: function(resp){
+					$('.success_bar')[0].innerHTML = resp['text'];
+					$('.success_bar').fadeIn(2000).fadeOut(3000);
+				},
+				error: function(resp){
+					$('.error_bar')[0].innerHTML = resp['text'];
+					$('.error_bar').fadeIn(2000).fadeOut(3000);
+				}
+				
+			});
+	})
 });

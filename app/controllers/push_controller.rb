@@ -3,6 +3,7 @@ class PushController < ApplicationController
   #41b34acb018529a92603a5b28aadc8ca7dd369d13b3be272e6
   URL       = 'https://secure.pushhero.com/api/v1'
   KINGS_DAY = Time.parse("09-10-1979")
+  skip_before_filter :authenticate_user!, :only=>[:index,:edit_priority]
   
   def index
     @tab = 'push'
@@ -13,9 +14,10 @@ class PushController < ApplicationController
   
   def send_remote_push(params)
     begin
-      params_apn = set_apn_params(params)
+      next_one = RestClient.get URL + '/daily_notifications_count/goverse',{:AUTHORIZATION => API_TOKEN}
+      params_apn = set_apn_params(params,next_one)
       params_apn[:notification].merge!(:date=>KINGS_DAY)
-      params_c2dm = set_c2dm_params(params)
+      params_c2dm = set_c2dm_params(params,next_one)
       params_c2dm[:notification].merge!(:date=>KINGS_DAY)
       resp1 = RestClient.post URL + '/notification', params_apn.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
       resp2 = RestClient.post URL + '/notification', params_c2dm.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
@@ -29,6 +31,11 @@ class PushController < ApplicationController
       msg = "Failed to push: #{msg} \n #{e.backtrace}"
     end
     render :json => {:text =>msg}
+  end
+  
+  def edit_priority
+    resp = RestClient.get URL + "/edit_priority/#{params[:klss]}/#{params[:priority]}/goverse/#{params[:id]}", {:AUTHORIZATION => API_TOKEN}
+    render :json => resp
   end
   
   def send_push
@@ -89,16 +96,17 @@ class PushController < ApplicationController
   
   private
   
-  def set_apn_params(params)
+  def set_apn_params(params,next_one)
    quote = Quote.find(params[:id].to_i)
    alert = quote.quote.to_s.force_encoding("UTF-8")
-   {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert},:group=>'APN_PROD',:app_name=>'goverse'}
+   priority = next_one
+   {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert},:group=>'APN_PROD',:app_name=>'goverse',:priority=>next_one}
   end
   
-  def set_c2dm_params(params)
+  def set_c2dm_params(params,next_one)
     quote = Quote.find(params[:id].to_i)
     alert = quote.quote.to_s.force_encoding("UTF-8")
-    {:notification=>{:data=>{:alert=>alert}},:group=>'C2DM',:app_name=>'goverse'}
+    {:notification=>{:data=>{:alert=>alert}},:group=>'C2DM',:app_name=>'goverse',:priority=>next_one}
   end
   
 end
