@@ -14,7 +14,8 @@ class PushController < ApplicationController
   
   def send_remote_push(params)
     begin
-      next_one = RestClient.get URL + '/daily_notifications_count/goverse',{:AUTHORIZATION => API_TOKEN}
+      resp      = RestClient.get URL + '/daily_notifications_count/goverse',{:AUTHORIZATION => API_TOKEN}
+      next_one = resp.strip.to_i + 1
       params_apn = set_apn_params(params,next_one)
       params_apn[:notification].merge!(:date=>KINGS_DAY)
       params_c2dm = set_c2dm_params(params,next_one)
@@ -30,7 +31,7 @@ class PushController < ApplicationController
       msg = e.message.size > 200 ? e.message[0..200] : e.message
       msg = "Failed to push: #{msg} \n #{e.backtrace}"
     end
-    render :json => {:text =>msg}
+    render :json => {:text => msg}
   end
   
   def edit_priority
@@ -100,13 +101,13 @@ class PushController < ApplicationController
    quote = Quote.find(params[:id].to_i)
    alert = quote.quote.to_s.force_encoding("UTF-8")
    priority = next_one
-   {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert},:group=>'APN_PROD',:app_name=>'goverse',:priority=>next_one}
+   {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>'goverse'}
   end
   
   def set_c2dm_params(params,next_one)
     quote = Quote.find(params[:id].to_i)
     alert = quote.quote.to_s.force_encoding("UTF-8")
-    {:notification=>{:data=>{:alert=>alert}},:group=>'C2DM',:app_name=>'goverse',:priority=>next_one}
+    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>'goverse'}
   end
   
 end
