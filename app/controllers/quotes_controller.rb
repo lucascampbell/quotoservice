@@ -84,7 +84,6 @@ class QuotesController < ApplicationController
     
     if @quote.update_attributes(params[:quote])
       flash[:notice] = "Quote updated successfully"
-      #redirect_to :action => :index
       redirect_to session.delete(:return_to)
     else
       render :action => :edit
@@ -102,10 +101,15 @@ class QuotesController < ApplicationController
   def activate
     @quote = Quote.find_by_id(params[:id])
     @quote.active = true
-    @quote.save
-    @quote.log_create
-    flash[:notice] = "Quote activated successfully"
-    redirect_to :action => :index
+    resp = @quote.valiate_fields
+    if resp
+      @quote.save
+      @quote.log_create
+      flash[:notice] = "Quote activated successfully"
+    else
+      flash[:alert]  = "You must have values for quote,citation,book, and translation to activate."
+    end
+    redirect_to request.referer
   end
   
   def deactivate
@@ -114,7 +118,7 @@ class QuotesController < ApplicationController
     @quote.save
     @quote.log_deactivate
     flash[:notice] = "Quote deactivated successfully"
-    redirect_to :action => :index
+    redirect_to request.referer
   end
   
   private
