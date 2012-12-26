@@ -1,21 +1,21 @@
 class PushController < ApplicationController
   API_TOKEN = 'b6e04f6b8833a50edd3768f773899f4f3a61dbbdb1c241cc73'
-  #41b34acb018529a92603a5b28aadc8ca7dd369d13b3be272e6
   URL       = 'https://secure.pushhero.com/api/v1'
   KINGS_DAY = Time.parse("09-10-1979")
+  APPNAME   = 'goverse'
   skip_before_filter :authenticate_user!, :only=>[:index,:edit_priority]
   
   def index
     @tab = 'push'
     @notifications = APN::GroupNotification.where("sent_at IS NULL").order("id DESC")
-    resp = RestClient.get(URL + '/daily_notifications/goverse',{:AUTHORIZATION => API_TOKEN})
+    resp = RestClient.get(URL + "/daily_notifications/#{APPNAME}",{:AUTHORIZATION => API_TOKEN})
     @remote_notifications = JSON.parse(resp)
   end
   
   def send_remote_push(params)
     begin
-      resp      = RestClient.get URL + '/daily_notifications_count/goverse',{:AUTHORIZATION => API_TOKEN}
-      next_one = resp.strip.to_i + 1
+      resp       = RestClient.get URL + "/daily_notifications_count/#{APPNAME}",{:AUTHORIZATION => API_TOKEN}
+      next_one   = resp.strip.to_i + 1
       params_apn = set_apn_params(params,next_one)
       params_apn[:notification].merge!(:date=>KINGS_DAY)
       params_c2dm = set_c2dm_params(params,next_one)
@@ -35,7 +35,7 @@ class PushController < ApplicationController
   end
   
   def edit_priority
-    resp = RestClient.get URL + "/edit_priority/#{params[:klss]}/#{params[:priority]}/goverse/#{params[:id]}", {:AUTHORIZATION => API_TOKEN}
+    resp = RestClient.get URL + "/edit_priority/#{params[:klss]}/#{params[:priority]}/#{APPNAME}/#{params[:id]}", {:AUTHORIZATION => API_TOKEN}
     render :json => resp
   end
   
@@ -44,25 +44,16 @@ class PushController < ApplicationController
        badge = 1
        quote_id = params[:id]
        quote = Quote.find(quote_id.to_i)
-       alert = quote.quote.to_s.force_encoding("UTF-8")
+       alert = quote.quote_push.to_s.force_encoding("UTF-8")
        
        #create notification for apple
        notification = APN::GroupNotification.new
        notification.group = APN::Group.find_by_name("APPLE")
-       notification.badge = badge   
-       notification.sound = 'true'   
+       notification.badge = badge
+       notification.sound = 'true'
        notification.alert = alert
-       notification.custom_properties = {:quote => quote.id}  
+       notification.custom_properties = {:quote => quote.id}
        notification.save!
-       
-       #create notification for android
-       # c2dm = C2dm::Notification.new
-       #  c2dm.collapse_key = (rand * 100000000).to_i.to_s
-       #  c2dm.data = {}
-       #  c2dm.data['alert'] = alert
-       #  c2dm.data['q_id'] = notification.id
-       #  c2dm.device_id = 5 
-       #  c2dm.save
        
        msg = "Successfully pushed"
      rescue Exception => e
@@ -99,15 +90,15 @@ class PushController < ApplicationController
   
   def set_apn_params(params,next_one)
    quote = Quote.find(params[:id].to_i)
-   alert = quote.quote.to_s.force_encoding("UTF-8")
+   alert = quote.quote_push.to_s.force_encoding("UTF-8")
    priority = next_one
-   {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>'goverse'}
+   {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME}
   end
   
   def set_c2dm_params(params,next_one)
     quote = Quote.find(params[:id].to_i)
-    alert = quote.quote.to_s.force_encoding("UTF-8")
-    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>'goverse'}
+    alert = quote.quote_push.to_s.force_encoding("UTF-8")
+    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME}
   end
   
 end

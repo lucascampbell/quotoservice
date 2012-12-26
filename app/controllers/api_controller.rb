@@ -28,17 +28,43 @@ class ApiController < ApplicationController
     end
     
     #check for updated quotes
-    qu = QuoteUpdate.where("id > ?", params[:update_id]).order("id ASC")
-    updates = []
-    qu.each do |quote|
-      updates << quote.attributes.to_options.delete_if{|key,value| value == 'no' || key == :created_at || key == :updated_at || key == :id}
-    end
-    unless updates.blank?
-      q_json[:update] = updates
-      q_json[:update] << {:last_id => qu.last.id}
-    end
+    # qu = QuoteUpdate.where("id > ?", params[:update_id]).order("id ASC")
+    # updates = []
+    # qu.each do |quote|
+    #   updates << quote.attributes.to_options.delete_if{|key,value| value == 'no' || key == :created_at || key == :updated_at || key == :id}
+    # end
+    # unless updates.blank?
+    #   q_json[:update] = updates
+    #   q_json[:update] << {:last_id => qu.last.id}
+    # end
     
     render :json => q_json
+  end
+  
+  #v2 update 
+  def get_updates
+    return not_found_action unless validate_params?(params)
+    
+    json = {:quotes=>{},:tags=>{},:topics=>{}}
+    #check for new quotes
+    json[:quotes] = Quote.quotes_new(params[:q_create_id])
+    
+    #check for deleted quotes
+    json[:quotes].merge!(Quote.quotes_delete(params[:q_delete_id]))
+  
+    #check for new tags
+    json[:tags] = Tag.tags_new(params[:tag_create_id])
+    
+    #check for deleted tags
+    json[:tags].merge!(Tag.tags_delete(params[:tag_delete_id]))
+     
+    #check for new topics
+    json[:topics] = Topic.topics_new(params[:topic_create_id])
+    
+    #check for deleted_topics
+    json[:topics].merge!(Topic.topics_delete(params[:topic_delete_id]))
+    
+    render :json => json
   end
   
   def set_quote
@@ -119,4 +145,12 @@ class ApiController < ApplicationController
     quotes
   end
   
+  def validate_params?(params)
+    params[:q_delete_id] and 
+    params[:q_create_id] and 
+    params[:tag_create_id] and 
+    params[:tag_delete_id] and 
+    params[:topic_create_id] and 
+    params[:topic_delete_id]
+  end
 end

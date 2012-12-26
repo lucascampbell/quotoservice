@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120708233930) do
+ActiveRecord::Schema.define(:version => 20121226033508) do
 
   create_table "apn_apps", :force => true do |t|
     t.text     "apn_dev_cert"
@@ -112,6 +112,15 @@ ActiveRecord::Schema.define(:version => 20120708233930) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "notes", :force => true do |t|
+    t.text     "description"
+    t.integer  "quote_id",    :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "notes", ["quote_id"], :name => "index_notes_on_quote_id"
+
   create_table "pushes", :force => true do |t|
     t.integer  "device_id"
     t.string   "platform"
@@ -132,22 +141,6 @@ ActiveRecord::Schema.define(:version => 20120708233930) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "quote_updates", :force => true do |t|
-    t.integer  "quote_id",                       :null => false
-    t.string   "quote",        :default => "no"
-    t.string   "citation",     :default => "no"
-    t.string   "book",         :default => "no"
-    t.string   "author",       :default => "no"
-    t.string   "topics",       :default => "no"
-    t.string   "tags",         :default => "no"
-    t.string   "translation",  :default => "no"
-    t.string   "abbreviation", :default => "no"
-    t.string   "rating",       :default => "no"
-    t.string   "active",       :default => "no"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-  end
-
   create_table "quotes", :force => true do |t|
     t.text     "quote"
     t.string   "citation"
@@ -160,6 +153,7 @@ ActiveRecord::Schema.define(:version => 20120708233930) do
     t.string   "translation"
     t.integer  "rating"
     t.string   "author"
+    t.text     "quote_push"
   end
 
   create_table "quotes_tags", :id => false, :force => true do |t|
@@ -172,11 +166,35 @@ ActiveRecord::Schema.define(:version => 20120708233930) do
     t.integer "topic_id"
   end
 
+  create_table "tag_creates", :force => true do |t|
+    t.integer  "tag_id",     :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "tag_deletes", :force => true do |t|
+    t.integer  "tag_id",     :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "tags", :force => true do |t|
     t.string   "name"
     t.integer  "visible",    :default => 0
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+  end
+
+  create_table "topic_creates", :force => true do |t|
+    t.integer  "topic_id",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "topic_deletes", :force => true do |t|
+    t.integer  "topic_id",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "topics", :force => true do |t|

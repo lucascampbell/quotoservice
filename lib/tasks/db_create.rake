@@ -84,7 +84,7 @@ namespace :db do
              exst  = quote.tags.collect(&:id).include? tag.id if tag
              quote.tags << tag if tag and !exst
            end
-        end
+         end
       end
       puts "quote to save is ---- #{quote.id}"
       quote.save!
@@ -136,7 +136,21 @@ namespace :db do
         object_id += 1
       end
     end
-    
+  end
+  
+  task :copy_quotes do
+    require File.join(File.dirname(__FILE__),'/../../config/environment')
+    Quote.all.each do |q|
+      q.quote_push = q.quote
+      q.save
+    end
+  end
+  
+  task :create_notes do
+    require File.join(File.dirname(__FILE__),'/../../config/environment')
+    Quote.all.each do |q|
+      Note.create!({:quote_id=>q.id})
+    end
   end
   
 end

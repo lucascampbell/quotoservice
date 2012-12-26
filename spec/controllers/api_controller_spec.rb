@@ -6,6 +6,19 @@ describe ApiController do
     Quote.delete_all
     Tag.delete_all
     Topic.delete_all
+    QuoteCreate.delete_all
+    QuoteDelete.delete_all
+    TopicCreate.delete_all
+    TopicDelete.delete_all
+    TagCreate.delete_all
+    TagDelete.destroy_all
+    ActiveRecord::Base.connection.reset_pk_sequence!('quotes')
+    ActiveRecord::Base.connection.reset_pk_sequence!('quote_creates')
+    ActiveRecord::Base.connection.reset_pk_sequence!('quote_deletes')
+    ActiveRecord::Base.connection.reset_pk_sequence!('topic_creates')
+    ActiveRecord::Base.connection.reset_pk_sequence!('topic_deletes')
+    ActiveRecord::Base.connection.reset_pk_sequence!('tag_creates')
+    ActiveRecord::Base.connection.reset_pk_sequence!('tag_deletes')
   end
   
   it "should return 500 with bad token" do
@@ -22,9 +35,7 @@ describe ApiController do
     get 'get_quotes',{:id=>0,:delete_id=>0,:update_id=>0}
     response.status.should == 200
     resp = JSON.parse(response.body)
-    puts resp
     resp["q"].count.should == 2
-    resp["id"].should == 2
   end
   
   it "should return with 1 correct quotes" do
@@ -35,8 +46,8 @@ describe ApiController do
      get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
      response.status.should == 200
      resp = JSON.parse(response.body)
+     puts resp
      resp["q"].count.should == 1
-     resp["id"].should == 2
   end
   
   it "should return with noupdates" do
@@ -226,7 +237,6 @@ describe ApiController do
       get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
       resp = JSON.parse(response.body)
       resp["delete"]["ids"].should == q_id.to_s
-      resp["delete"]["last_id"].should == "1"
       
       get 'get_quotes',{:id=>1,:delete_id=>1,:update_id=>0}
       resp = JSON.parse(response.body)
@@ -241,23 +251,88 @@ describe ApiController do
       resp["delete"]["last_id"].should == "2"
     end
     
-    it "should return updates for updated quotes" do
+    
+    #V2 tests for get updates
+    
+    it "should return new creates for created quotes" do
       q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
       q.set_id
       q.save
+      q.log_create
       q_id = q.id.to_s
       q1 = Quote.new({:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2', :active=>true})
       q1.set_id
       q1.save
+      q1.log_create
       q1_id = q1.id.to_s
       
-      q.update_attributes(:quote=>'new test quote1 updated')
-
-      get 'get_quotes',{:id=>1,:delete_id=>0,:update_id=>0}
+      get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
       resp = JSON.parse(response.body)
-      puts resp
-      resp["update"].first["quote_id"].should == q_id.to_i
-      resp["update"].last["last_id"].should == 1
+      resp['quotes']['q_delete'].should == 'noupdates'
+     
+      resp['quotes']['q_create'].first['id'].should == q_id.to_i
+      resp['quotes']['q_create'].last['id'].should == q1_id.to_i
     end
+    
+    it "should return new topics for created quotes" do
+      t = Topic.new({:name=>'tst_topic',})
+      t.set_id
+      t.save
+      
+      get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
+      resp = JSON.parse(response.body)
+      resp['topics']['topic_create'].first['id'].should == t.id
+      resp['topics']['topic_create'].first['name'].should == t.name
+    end
+    
+    it "should return new tags for created quotes" do
+      t = Tag.new({:name=>'tst_tag',})
+      t.set_id
+      t.save
+      
+      get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
+      resp = JSON.parse(response.body)
+      resp['tags']['tag_create'].first['id'].should == t.id
+      resp['tags']['tag_create'].first['name'].should == t.name
+    end
+    
+    it "should return delete and create for updated quote" do
+       q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+       q.set_id
+       q.save
+       q.log_create
+       q_id = q.id.to_s
+       q.update_attributes(:quote=>'new update test quote1')
+       
+       get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
+       resp = JSON.parse(response.body)
+       puts resp
+       resp['quotes']['q_delete']['ids'].should == q_id
+       resp['quotes']['q_create'].first['id'].should == q_id.to_i
+     end
+     
+     it "should return delete and create topics for updated quotes" do
+        t = Topic.new({:name=>'tst_topic',})
+        t.set_id
+        t.save
+        t.update_attributes(:name=>'test_topic_up')
+        get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>1,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
+        resp = JSON.parse(response.body)
+        resp['topics']['topic_create'].first['id'].should == t.id
+        resp['topics']['topic_delete']['ids'].should == t.id.to_s
+      end
+
+      it "should return delete create tags for updated quotes" do
+        t = Tag.new({:name=>'tst_tag',})
+        t.set_id
+        t.save
+        t.update_attributes(:name=>'test_tag_up')
+        
+        get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>1,:tag_delete_id=>0}
+        resp = JSON.parse(response.body)
+        resp['tags']['tag_create'].first['id'].should == t.id
+        resp['tags']['tag_delete']['ids'].should == t.id.to_s
+      end
+    
       
 end

@@ -83,3 +83,18 @@ $(function() {
 			});
 	})
 });
+
+function NotesSubmit(d){
+	var form = d.form;
+	$.ajax({
+		url: form.action,
+		type:'GET',
+		data: {id:form[3].value,quote_id:form[2].value},
+		dataType: "json",
+		success: function(resp){
+				$('.success_bar')[0].innerHTML = resp['text'];
+				$('.success_bar').fadeIn(2000).fadeOut(3000);
+		}
+	})
+	return false;
+}

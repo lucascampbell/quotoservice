@@ -12,6 +12,7 @@
 	<tr>
 		<th style='text-align:center'><%=sortable 'quotes.id','id'%></th>
 		<th style='text-align:center'><%=sortable 'quote'%></th>
+		<th style='text-align:center'><%=sortable 'quote_push','quote push'%></th>
 		<th style='text-align:center'><%=sortable 'citation'%></th>
 		<th style='text-align:center'><%=sortable 'book'%></th>
 		<th style='text-align:center'><%=sortable 'author'%></th>
@@ -20,7 +21,7 @@
 		<th style='text-align:center'><%=sortable 'translation'%></th>
 		<th style='text-align:center'><%=sortable 'abbreviation'%></th>
 		<th style='text-align:center'><%=sortable 'rating'%></th>
-		<th style='text-align:center'><%=sortable 'created_at','created at'%></th>
+		<th style='text-align:center'><%=sortable 'created_at','created'%></th>
 		<th style='text-align:center'><%=sortable 'active'%></th>
 		<th style='text-align:center'>Action</th>
 	</tr>
@@ -28,6 +29,7 @@
 		<tr>
 			<td><%=quote.id%></td>
 			<td><%=quote.quote%></td>
+			<td><%=quote.quote_push%></td>
 			<td><%=quote.citation%></td>
 			<td><%=quote.book%></td>
 			<td><%=quote.author%></td>
@@ -66,7 +68,9 @@
 					<div class='label' style='display:inline'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
 					<div class='label label-important' style='display:inline'><%= link_to("Delete", quote, :method => :delete, :style => 'color:white;text-decoration:none') %></div>
 				<%end%>
+				<div class='label' style='display:inline'><a class='notes' href="#notes_<%=quote.id%>" data-toggle="modal" style='color:white;text-decoration:none'>notes</a></div>
 			</td>
 		</tr>
+		<%=render :partial  => 'notes_modal',:locals=>{:q=>quote}%>
 	<%end%>
 </table>

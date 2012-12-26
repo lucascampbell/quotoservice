@@ -2,18 +2,23 @@ require 'resque/server'
 QuotesService::Application.routes.draw do
   devise_for :users
 
-  match 'quotes/:id/activate' => 'quotes#activate'
+  match 'quotes/:id/activate'   => 'quotes#activate'
   match 'quotes/:id/deactivate' => 'quotes#deactivate'
   match 'quotes/search'         => 'quotes#search', :via=>[:post,:get]
+  match 'quotes/notes_save'     => 'quotes#notes_save', :via=>:get
   resources :quotes
   resources :topics
   resources :tags
-  resources :groups
   
-  #API
+  #API V1
   match 'api/v1/get_quotes'      => 'api#get_quotes',      :via=>:get
   match 'api/v1/set_quote'       => 'api#set_quote',       :via=>:post
   match 'api/v1/register_device' => 'api#register_device', :via =>:post
+  
+  #API V2
+  match 'api/v2/get_quotes'      => 'api#get_updates',      :via=>:get
+  match 'api/v2/set_quote'       => 'api#set_quote',       :via=>:post
+  match 'api/v2/register_device' => 'api#register_device', :via =>:post
   
   #Push
   match 'push/index'                    => 'push#index'

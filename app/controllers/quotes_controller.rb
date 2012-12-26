@@ -1,4 +1,5 @@
 class QuotesController < ApplicationController
+  skip_before_filter :authenticate_user!, :only=>[:notes_save]
   helper_method :sort_column,:sort_direction
   def index
     @tab = 'home'
@@ -98,6 +99,20 @@ class QuotesController < ApplicationController
     redirect_to :action => :index
   end
   
+  def notes_save
+    notes = params[:id]
+    id    = params[:quote_id]
+    q = Quote.find(id)
+    notes += "  -#{current_user.email}" unless notes =~ /- #{current_user.email}/
+    q.note.description = notes
+    if q.note.save
+      msg = 'success'
+    else
+      msg = 'failure'
+    end
+    render :json => {:text=>msg}
+  end
+  
   def activate
     @quote = Quote.find_by_id(params[:id])
     @quote.active = true
@@ -144,7 +159,7 @@ class QuotesController < ApplicationController
   end
   
   def search_type
-    ['quote','author','book','citation','topic','tag','duplicate'].include?(params[:search_type]) ? params[:search_type] : 'quote'
+    ['quote','author','book','citation','topic','tag','duplicate','quote_push'].include?(params[:search_type]) ? params[:search_type] : 'quote'
   end
     
 end

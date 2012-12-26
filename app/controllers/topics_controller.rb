@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
   def index
     @tab = 'topic'
-    @topics = Topic.all(:order=>'id DESC')
+    @topics = Topic.paginate(:page=>params[:page]).order('id DESC')
   end
   
   def new

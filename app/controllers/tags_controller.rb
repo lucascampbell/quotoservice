@@ -1,6 +1,7 @@
 class TagsController < ApplicationController
+  before_filter :set_tab
+  
   def index
-    @tab = 'tag'
     @tags = Tag.paginate(:page=>params[:page]).order('id DESC')
   end
   
@@ -21,7 +22,6 @@ class TagsController < ApplicationController
   end
   
   def edit
-    puts "params #{params[:id]}"
     @tag = Tag.find_by_id(params[:id])
   end
   
@@ -43,5 +43,11 @@ class TagsController < ApplicationController
     Tag.find(params[:id]).delete
     flash[:notice] = "Tag deleted successfully"
     redirect_to :action => :index
+  end
+  
+  private 
+  
+  def set_tab
+    @tab = 'tag'
   end
 end
