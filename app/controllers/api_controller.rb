@@ -38,7 +38,7 @@ class ApiController < ApplicationController
     #   q_json[:update] = updates
     #   q_json[:update] << {:last_id => qu.last.id}
     # end
-    puts "q_json ********* #{q_json}"
+    #puts "q_json ********* #{q_json}"
     render :json => q_json
   end
   
