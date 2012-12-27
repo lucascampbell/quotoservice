@@ -155,7 +155,7 @@ class QuotesController < ApplicationController
   end
   
   def sort_direction
-    ['asc','desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+    ['asc','desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
   
   def search_type
