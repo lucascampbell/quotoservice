@@ -20,8 +20,6 @@ class QuotesController < ApplicationController
       @quotes = Quote.includes(:tags).select("quotes.id").where("lower(tags.name) like ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     when 'topic'
       @quotes = Quote.includes(:topics).select("quotes.id").where("lower(topics.name) like ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
-    when 'duplicate'
-      #@quotes = Quote
     else
       @quotes = Quote.where("lower(#{search_type}) LIKE ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     end
@@ -159,7 +157,7 @@ class QuotesController < ApplicationController
   end
   
   def search_type
-    ['quote','author','book','citation','topic','tag','duplicate','quote_push'].include?(params[:search_type]) ? params[:search_type] : 'quote'
+    ['quote','author','book','citation','topic','tag','quote_push'].include?(params[:search_type]) ? params[:search_type] : 'quote'
   end
     
 end
