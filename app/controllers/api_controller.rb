@@ -3,7 +3,7 @@ class ApiController < ApplicationController
   before_filter :authenticate_token
   
   def get_quotes
-    render :json => {:q =>"noupdates",:id => nil} and return
+    render :json => {:q =>"noupdates",:id => 1} and return
     return not_found_action unless params[:id] and params[:delete_id] and params[:update_id]
     
     #check for new quotes
