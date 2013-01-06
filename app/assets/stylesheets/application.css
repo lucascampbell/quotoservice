@@ -10,4 +10,8 @@
  *
  *= require_self
  *= require_tree .
+ *= require jquery-ui-1.9.1.custom.min
+ *= require bootstrap
+ *= require jquery-ui-timepicker-addon
+ *= require timePicker
 */

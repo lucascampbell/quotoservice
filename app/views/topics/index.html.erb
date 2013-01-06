@@ -4,6 +4,9 @@
 		<th style='text-align:center'>ID</th>
 		<th style='text-align:center'>Name</th>
 		<th style='text-align:center'>Visible</th>
+		<th style='text-align:center'>Status</th>
+		<th style='text-align:center'>Expires</th>
+		<th style='text-align:center'>Order</th>
 		<th style='text-align:center'>Action</th>
 	</tr>
 	<% @topics.each do |topic| %>
@@ -17,6 +20,9 @@
 			  <div class='label label-warning'>not visible</div>
 		    <% end %>
 			</td>
+			<td><%=topic.status%></td>
+			<td><%=topic.expires_at.strftime("%m-%d-%Y") if topic.expires_at%></td>
+			<td><%=topic.order_index%></td>
 			<td width='15%'>
 			<div class='label' style='display:inline'><a href="/topics/<%=topic.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
 			<div class='label label-important' style='display:inline'><%= link_to("Delete", topic, :method => :delete, :style => 'color:white;text-decoration:none') %></div>

@@ -1,6 +1,8 @@
 class TopicsController < ApplicationController
   def index
     @tab = 'topic'
+    #check for expired topics
+    Topic.where("status = ? and expires_at < ?",'featured',Time.now).update_all("status = 'expired'")
     @topics = Topic.paginate(:page=>params[:page]).order('id DESC')
   end
   
@@ -43,4 +45,5 @@ class TopicsController < ApplicationController
     flash[:notice] = "Topic deleted successfully"
     redirect_to :action => :index
   end
+  
 end

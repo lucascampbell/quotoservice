@@ -26,9 +26,13 @@ describe QuotesController do
   
   it "should create new quote with tags and redirect" do
     Quote.delete_all
-    Tag.create({:name=>'tag1',:id=>1})
-    Tag.create({:name=>'tag2',:id=>2})
-    params = {:quote => {:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:tags=>["","1","2"]}}
+    t1 = Tag.new({:name=>'tag1'})
+    t1.set_id
+    t1.save
+    t2 = Tag.new({:name=>'tag2'})
+    t2.set_id
+    t2.save
+    params = {:quote => {:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:tags=>["",t1.id,t2.id]}}
     post 'create',params
     Quote.count.should == 1
     q = Quote.first
@@ -37,18 +41,18 @@ describe QuotesController do
   end
   
   it "should update quote with new value" do
-    quote = Quote.create({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book'})
+    quote = Quote.create({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation'})
     params = {:quote => {:quote => 'new edit test quote',},:id=>quote.id}
     put 'update',params
     quote = Quote.first.quote.should == 'new edit test quote'
   end
   
   it "should activate quote" do
-    quote = Quote.create({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book'})
+    quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation'})
     quote.active.should == false
     get "activate",:id=>quote.id
-    quote = Quote.first
-    quote.active.should == true
+    quote2 = Quote.find(quote.id)
+    quote2.active.should == true
     response.should redirect_to('/quotes')
   end
 end

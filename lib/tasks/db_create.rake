@@ -141,8 +141,7 @@ namespace :db do
   task :copy_quotes do
     require File.join(File.dirname(__FILE__),'/../../config/environment')
     Quote.all.each do |q|
-      q.quote_push = q.quote
-      q.save
+      q.update_attribute(:quote_push, q.quote)
     end
   end
   

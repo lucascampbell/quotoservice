@@ -82,6 +82,10 @@ $(function() {
 				
 			});
 	})
+	$('.expires_date').datetimepicker({
+		timeFormat: 'hh:mm z',
+		dateFormat: 'dd-mm-yy'
+	});
 });
 
 function NotesSubmit(d){

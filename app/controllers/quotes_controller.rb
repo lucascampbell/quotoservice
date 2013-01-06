@@ -83,7 +83,8 @@ class QuotesController < ApplicationController
     
     if @quote.update_attributes(params[:quote])
       flash[:notice] = "Quote updated successfully"
-      redirect_to session.delete(:return_to)
+      r = session.delete(:return_to) ? session.delete(:return_to) : url_for(:action=>:index)
+      redirect_to r
     else
       render :action => :edit
     end
@@ -122,7 +123,8 @@ class QuotesController < ApplicationController
     else
       flash[:alert]  = "You must have values for quote,citation,book, and translation to activate."
     end
-    redirect_to request.referer
+    r = request.referer ? request.referer : url_for(:action=>:index)
+    redirect_to r
   end
   
   def deactivate

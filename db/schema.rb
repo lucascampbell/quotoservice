@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121226033508) do
+ActiveRecord::Schema.define(:version => 20121227183138) do
 
   create_table "apn_apps", :force => true do |t|
     t.text     "apn_dev_cert"
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(:version => 20121226033508) do
     t.integer  "rating"
     t.string   "author"
     t.text     "quote_push"
+    t.integer  "order_index"
   end
 
   create_table "quotes_tags", :id => false, :force => true do |t|
@@ -199,9 +200,12 @@ ActiveRecord::Schema.define(:version => 20121226033508) do
 
   create_table "topics", :force => true do |t|
     t.string   "name"
-    t.integer  "visible",    :default => 0
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.integer  "visible",     :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.datetime "expires_at"
+    t.string   "status"
+    t.integer  "order_index"
   end
 
   create_table "users", :force => true do |t|

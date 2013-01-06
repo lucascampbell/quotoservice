@@ -13,4 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap-modal
+//= require jquery-ui-1.9.1.custom.min
+//= require timePicker.min
+//= require jquery-ui-timepicker-addon
 //= require_tree .

@@ -35,6 +35,7 @@ describe ApiController do
     get 'get_quotes',{:id=>0,:delete_id=>0,:update_id=>0}
     response.status.should == 200
     resp = JSON.parse(response.body)
+    puts resp
     resp["q"].count.should == 2
   end
   
