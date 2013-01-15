@@ -55,4 +55,42 @@ describe QuotesController do
     quote2.active.should == true
     response.should redirect_to('/quotes')
   end
+  
+  it "should remove all quote creates when quote is deactivated" do
+    quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation',:active=>true})
+    quote.log_create
+    QuoteCreate.count.should == 1
+    
+    get "deactivate", :id=>quote.id
+    QuoteCreate.count.should == 0
+    QuoteDelete.count.should == 1
+  end
+  
+  it "should remove all quote creates when quote is deactivated but leave other quotes" do
+    quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation',:active=>true})
+    quote2 = Quote.create!({:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2',:translation=>'translation',:active=>true})
+    quote.log_create
+    QuoteCreate.count.should == 1
+    quote2.log_create
+    QuoteCreate.count.should == 2
+    
+    get "deactivate", :id=>quote.id
+    QuoteCreate.count.should == 1
+    QuoteDelete.count.should == 1
+    QuoteCreate.first.id.should == quote2.id
+  end
+  
+  it "should remove all quote creates when quote is destroyed but leave other quotes" do
+    quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation',:active=>true})
+    quote2 = Quote.create!({:quote => 'new test quote2', :citation => "new test citations2", :book => 'new test book2',:translation=>'translation',:active=>true})
+    quote.log_create
+    QuoteCreate.count.should == 1
+    quote2.log_create
+    QuoteCreate.count.should == 2
+    
+    get "destroy", :id=>quote.id
+    QuoteCreate.count.should == 1
+    QuoteDelete.count.should == 1
+    QuoteCreate.first.id.should == quote2.id
+  end
 end

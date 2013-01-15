@@ -85,12 +85,12 @@ class Quote < ActiveRecord::Base
   
   def log_destroy
     return unless self.active == true
+    QuoteCreate.destroy_all("quote_id = #{self.id}")
     QuoteDelete.create!(:quote_id => self.id,:version=>1)
   end
   
   def log_deactivate
-    qc = QuoteCreate.find(:all,:conditions=>{:quote_id => self.id})
-    qc.first.destroy if qc.first != nil
+    QuoteCreate.destroy_all("quote_id = #{self.id}")
     QuoteDelete.create!(:quote_id => self.id,:version=>1)
   end
   

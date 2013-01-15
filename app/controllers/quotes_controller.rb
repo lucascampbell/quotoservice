@@ -92,8 +92,6 @@ class QuotesController < ApplicationController
   
   def destroy
     Quote.find(params[:id]).destroy
-    qc = QuoteCreate.find_by_quote_id(params[:id])
-    qc.destroy if qc
     flash[:notice] = "Quote deleted successfully"
     redirect_to :action => :index
   end
@@ -133,7 +131,8 @@ class QuotesController < ApplicationController
     @quote.save
     @quote.log_deactivate
     flash[:notice] = "Quote deactivated successfully"
-    redirect_to request.referer
+    r = request.referer ? request.referer : url_for(:action=>:index)
+    redirect_to r
   end
   
   private
