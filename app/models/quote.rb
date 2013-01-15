@@ -66,35 +66,37 @@ class Quote < ActiveRecord::Base
     return unless self.active == true
     QuoteDelete.create!(:quote_id => self.id)
     QuoteCreate.create!(:quote_id => self.id)
-    #  qu = QuoteUpdate.new
-    #  qu.quote_id = self.id
-    #  qu.quote = self.quote if self.quote_changed?
-    #  qu.citation = self.citation if self.citation_changed?
-    #  qu.book = self.book if self.book_changed?
-    #  qu.author = self.author if self.author_changed?
-    #  qu.translation = self.translation if self.translation_changed?
-    #  qu.abbreviation = self.abbreviation if self.abbreviation_changed?
-    #  qu.rating = self.rating if self.rating_changed?
-    #  qu.active = self.active if self.active_changed?
-    #  qu.tags = self.tags.collect(&:id).join(',') if self.tags
-    #  qu.topics = self.topics.collect(&:id).join(',') if self.topics
-    #  qu.save
+    
+    #do this for 1.0 until it is deprecated
+    qu = QuoteUpdate.new
+    qu.quote_id = self.id
+    qu.quote = self.quote if self.quote_changed?
+    qu.citation = self.citation if self.citation_changed?
+    qu.book = self.book if self.book_changed?
+    qu.author = self.author if self.author_changed?
+    qu.translation = self.translation if self.translation_changed?
+    qu.abbreviation = self.abbreviation if self.abbreviation_changed?
+    qu.rating = self.rating if self.rating_changed?
+    qu.active = self.active if self.active_changed?
+    qu.tags = self.tags.collect(&:id).join(',') if self.tags
+    qu.topics = self.topics.collect(&:id).join(',') if self.topics
+    qu.save
   end
   
   def log_destroy
     return unless self.active == true
-    QuoteDelete.create!(:quote_id => self.id)
+    QuoteDelete.create!(:quote_id => self.id,:version=>1)
   end
   
   def log_deactivate
     qc = QuoteCreate.find(:all,:conditions=>{:quote_id => self.id})
     qc.first.destroy if qc.first != nil
-    QuoteDelete.create!(:quote_id => self.id)
+    QuoteDelete.create!(:quote_id => self.id,:version=>1)
   end
   
   def log_create
     qd = QuoteDelete.find(:all,:conditions=>{:quote_id => self.id})
     qd.first.destroy if qd.first != nil
-    QuoteCreate.create!(:quote_id => self.id, :active => true)
+    QuoteCreate.create!(:quote_id => self.id, :active => true,:version=>1)
   end
 end

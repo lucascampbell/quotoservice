@@ -60,6 +60,29 @@ describe ApiController do
      resp["q"].should == "noupdates"
      resp["id"].should == nil
   end
+  
+  it "should only return quotes that are not updated" do
+    q = Quote.create!({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+    q.log_create
+    
+    get 'get_quotes',{:id=>0,:delete_id=>0,:update_id=>0}
+    response.status.should == 200
+    resp = JSON.parse(response.body)
+    resp["q"].count.should == 1
+    resp["id"].should == 1
+    resp['update'].should == nil
+    
+    q.citation = 'test citation'
+    q.save!
+    
+    get 'get_quotes',{:id=>0,:delete_id=>0,:update_id=>0}
+    response.status.should == 200
+    resp = JSON.parse(response.body)
+    
+    resp["q"].count.should == 1
+    resp["id"].should == 1
+    resp["update"].first['quote_id'].should == 1
+  end
    
   it "should set new quote and return original id" do
      post "set_quote",{:quote => 'test quote', :book => 'testbook', :citation =>'testcitation', :id=>'5',:id_last => '4000'}

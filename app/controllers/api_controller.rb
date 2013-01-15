@@ -9,7 +9,8 @@ class ApiController < ApplicationController
     #check for new quotes
     idd = params[:id] == 'id' ? 0 : params[:id]
     
-    qc     = QuoteCreate.where("id > ? and active = ?",idd,true).order("id ASC")
+    qc     = QuoteCreate.where("id > ? and active = ? and version = ?",idd,true,1).order("id ASC")
+    puts qc.count
     quotes = Quote.where(:id => qc.collect(&:quote_id)) if qc
     if quotes.blank?
       q_json = {:q =>"noupdates",:id => nil}
@@ -20,7 +21,7 @@ class ApiController < ApplicationController
     end
     
     #check for deleted quotes
-    qd = QuoteDelete.where("id > ?",params[:delete_id]).order("id ASC")
+    qd = QuoteDelete.where("id > ? and version = ?",params[:delete_id],1).order("id ASC")
     
     unless qd.blank?
       ids = qd.collect(&:quote_id).join(',')
@@ -29,16 +30,17 @@ class ApiController < ApplicationController
     end
     
     #check for updated quotes
-    # qu = QuoteUpdate.where("id > ?", params[:update_id]).order("id ASC")
-    # updates = []
-    # qu.each do |quote|
-    #   updates << quote.attributes.to_options.delete_if{|key,value| value == 'no' || key == :created_at || key == :updated_at || key == :id}
-    # end
-    # unless updates.blank?
-    #   q_json[:update] = updates
-    #   q_json[:update] << {:last_id => qu.last.id}
-    # end
-    #puts "q_json ********* #{q_json}"
+    qu = QuoteUpdate.where("id > ?", params[:update_id]).order("id ASC")
+    
+    updates = []
+    qu.each do |quote|
+      updates << quote.attributes.to_options.delete_if{|key,value| value == 'no' || key == :created_at || key == :updated_at || key == :id}
+    end
+    unless updates.blank?
+      q_json[:update] = updates
+      q_json[:update] << {:last_id => qu.last.id}
+    end
+   
     render :json => q_json
   end
   
