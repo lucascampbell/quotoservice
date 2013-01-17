@@ -83,8 +83,8 @@ class QuotesController < ApplicationController
     
     if @quote.update_attributes(params[:quote])
       flash[:notice] = "Quote updated successfully"
-      if request.referer 
-        redirect_to request.referer
+      if session[:return_to] 
+        redirect_to session[:return_to]
       else
         redirect_to url_for(:action=>:index)
       end
