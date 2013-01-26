@@ -4,7 +4,12 @@ module ApplicationHelper
     title = title ? title.titleize : column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
-    link_to title, {:sort=>column, :direction=>direction, :page => params[:page]}, {:class => css_class}
+    link_to title, {:sort=>column, 
+      :direction=>direction, 
+      :page => params[:page],
+      :search_type=>@search_type,
+      :search => @search}, 
+    {:class => css_class}
   end
   
   def options_for_select_custom
