@@ -35,6 +35,7 @@ gem 'jquery-rails'
 
 group :production do
   gem 'pg'
+  gem 'exception_notification', git: 'git://github.com/alanjds/exception_notification.git'
 end
 
 group :development, :test do

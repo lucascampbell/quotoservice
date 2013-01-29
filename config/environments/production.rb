@@ -1,6 +1,9 @@
 QuotesService::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
-
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "[Exception] ",
+    :sender_address => %{"Exception Notifier" <luke@pushhero.com>},
+    :exception_recipients => %w{lucas.campbellrossen@gmail.com}
   # Code is not reloaded between requests
   config.cache_classes = true
 
