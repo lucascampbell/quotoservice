@@ -22,7 +22,7 @@ class Topic < ActiveRecord::Base
   def self.topics_delete(id)
     td = TopicDelete.where("id > ?",id)
     unless td.blank?
-      ids = td.collect(&:topic_id).join(',')
+      ids = td.collect(&:topic_id).uniq.join(',')
       delete = {:ids => ids, :last_id => td.last.id.to_s}
       q_json = {}
       q_json[:topic_delete] = delete

@@ -29,7 +29,7 @@ class Quote < ActiveRecord::Base
   def self.quotes_delete(id)
     qd = QuoteDelete.where("id > ?",id).order("id ASC")
     unless qd.blank?
-      ids = qd.collect(&:quote_id).join(',')
+      ids = qd.collect(&:quote_id).uniq.join(',')
       delete = {:ids => ids, :last_id => qd.last.id.to_s}
       q_json = {}
       q_json[:q_delete] = delete
