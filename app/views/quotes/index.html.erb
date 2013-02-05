@@ -68,7 +68,11 @@
 					<div class='label' style='display:inline'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
 					<div class='label label-important' style='display:inline'><%= link_to("Delete", quote, :method => :delete, :style => 'color:white;text-decoration:none') %></div>
 				<%end%>
-				<div class='label' style='display:inline'><a class='notes' href="#notes_<%=quote.id%>" data-toggle="modal" style='color:white;text-decoration:none'>notes</a></div>
+				<% if quote.note and quote.note.size > 0 %>
+					<div class='label label-success' style='display:inline'><a class='notes' href="#notes_<%=quote.id%>" data-toggle="modal" style='color:white;text-decoration:none'>notes</a></div>
+				<% else %>
+					<div class='label' style='display:inline'><a class='notes' href="#notes_<%=quote.id%>" data-toggle="modal" style='color:white;text-decoration:none'>notes</a></div>
+				<% end %>
 			</td>
 		</tr>
 		<%=render :partial  => 'notes_modal',:locals=>{:q=>quote}%>

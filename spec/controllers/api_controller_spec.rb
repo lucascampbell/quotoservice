@@ -305,6 +305,7 @@ describe ApiController do
       
       get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
       resp = JSON.parse(response.body)
+      puts resp
       resp['topics']['topic_create'].first['id'].should == t.id
       resp['topics']['topic_create'].first['name'].should == t.name
     end
@@ -330,7 +331,7 @@ describe ApiController do
        
        get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
        resp = JSON.parse(response.body)
-       puts resp
+       #puts resp
        resp['quotes']['q_delete']['ids'].should == q_id
        resp['quotes']['q_create'].first['id'].should == q_id.to_i
      end
@@ -342,6 +343,7 @@ describe ApiController do
         t.update_attributes(:name=>'test_topic_up')
         get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>1,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
         resp = JSON.parse(response.body)
+        #puts resp
         resp['topics']['topic_create'].first['id'].should == t.id
         resp['topics']['topic_delete']['ids'].should == t.id.to_s
       end
