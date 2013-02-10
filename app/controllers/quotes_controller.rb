@@ -52,6 +52,9 @@ class QuotesController < ApplicationController
       flash[:notice] = "Quote saved successfully"
       redirect_to :action => :index
     else
+      @tags   = Tag.all
+      @topics = Topic.all
+      @tab = 'new'
       render :action => :new
     end
   end
