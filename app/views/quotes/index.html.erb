@@ -58,7 +58,7 @@
 				<% if quote.active %>
 					<div class='label' style='display:inline'><a href="/quotes/<%=quote.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
 					<div class='label label-important' style='display:inline'><%= link_to("Delete", quote, :method => :delete, :style => 'color:white;text-decoration:none',:confirm=>"Are you sure you want to delete?") %></div>
-					<% if quote.quote.size > 107 %>
+					<% if quote.quote_push and quote.quote_push.size > 107 %>
 						<div class='label'><a class='push_quote_confirm' href="/push/send_push?id=<%=quote.id%>" style='color:white;text-decoration:none'>push</a></div>
 					<% else%>
 						<div class='label label-success' style='display:inline'><a class='push_quote' href="/push/send_push?id=<%=quote.id%>" style='color:white;text-decoration:none'>push</a></div>
