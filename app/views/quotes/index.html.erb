@@ -20,6 +20,7 @@
 		<th style='text-align:center'>Topics</th>
 		<th style='text-align:center'><%=sortable 'translation'%></th>
 		<th style='text-align:center'><%=sortable 'abbreviation'%></th>
+		<th style='text-align:center'><%=sortable 'order'%></th>
 		<th style='text-align:center'><%=sortable 'rating'%></th>
 		<th style='text-align:center'><%=sortable 'created_at','created'%></th>
 		<th style='text-align:center'><%=sortable 'active'%></th>
@@ -45,6 +46,7 @@
 			</td>
 			<td><%=quote.translation%></td>
 			<td><%=quote.abbreviation%></td>
+			<td><%=quote.order_index%></td>
 			<td><%=quote.rating%></td>
 			<td><%=quote.created_at.strftime("%m/%d/%Y")%></td>
 			<td>

@@ -7,7 +7,7 @@ class PushController < ApplicationController
   
   def index
     @tab = 'push'
-    @notifications = APN::GroupNotification.where("sent_at IS NULL").order("id DESC")
+    #@notifications = APN::GroupNotification.where("sent_at IS NULL").order("id DESC")
     resp = RestClient.get(URL + "/daily_notifications/#{APPNAME}",{:AUTHORIZATION => API_TOKEN})
     @remote_notifications = JSON.parse(resp)
   end
@@ -39,31 +39,32 @@ class PushController < ApplicationController
     render :json => resp
   end
   
-  def send_push
-     begin
-       badge = 1
-       quote_id = params[:id]
-       quote = Quote.find(quote_id.to_i)
-       alert = quote.quote_push.to_s.force_encoding("UTF-8")
-       
-       #create notification for apple
-       notification = APN::GroupNotification.new
-       notification.group = APN::Group.find_by_name("APPLE")
-       notification.badge = badge
-       notification.sound = 'true'
-       notification.alert = alert
-       notification.custom_properties = {:quote => quote.id}
-       notification.save!
-       
-       msg = "Successfully pushed"
-     rescue Exception => e
-       puts "#{e.message} \n #{e.backtrace}"
-       msg = e.message.size > 200 ? e.message[0..200] : e.message
-       msg = "Failed to push: #{msg}"
-     end
-    send_remote_push(params)
-    #render :json => {:text =>msg}
-  end
+  #deprecated with old app
+  # def send_push
+  #    begin
+  #      badge = 1
+  #      quote_id = params[:id]
+  #      quote = Quote.find(quote_id.to_i)
+  #      alert = quote.quote_push.to_s.force_encoding("UTF-8")
+  #      
+  #      #create notification for apple
+  #      notification = APN::GroupNotification.new
+  #      notification.group = APN::Group.find_by_name("APPLE")
+  #      notification.badge = badge
+  #      notification.sound = 'true'
+  #      notification.alert = alert
+  #      notification.custom_properties = {:quote => quote.id}
+  #      notification.save!
+  #      
+  #      msg = "Successfully pushed"
+  #    rescue Exception => e
+  #      puts "#{e.message} \n #{e.backtrace}"
+  #      msg = e.message.size > 200 ? e.message[0..200] : e.message
+  #      msg = "Failed to push: #{msg}"
+  #    end
+  #   send_remote_push(params)
+  #   #render :json => {:text =>msg}
+  # end
   
   def delete
     gn = APN::GroupNotification.find_by_id(params[:id])

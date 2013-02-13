@@ -74,8 +74,11 @@ class ApiController < ApplicationController
     #quote,citation,book fields passed
     return bad_data_error_action if params['quote'].blank? or params['citation'].blank? or params['book'].blank?
     quote = Quote.new
-    #Base64.decode64(params['quote'])
-    quote.quote = CGI.escapeHTML(params['quote'].gsub("--8",";"))
+    if Quote.resembles_base64?(params['quote'])
+      quote.quote = Base64.decode64(params['quote'])
+    else
+      quote.quote = CGI.escapeHTML(params['quote'].gsub("--8",";"))
+    end
     quote.citation = params['citation']
     quote.book = params['book']
     quote.set_id
@@ -83,19 +86,12 @@ class ApiController < ApplicationController
     # quote should only fail if quote already exists if so return updates
     if quote.save
       render :json => {:q => 'noupdates', :id => quote.id}
-    # else
-    #       if quote.errors['quote'].first == 'has already been taken'
-    #         quotes = Quote.where("id > ? AND active = ?",params['id_last'],true).order("id ASC")
-    #         q_formatted = format_quotes(quotes)
-    #         q_json = quotes.blank? ? {:q =>"noupdates",:id => nil} : {:q => q_formatted, :id => q_formatted.last.id}
-    #         render :json => q_json
     else
-      return bad_data_error_action unless quote.errors['quote'].first == 'has already been taken'
-      # if quote.errors['quote'].first == 'has already been taken'
-      #         render :json => {:q => 'Quote already exists'}
-      #       else
-      #         return bad_data_error_action
-      #       end
+      if quote.errors['quote'].first == 'has already been taken'
+        render :json => {:q => 'noupdates', :id => quote.id}
+      else
+        return bad_data_error_action 
+      end
     end
   end
   

@@ -26,6 +26,11 @@ class Quote < ActiveRecord::Base
     q_json
   end
   
+  def self.resembles_base64?(quote)
+    res = quote =~ /^[A-Za-z0-9+\/=]+\Z/
+    (quote.length % 4 == 0) and (res != nil)
+  end
+  
   def self.quotes_delete(id)
     qd = QuoteDelete.where("id > ?",id).order("id ASC")
     unless qd.blank?

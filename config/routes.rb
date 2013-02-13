@@ -23,7 +23,7 @@ QuotesService::Application.routes.draw do
   #Push
   match 'push/index'                    => 'push#index'
   match 'push/edit_priority'            => 'push#edit_priority',   :via=>:get
-  match 'push/send_push'                => 'push#send_push',       :via=>:get
+  match 'push/send_push'                => 'push#send_remote_push', :via=>:get
   match 'push/delete/:id'               => 'push#delete',          :via=>:delete
   match 'push/delete_remote/:id/:name'  => 'push#delete_remote',   :via=>:delete
   mount Resque::Server.new, :at => "/resque"
