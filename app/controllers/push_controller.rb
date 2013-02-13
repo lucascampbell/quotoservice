@@ -12,7 +12,7 @@ class PushController < ApplicationController
     @remote_notifications = JSON.parse(resp)
   end
   
-  def send_remote_push(params)
+  def send_remote_push
     begin
       resp       = RestClient.get URL + "/daily_notifications_count/#{APPNAME}",{:AUTHORIZATION => API_TOKEN}
       next_one   = resp.strip.to_i + 1
