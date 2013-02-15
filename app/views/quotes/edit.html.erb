@@ -34,7 +34,7 @@
 	<%= f.label :rating %>
   	<%= f.text_field :rating %><br/>
 	<%= f.label :tags, :style=>"display:inline" %><span>( hold cmd so you do not loose previously selected tags)</span><br/>
-	<%=f.select 'tags', options_for_select(@tags.collect{|t| [t.name,t.id]}, @quote.tags.map {|t| t.id}),{},{:multiple=>true,:prompt => 'Select topic'}%><br/>
+	<%=f.select 'tags', options_for_select(@tags.collect{|t| [t.name,t.id]}, @quote.tags.map {|t| t.id}),{},{:multiple=>true,:class=>'t_select'}%><br/>
 	<%= f.label :active,{:style=>'display:inline'} %>
 	<% if @quote.active %>
 		<%= f.check_box :active, :disabled => true %>
