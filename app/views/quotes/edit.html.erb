@@ -14,9 +14,9 @@
 
   <div style='margin-top:10px'>
 	<%= f.label :quote %>
-  	<%= f.text_area :quote %>
+  	<%= f.text_area :quote, :style=>"width:500px" %>
 	<%= f.label :quote_push %>
-	  <%= f.text_area :quote_push %>
+	  <%= f.text_area :quote_push, :style=>"width:500px" %>
 	<%= f.label :citation %>
   	<%= f.text_field :citation %>
 	<%= f.label :book %>
@@ -24,7 +24,7 @@
 	<%= f.label :author %>
   	<%= f.text_field :author %><br/>
   	<%= f.label :topic, :style=>"display:inline" %><span>( hold cmd so you do not loose previously selected topics)</span><br/>
-	<%= f.select 'topics', options_for_select(@topics.collect{|t| [t.name,t.id]}, @quote.topics.map {|t| t.id}),{},{:multiple=>true,:prompt => 'Select topic'}%><br/>
+	<%= f.select 'topics', options_for_select(@topics.collect{|t| [t.name,t.id]}, @quote.topics.map {|t| t.id}),{},{:multiple=>true,:class=>'t_select'}%><br/>
 	<%= f.label :translation %>
   	<%= f.text_field :translation %>
 	<%= f.label :abbreviation %>

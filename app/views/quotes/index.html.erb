@@ -29,8 +29,8 @@
 	<% @quotes.each do |quote| %>
 		<tr>
 			<td><%=quote.id%></td>
-			<td><%=quote.quote%></td>
-			<td><%=quote.quote_push%></td>
+			<td><%=truncate(quote.quote, :length => 160, :omission => '... (continued)')%></td>
+			<td><%=truncate(quote.quote_push, :length => 160, :omission => '... (continued)')%></td>
 			<td><%=quote.citation%></td>
 			<td><%=quote.book%></td>
 			<td><%=quote.author%></td>

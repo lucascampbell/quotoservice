@@ -25,7 +25,8 @@
 	<%= f.label :author %>
   	<%= f.text_field :author %>
 	<%= f.label :topic %>
-  	<%= f.select('topics',@topics.collect{|t| [t.name,t.id]},{:prompt=>"Select topic"},{:multiple=>true}) %><br/>
+	
+  	<%= f.select('topics',@topics.collect{|t| [t.name,t.id]},{:prompt=>"Select topic"},{:multiple=>true,:class=>'t_select'}) %><br/>
 	<%= f.label :translation %>
   	<%= f.text_field :translation %>
 	<%= f.label :abbreviation %>

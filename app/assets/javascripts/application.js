@@ -16,4 +16,5 @@
 //= require jquery-ui-1.9.1.custom.min
 //= require timePicker.min
 //= require jquery-ui-timepicker-addon
+//= require ui.multiselect
 //= require_tree .

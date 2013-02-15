@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130114234219) do
+ActiveRecord::Schema.define(:version => 20130122184726) do
 
   create_table "apn_apps", :force => true do |t|
     t.text     "apn_dev_cert"
@@ -135,29 +135,29 @@ ActiveRecord::Schema.define(:version => 20130114234219) do
     t.datetime "updated_at",                  :null => false
     t.integer  "version"
   end
-  
+
   create_table "quote_deletes", :force => true do |t|
-     t.integer  "quote_id",                    :null => false
-     t.datetime "created_at",                  :null => false
-     t.datetime "updated_at",                  :null => false
-     t.integer  "version"
+    t.integer  "quote_id",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "version"
   end
 
   create_table "quote_updates", :force => true do |t|
-    t.integer  "quote_id",                      :null => false
-    t.string   "active",       :default => "f"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.integer  "version"
-    t.string   "quote"
-    t.string   "citation"
-    t.string   "book"
+    t.text     "quote"
+    t.integer  "quote_id"
+    t.string   "abbreviation"
     t.string   "author"
     t.string   "translation"
-    t.string   "abbreviation"
     t.string   "rating"
+    t.boolean  "active"
     t.string   "tags"
     t.string   "topics"
+    t.string   "citation"
+    t.string   "book"
+    t.boolean  "favorite"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "quotes", :force => true do |t|

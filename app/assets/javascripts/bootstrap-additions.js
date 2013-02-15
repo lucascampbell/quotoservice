@@ -86,6 +86,7 @@ $(function() {
 		timeFormat: 'hh:mm z',
 		dateFormat: 'dd-mm-yy'
 	});
+	$(".t_select").multiselect();
 });
 
 function NotesSubmit(d){
