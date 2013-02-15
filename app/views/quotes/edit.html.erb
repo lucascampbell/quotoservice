@@ -23,7 +23,7 @@
   	<%= f.text_field :book %><br/>
 	<%= f.label :author %>
   	<%= f.text_field :author %><br/>
-  	<%= f.label :topic, :style=>"display:inline" %><span>( hold cmd so you do not loose previously selected topics)</span><br/>
+  	<%= f.label :topic, :style=>"display:inline" %><br/>
 	<%= f.select 'topics', options_for_select(@topics.collect{|t| [t.name,t.id]}, @quote.topics.map {|t| t.id}),{},{:multiple=>true,:class=>'t_select'}%><br/>
 	<%= f.label :translation %>
   	<%= f.text_field :translation %>
@@ -33,7 +33,7 @@
 	  	<%= f.text_field :order_index %><br/>
 	<%= f.label :rating %>
   	<%= f.text_field :rating %><br/>
-	<%= f.label :tags, :style=>"display:inline" %><span>( hold cmd so you do not loose previously selected tags)</span><br/>
+	<%= f.label :tags, :style=>"display:inline" %><br/>
 	<%=f.select 'tags', options_for_select(@tags.collect{|t| [t.name,t.id]}, @quote.tags.map {|t| t.id}),{},{:multiple=>true,:class=>'t_select'}%><br/>
 	<%= f.label :active,{:style=>'display:inline'} %>
 	<% if @quote.active %>
