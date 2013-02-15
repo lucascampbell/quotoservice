@@ -15,7 +15,7 @@ class Quote < ActiveRecord::Base
   
   def self.quotes_new(id)
     qc     = QuoteCreate.where("id > ? and active = ?",id,true).order("id ASC")
-    quotes = Quote.where(:id => qc.collect(&:quote_id)) if qc
+    quotes = Quote.select("id,quote,citation,book,active,translation,rating,author,order_index").where(:id => qc.collect(&:quote_id)) if qc
     if quotes.blank?
       q_json = {:q_create =>"noupdates",:id => nil}
     else

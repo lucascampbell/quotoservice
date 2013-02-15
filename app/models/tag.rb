@@ -10,7 +10,7 @@ class Tag < ActiveRecord::Base
    
   def self.tags_new(id)
     tc = TagCreate.where("id > ?",id)
-    tags = Tag.where(:id => tc.collect(&:tag_id)) unless tc.blank?
+    tags = Tag.select("id,name,visible").where(:id => tc.collect(&:tag_id)) unless tc.blank?
     if tags
       q_json = {:tag_create => tags,:last_id => tc.last.id}
     else

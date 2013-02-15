@@ -10,7 +10,7 @@ class Topic < ActiveRecord::Base
   
   def self.topics_new(id)
     tc = TopicCreate.where("id > ?",id)
-    topics = Topic.where(:id => tc.collect(&:topic_id)) unless tc.blank?
+    topics = Topic.select("id,name,visible,expires_at,status,order_index").where(:id => tc.collect(&:topic_id)) unless tc.blank?
     if topics
       q_json = {:topic_create => topics,:last_id => tc.last.id}
     else
