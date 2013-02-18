@@ -5,7 +5,7 @@ class Topic < ActiveRecord::Base
   self.per_page = 200
   has_and_belongs_to_many :quotes
   before_destroy :log_destroy
-  after_update :log_update
+  after_update :log_create
   after_create :log_create
   
   def self.topics_new(id)
@@ -22,7 +22,7 @@ class Topic < ActiveRecord::Base
   def self.topics_delete(id)
     td = TopicDelete.where("id > ?",id)
     unless td.blank?
-      ids = td.collect(&:topic_id).uniq.join(',')
+      ids = td.collect(&:topic_id).uniq
       delete = {:ids => ids, :last_id => td.last.id.to_s}
       q_json = {}
       q_json[:topic_delete] = delete
@@ -44,10 +44,10 @@ class Topic < ActiveRecord::Base
     TopicDelete.create!(:topic_id => self.id)
   end
 
-  def log_update
-    TopicDelete.create!(:topic_id => self.id)
-    TopicCreate.create!(:topic_id => self.id)
-  end
+  # def log_update
+  #    #TopicDelete.create!(:topic_id => self.id)
+  #    TopicCreate.create!(:topic_id => self.id)
+  #  end
 
   def log_create
     TopicCreate.create!(:topic_id => self.id)

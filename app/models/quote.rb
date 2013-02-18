@@ -17,11 +17,11 @@ class Quote < ActiveRecord::Base
     qc     = QuoteCreate.where("id > ? and active = ?",id,true).order("id ASC")
     quotes = Quote.select("id,quote,citation,book,active,translation,rating,author,order_index").where(:id => qc.collect(&:quote_id)) if qc
     if quotes.blank?
-      q_json = {:q_create =>"noupdates",:id => nil}
+      q_json = {:quote_create =>"noupdates",:id => nil}
     else
       #loop through quotes and insert tag ids for json resp.  DEPRECATION WARNING is thrown, alternative is to overwrite json method 
       q_formatted = format_quotes(quotes)
-      q_json = {:q_create => q_formatted, :last_id => qc.last.id}
+      q_json = {:quote_create => q_formatted, :last_id => qc.last.id}
     end
     q_json
   end
@@ -37,9 +37,9 @@ class Quote < ActiveRecord::Base
       ids = qd.collect(&:quote_id).uniq.join(',')
       delete = {:ids => ids, :last_id => qd.last.id.to_s}
       q_json = {}
-      q_json[:q_delete] = delete
+      q_json[:quote_delete] = delete
     else
-      q_json = {:q_delete => 'noupdates'}
+      q_json = {:quote_delete => 'noupdates'}
     end
     q_json
   end
