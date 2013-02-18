@@ -92,6 +92,8 @@ class QuotesController < ApplicationController
         redirect_to url_for(:action=>:index)
       end
     else
+      @tags   = Tag.all
+      @topics = Topic.all
       render :action => :edit
     end
   end
