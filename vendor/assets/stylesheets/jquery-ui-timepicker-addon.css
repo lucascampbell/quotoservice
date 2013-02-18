@@ -15,6 +15,7 @@
 
 .ui-datepicker { 
   top:10% !important;
+	left:30% !important;
 }
 
 .ui_tpicker_timezone select{
