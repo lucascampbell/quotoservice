@@ -22,7 +22,7 @@ class Tag < ActiveRecord::Base
   def self.tags_delete(id)
     td = TagDelete.where("id > ?",id)
     unless td.blank?
-      ids = td.collect(&:tag_id).uniq.join(',')
+      ids = td.collect(&:tag_id).uniq
       delete = {:ids => ids, :last_id => td.last.id.to_s}
       q_json = {}
       q_json[:tag_delete] = delete
