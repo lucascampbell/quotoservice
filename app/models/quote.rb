@@ -45,7 +45,7 @@ class Quote < ActiveRecord::Base
   end
   
   def self.quotes_all
-    quotes = Quote.select("id,quote,citation,book,active,translation,rating,author,order_index").all
+    quotes = Quote.select("id,quote,citation,book,active,translation,rating,author,order_index").where(:active=>true)
     q_formatted = format_quotes(quotes)
     qc = QuoteCreate.last ? QuoteCreate.last.id : 0
     qd = QuoteDelete.last ? QuoteDelete.last.id : 0

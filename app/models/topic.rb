@@ -20,7 +20,7 @@ class Topic < ActiveRecord::Base
   end
   
   def self.topics_all
-    topics=Topic.select("id,name,visible,expires_at,status,order_index").all
+    topics = Topic.select("id,name,visible,expires_at,status,order_index").all
     tc = TopicCreate.last ? TopicCreate.last.id : 0
     td = TopicDelete.last ? TopicDelete.last.id : 0
     {:topics => topics,:topic_create_last_id => tc, :topic_delete_last_id => td}
