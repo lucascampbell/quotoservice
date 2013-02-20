@@ -129,6 +129,14 @@ class ApiController < ApplicationController
     end
   end
   
+  def snapshot
+    json = []
+    json = Quote.quotes_all
+    json.merge!(Tag.tags_all)
+    json.merge!(Topic.topics_all)
+    render :json => json
+  end
+  
   private
   
   def authenticate_token

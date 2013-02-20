@@ -19,6 +19,13 @@ class Tag < ActiveRecord::Base
     q_json
   end
   
+  def self.tags_all
+    tags = Tag.select("id,name,visible").all
+    tc = TagCreate.last ? TagCreate.last.id : 0
+    td = TagDelete.last ? TagDelete.last.id : 0
+    {:tags => tags, :tag_create_last_id => tc, :tag_delete_last_id=> td}
+  end
+  
   def self.tags_delete(id)
     td = TagDelete.where("id > ?",id)
     unless td.blank?

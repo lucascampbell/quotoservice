@@ -18,6 +18,7 @@ gem 'c2dm_on_rails', :git => 'git://github.com/lucascampbell/c2dm_on_rails.git'
 gem 'rest-client'
 gem 'hirefireapp'
 gem 'aws-s3'
+gem 'yamler'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

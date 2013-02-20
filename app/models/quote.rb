@@ -44,6 +44,14 @@ class Quote < ActiveRecord::Base
     q_json
   end
   
+  def self.quotes_all
+    quotes = Quote.select("id,quote,citation,book,active,translation,rating,author,order_index").all
+    q_formatted = format_quotes(quotes)
+    qc = QuoteCreate.last ? QuoteCreate.last.id : 0
+    qd = QuoteDelete.last ? QuoteDelete.last.id : 0
+    {:quotes => q_formatted, :quote_create_last_id =>qc , :quote_delete_last_id => qd}
+  end
+  
   def self.format_quotes(quotes)
     quotes.each do |qt|
       t_ids  = qt.tags.collect(&:id)

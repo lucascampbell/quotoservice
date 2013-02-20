@@ -359,6 +359,12 @@ describe ApiController do
         resp['tags']['tag_create'].first['id'].should == t.id
         resp['tags']['tag_delete']['ids'].should == t.id.to_s
       end
+      
+      it "should return entire snapshot of quotes tags topics" do
+        get 'snapshot'
+        resp = JSON.parse(response.body)
+        puts resp 
+      end
     
       
 end
