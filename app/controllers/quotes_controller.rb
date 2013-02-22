@@ -15,12 +15,12 @@ class QuotesController < ApplicationController
     @tab         = 'home'
     search_ci    = nil
     search_ci    = @search.downcase if @search
-    #sort_column_f = "#{sort_column}"
+    sort_column_f = "quotes.#{sort_column}"
     case @search_type
     when 'tag'
       @quotes = Quote.includes(:tags).select("quotes.id,quotes.order_index").where("lower(tags.name) like ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     when 'topic'
-      @quotes = Quote.includes(:topics).select("quotes.id,quotes.order_index").where("lower(topics.name) like ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+      @quotes = Quote.includes(:topics).select("quotes.id,quotes.order_index").where("lower(topics.name) like ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column_f + " " + sort_direction)
     else
       @quotes = Quote.where("lower(#{search_type}) LIKE ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     end
