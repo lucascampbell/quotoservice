@@ -15,7 +15,7 @@ class QuotesController < ApplicationController
     @tab         = 'home'
     search_ci    = nil
     search_ci    = @search.downcase if @search
-    #sort_column_f = "quotes.#{sort_column}"
+    
     case @search_type
     when 'tag'
       @quotes = Quote.includes(:tags).select("quotes.id").where("lower(tags.name) like ?","%#{search_ci}%").paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
