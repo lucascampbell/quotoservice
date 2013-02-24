@@ -142,7 +142,7 @@ class ApiController < ApplicationController
     if id
       t = Topic.find_by_name("Daily Verse")
       q = Quote.find(id)
-      t.qoutes << q
+      t.quotes << q
       t.save
       msg = 'success'
     else
