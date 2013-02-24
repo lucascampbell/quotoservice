@@ -16,11 +16,11 @@ QuotesService::Application.routes.draw do
   match 'api/v1/register_device' => 'api#register_device', :via =>:post
   
   #API V2
-  match 'api/v2/get_quotes'      => 'api#get_updates',      :via=>:get
-  match 'api/v2/set_quote'       => 'api#set_quote',       :via=>:post
-  match 'api/v2/register_device' => 'api#register_device', :via =>:post
-  match 'api/v2/snapshot'        => 'api#snapshot',       :via =>:get
-  
+  match 'api/v2/get_quotes'         => 'api#get_updates',        :via=>:get
+  match 'api/v2/set_quote'          => 'api#set_quote',          :via=>:post
+  match 'api/v2/register_device'    => 'api#register_device',    :via=>:post
+  match 'api/v2/snapshot'           => 'api#snapshot',           :via=>:get
+  match 'api/v2/add_to_daily_verse' => 'api#add_to_daily_verse', :via=>:get
   #Push
   match 'push/index'                    => 'push#index'
   match 'push/edit_priority'            => 'push#edit_priority',   :via=>:get

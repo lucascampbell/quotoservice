@@ -137,6 +137,17 @@ class ApiController < ApplicationController
     render :json => json
   end
   
+  def add_to_daily_verse
+    id = params[:quote_id]
+    if id
+      t = Topic.find_by_name("Daily Verse")
+      q = Quote.find(id)
+      t.qoutes << q
+      t.save
+    end
+    render :json => {:text => "success"}
+  end
+  
   private
   
   def authenticate_token
