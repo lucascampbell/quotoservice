@@ -144,8 +144,11 @@ class ApiController < ApplicationController
       q = Quote.find(id)
       t.qoutes << q
       t.save
+      msg = 'success'
+    else
+      msg = 'quote_id not found'
     end
-    render :json => {:text => "success"}
+    render :json => {:text => msg}
   end
   
   private
