@@ -138,9 +138,11 @@ class ApiController < ApplicationController
   end
   
   def add_to_daily_verse
-    id = params[:quote_id]
+    id = params[:id]
     if id
       t = Topic.find_by_name("Daily Verse")
+      #TODO look into adding order of +1 greatest to new quote
+      #t.quotes.sort{|a,b|b.order <=> a.order}
       q = Quote.find(id)
       t.quotes << q
       t.save
