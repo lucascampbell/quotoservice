@@ -1,10 +1,24 @@
 class QuotesController < ApplicationController
-  skip_before_filter :authenticate_user!, :only=>[:notes_save]
+  skip_before_filter :authenticate_user! #, :only=>[:notes_save]
+  
+  before_filter do |controller|
+    controller.send :authenticate_user! unless controller.action_name == 'notes_save' || (controller.request.format.json?  and controller.request.get?())
+  end
+  
+  # before_filter do |controller|
+  #   controller.send :authenticate_token! if controller.request.format.json? || controller.request.format.xml?
+  # end
+  # 
   helper_method :sort_column,:sort_direction
+  
   def index
     @tab = 'home'
     @search_type = 'quote'
     @quotes = Quote.paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
+    respond_to do |format|
+      format.html
+      format.json { render :json => @quotes.to_json}
+    end
   end
   
   def search

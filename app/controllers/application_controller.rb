@@ -21,4 +21,8 @@ class ApplicationController < ActionController::Base
     def not_found_action
       render :json => {:text => "Not Found."}.to_json, :status => 404
     end
+    
+    def authenticate_token!
+      return internal_error_action unless request.env["HTTP_AUTHORIZATION"] == '&3!kZ1Ct:zh7GaM'
+    end
 end

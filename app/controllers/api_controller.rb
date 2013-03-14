@@ -1,6 +1,6 @@
 class ApiController < ApplicationController
   skip_before_filter :authenticate_user!
-  before_filter :authenticate_token
+  before_filter :authenticate_token!
   
   def get_quotes
     #render :json => {:q =>"noupdates",:last_id => 1} and return
@@ -154,10 +154,6 @@ class ApiController < ApplicationController
   end
   
   private
-  
-  def authenticate_token
-    return internal_error_action unless request.env["HTTP_AUTHORIZATION"] == '&3!kZ1Ct:zh7GaM'
-  end
   
   def format_quotes(quotes)
     quotes.each do |qt|
