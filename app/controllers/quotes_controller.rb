@@ -2,10 +2,7 @@ class QuotesController < ApplicationController
   skip_before_filter :authenticate_user! #, :only=>[:notes_save]
   
   before_filter do |controller|
-    puts "req xhr is #{controller.request.xhr?}"
-    puts "req format is #{controller.request[:format]}"
-    puts "req cotent is #{controller.request[:content_type]}"
-    controller.send :authenticate_user! unless controller.action_name == 'notes_save' || (controller.request.get?() and controller.request.xhr?)
+    controller.send :authenticate_user! unless controller.action_name == 'notes_save' || (controller.request.get?() and params[:callback])
   end
   
   # before_filter do |controller|
@@ -20,7 +17,9 @@ class QuotesController < ApplicationController
     @quotes = Quote.paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     respond_to do |format|
       format.html
-      format.any { render :json => @quotes.to_json, :callback=>params[:callback]}
+      if params[:callback]
+        format.js { render :json => @quotes.to_json, :callback=>params[:callback]}
+      end
     end
   end
   
