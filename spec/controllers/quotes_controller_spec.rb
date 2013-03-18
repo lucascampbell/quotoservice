@@ -112,7 +112,7 @@ describe QuotesController do
     it "should not authenticate if get json request" do
       quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation',:active=>true})
       expected = Quote.all
-      get 'index',:page=>1,:callback=>'awsome', :format=>:json
+      get 'index',:page=>1,:callback=>'awesome', :format=>:jsonp
       assigns(:quotes).should eq(expected)
     end
     
