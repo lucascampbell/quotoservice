@@ -17,7 +17,7 @@ class QuotesController < ApplicationController
     @quotes = Quote.paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     respond_to do |format|
       format.html
-      format.json { render :json => @quotes.to_json}
+      format.json { render :json => @quotes.to_json, :callback=>params[:callback]}
     end
   end
   

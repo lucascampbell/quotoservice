@@ -137,6 +137,7 @@ GEM
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.7.7)
+    jsonp (0.0.1)
     launchy (2.2.0)
       addressable (~> 2.3)
     mail (2.4.4)
@@ -285,6 +286,7 @@ DEPENDENCIES
   hirefireapp
   jquery-rails
   json
+  jsonp
   launchy (>= 2.1.0)
   pg
   rails (= 3.2.11)
