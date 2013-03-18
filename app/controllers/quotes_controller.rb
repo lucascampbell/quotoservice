@@ -2,6 +2,7 @@ class QuotesController < ApplicationController
   skip_before_filter :authenticate_user! #, :only=>[:notes_save]
   
   before_filter do |controller|
+    puts "params #{params}"
     controller.send :authenticate_user! unless controller.action_name == 'notes_save' || (controller.request.get?() and params[:callback])
   end
   
@@ -16,10 +17,10 @@ class QuotesController < ApplicationController
     @search_type = 'quote'
     @quotes = Quote.paginate(:page=>params[:page]).order(sort_column + " " + sort_direction)
     respond_to do |format|
-      format.html
       if params[:callback]
         format.js { render :json => @quotes.to_json, :callback=>params[:callback]}
       end
+      format.html
     end
   end
   
