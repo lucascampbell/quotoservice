@@ -2,8 +2,8 @@ class QuotesController < ApplicationController
   skip_before_filter :authenticate_user! #, :only=>[:notes_save]
   
   before_filter do |controller|
-    puts "req is #{controller.request[:format]}"
-    controller.send :authenticate_user! unless controller.action_name == 'notes_save' || (controller.request.get?() and controller.request[:format] == 'jsonp')
+    puts "req is #{controller.request.xhr?}"
+    controller.send :authenticate_user! unless controller.action_name == 'notes_save' || (controller.request.get?() and controller.request.xhr?)
   end
   
   # before_filter do |controller|
