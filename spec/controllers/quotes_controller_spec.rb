@@ -82,7 +82,8 @@ describe QuotesController do
       get "deactivate", :id=>quote.id
       QuoteCreate.count.should == 1
       QuoteDelete.count.should == 1
-      QuoteCreate.first.id.should == quote2.id
+     
+      QuoteCreate.first.quote_id.should == quote2.id
     end
   
     it "should remove all quote creates when quote is destroyed but leave other quotes" do
@@ -96,7 +97,7 @@ describe QuotesController do
       get "destroy", :id=>quote.id
       QuoteCreate.count.should == 1
       QuoteDelete.count.should == 1
-      QuoteCreate.first.id.should == quote2.id
+      QuoteCreate.first.quote_id.should == quote2.id
     end
   end
   context "json request" do
@@ -112,7 +113,8 @@ describe QuotesController do
     it "should not authenticate if get json request" do
       quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation',:active=>true})
       expected = Quote.all
-      get 'index',:page=>1,:callback=>'awesome', :format=>:jsonp
+      get 'index',:page=>1,:callback=>'awesome', :format=>:json
+      puts response.body
       assigns(:quotes).should eq(expected)
     end
     
