@@ -146,6 +146,7 @@ class ApiController < ApplicationController
       q = Quote.find(id)
       t.quotes << q
       t.save
+      q.save
       msg = 'success'
     else
       msg = 'quote_id not found'

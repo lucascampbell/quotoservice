@@ -114,7 +114,6 @@ describe QuotesController do
       quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation',:active=>true})
       expected = Quote.all
       get 'index',:page=>1,:callback=>'awesome', :format=>:json
-      puts response.body
       assigns(:quotes).should eq(expected)
     end
     
