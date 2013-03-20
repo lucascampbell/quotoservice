@@ -13,8 +13,10 @@ class Quote < ActiveRecord::Base
   STARTING_ID = 1666
   self.per_page = 100
   
+  #active is used for old version of app where updates are done with separate QuoteUpdate model.  active is set to true only on creates so that old 
+  #version can query for only updates that are done by create and not update.  New version should not search with active as criteria.  Bug was found recently.
   def self.quotes_new(id)
-    qc     = QuoteCreate.where("id > ? and active = ?",id,true).order("id ASC")
+    qc     = QuoteCreate.where("id > ?",id).order("id ASC")
     quotes = Quote.select("id,quote,citation,book,active,translation,rating,author,order_index").where(:id => qc.collect(&:quote_id)) if qc
     if quotes.blank?
       q_json = {:quote_create =>"noupdates",:id => nil}

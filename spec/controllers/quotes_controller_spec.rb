@@ -70,6 +70,17 @@ describe QuotesController do
       QuoteCreate.count.should == 0
       QuoteDelete.count.should == 1
     end
+    
+    it "should create quotecreate and quotedelete when update occurs" do
+      quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation',:active=>true})
+      quote.log_create
+      QuoteCreate.count.should == 1
+      params = {:quote=>{:citation=>quote.citation,:book=>quote.book,:rating=>3},:id=>quote.id}
+      put "update", params
+      response.should redirect_to('/quotes')
+      QuoteCreate.count.should == 2
+      QuoteDelete.count.should == 1
+    end
   
     it "should remove all quote creates when quote is deactivated but leave other quotes" do
       quote = Quote.create!({:quote => 'new test quote', :citation => "new test citations", :book => 'new test book',:translation=>'translation',:active=>true})
