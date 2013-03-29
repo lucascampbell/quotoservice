@@ -90,16 +90,16 @@ class PushController < ApplicationController
   private
   
   def set_apn_params(params,next_one)
-   quote = Quote.find(params[:id].to_i)
-   alert = quote.quote_push.to_s.force_encoding("UTF-8")
-   priority = next_one
-   {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME}
+    quote = Quote.find(params[:id].to_i)
+    alert = quote.quote_push.to_s.force_encoding("UTF-8")
+    priority = next_one
+    {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME,:queue=>'Daily 8:00am EST'}
   end
   
   def set_c2dm_params(params,next_one)
     quote = Quote.find(params[:id].to_i)
     alert = quote.quote_push.to_s.force_encoding("UTF-8")
-    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME}
+    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queue=>'Daily 8:00am EST'}
   end
   
 end

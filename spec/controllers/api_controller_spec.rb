@@ -300,13 +300,13 @@ describe ApiController do
     end
     
     it "should return new topics for created quotes" do
-      t = Topic.new({:name=>'tst_topic',})
+      t = Topic.new({:name=>'tst_topic'})
       t.set_id
       t.save
       
       get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
       resp = JSON.parse(response.body)
-      puts resp
+      
       resp['topics']['topic_create'].first['id'].should == t.id
       resp['topics']['topic_create'].first['name'].should == t.name
     end
@@ -337,35 +337,144 @@ describe ApiController do
        resp['quotes']['quote_create'].first['id'].should == q_id.to_i
      end
      
-     it "should return delete and create topics for updated quotes" do
-        t = Topic.new({:name=>'tst_topic',})
-        t.set_id
-        t.save
-        t.update_attributes(:name=>'test_topic_up')
-        get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>1,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
-        resp = JSON.parse(response.body)
-        #puts resp
-        resp['topics']['topic_create'].first['id'].should == t.id
-        #resp['topics']['topic_delete']['ids'].should == t.id.to_s
-      end
+   it "should return delete and create topics for updated quotes" do
+      t = Topic.new({:name=>'tst_topic',})
+      t.set_id
+      t.save
+      t.update_attributes(:name=>'test_topic_up')
+      get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>1,:topic_delete_id=>0,:tag_create_id=>0,:tag_delete_id=>0}
+      resp = JSON.parse(response.body)
+      #puts resp
+      resp['topics']['topic_create'].first['id'].should == t.id
+      #resp['topics']['topic_delete']['ids'].should == t.id.to_s
+    end
 
-      it "should return delete create tags for updated quotes" do
-        t = Tag.new({:name=>'tst_tag',})
-        t.set_id
-        t.save
-        t.update_attributes(:name=>'test_tag_up')
-        
-        get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>1,:tag_delete_id=>0}
-        resp = JSON.parse(response.body)
-        resp['tags']['tag_create'].first['id'].should == t.id
-        resp['tags']['tag_delete']['ids'].should == [t.id]
-      end
+    it "should return delete create tags for updated quotes" do
+      t = Tag.new({:name=>'tst_tag',})
+      t.set_id
+      t.save
+      t.update_attributes(:name=>'test_tag_up')
       
-      it "should return entire snapshot of quotes tags topics" do
-        get 'snapshot'
-        resp = JSON.parse(response.body)
-        puts resp 
-      end
+      get 'get_updates',{:q_create_id=>0,:q_delete_id=>0,:topic_create_id=>0,:topic_delete_id=>0,:tag_create_id=>1,:tag_delete_id=>0}
+      resp = JSON.parse(response.body)
+      resp['tags']['tag_create'].first['id'].should == t.id
+      resp['tags']['tag_delete']['ids'].should == [t.id]
+    end
     
+    it "should return entire snapshot of quotes tags topics" do
+      get 'snapshot'
+      resp = JSON.parse(response.body)
+      puts resp 
+    end
+    
+    it "should return first page of quotes" do
+      q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q.set_id
+      q.save
+      q2 = Quote.new({:quote => 'new test quote2', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q2.set_id
+      q2.save
+      q3 = Quote.new({:quote => 'new test quote3', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q3.set_id
+      q3.save
+      Quote.per_page = 2
+      get "quotes_by_page"
+      resp = JSON.parse(response.body)
+      resp.count.should == 2
+      
+      get "quotes_by_page",:page =>2
+      resp = JSON.parse(response.body)
+      resp.count.should == 1
+      
+      get "quotes_by_page",:page =>3
+      resp = JSON.parse(response.body)
+      resp.count.should == 0
+    end
+    
+    it "should return first page of topics" do
+      t = Topic.new({:name=>'tst_topic'})
+      t.set_id
+      t.save
+      t1 = Topic.new({:name=>'tst_topic2'})
+      t1.set_id
+      t1.save
+      Topic.per_page = 1
+      
+      get "topics_by_page"
+      resp = JSON.parse(response.body)
+      resp.count.should == 1
+      
+      get "topics_by_page",:page => 2
+      resp = JSON.parse(response.body)
+      resp.count.should == 1
+      
+      get "topics_by_page",:page => 3
+      resp = JSON.parse(response.body)
+      resp.count.should == 0
+    end
+    
+    it "should return topics by status" do
+      t = Topic.new({:name=>'tst_topic',:status=>'featured'})
+      t.set_id
+      t.save
+      t1 = Topic.new({:name=>'tst_topic2',:status=>'standard'})
+      t1.set_id
+      t1.save
+      Topic.per_page = 1
+      
+      get "topics_by_status",:id=>'featured'
+      resp = JSON.parse(response.body)
+      resp.count.should == 1
+      resp[0]["status"].should == 'featured'
+      
+      get "topics_by_status",:id=>'standard'
+      resp = JSON.parse(response.body)
+      resp.count.should == 1
+      resp[0]["status"].should == 'standard'
+    end
+    
+    it "should return qoutes by topic id or name" do
+      t = Topic.new({:name=>'tst_topic',:status=>'featured'})
+      t.set_id
+      t.save
+      
+      q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q.set_id
+      q.save
+      q2 = Quote.new({:quote => 'new test quote2', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q2.set_id
+      q2.save
+      q3 = Quote.new({:quote => 'new test quote3', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q3.set_id
+      q3.save
+      
+      t.quotes << q
+      t.quotes << q2
+      
+      t.save
+      
+      get "quotes_by_topic_id_name",:id=>t.id
+      resp = JSON.parse(response.body)
+      resp.count.should == 2
+      
+      get "quotes_by_topic_id_name",:name=>t.name
+      resp = JSON.parse(response.body)
+      resp.count.should == 2
+    end
+    
+    
+    it "should return topics by name or id" do
+      t = Topic.new({:name=>'tst_topic',:status=>'featured'})
+      t.set_id
+      t.save!
+      
+      get "topic_by_id_name",:id=>t.id
+      resp = JSON.parse(response.body)
+      resp.count.should == 1
+      
+      get "topic_by_id_name",:name=>t.name
+      resp = JSON.parse(response.body)
+      resp.count.should == 1
+    end
       
 end

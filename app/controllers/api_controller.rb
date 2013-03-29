@@ -154,6 +154,48 @@ class ApiController < ApplicationController
     render :json => {:text => msg}
   end
   
+  # START OF WEBSITE API ACTIONS POSSIBLY TO BE ABSTRACTED
+  
+  def quotes_by_page
+    @quotes = Quote.paginate(:page=>params[:page]).order("id DESC").select("id,quote,citation,book,translation,rating,author,order_index").where(:active=>true)
+    render :json => @quotes.to_json, :callback=>params[:callback]
+  end
+  
+  def quotes_by_topic_id_name
+    id   = params[:id]
+    name = params[:name] 
+    @quotes = Quote.paginate(:page=>params[:page]).includes(:topics).select("id,quote,citation,book,translation,rating,author,order_index").where("topics.name = ? and quotes.active = ? ",name,true).order("quotes.id DESC") if name
+    @quotes = Quote.paginate(:page=>params[:page]).includes(:topics).select("id,quote,citation,book,translation,rating,author,order_index").where("topics.id = ? and quotes.active = ? ",id,true).order("quotes.id DESC") if id
+    
+    render :json => @quotes.to_json, :callback=>params[:callback]
+  end
+  
+  def topic_by_id_name
+    id   = params[:id]
+    name = params[:name]
+    @topic = Topic.select("id,name,status,order_index").where("id = ?",id).order("id DESC") if id
+    @topic = Topic.select("id,name,status,order_index").where("name = ?",name).order("id DESC") if name
+    
+    render :json => @topic.to_json, :callback=>params[:callback]
+  end
+  
+  def topics_by_status
+    id = params[:id] 
+    @topics = Topic.paginate(:page=>params[:page]).select("id,name,status,order_index").where("status = ?",id).order("id DESC") if id
+    
+    render :json => @topics.to_json, :callback=>params[:callback]
+  end
+  
+  def topics_by_page
+    @topics = Topic.paginate(:page=>params[:page]).select("id,name,status,order_index").order("id DESC")
+    
+    render :json => @topics.to_json, :callback=>params[:callback]
+  end
+  
+  def random_standard_quotes
+    #no hidden or featured topics
+  end
+  
   private
   
   def format_quotes(quotes)
