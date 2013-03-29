@@ -23,13 +23,13 @@ QuotesService::Application.routes.draw do
   match 'api/v2/add_to_daily_verse' => 'api#add_to_daily_verse', :via=>:get
   
   #website
-  match 'api/v2/quotes'                 => 'api#quotes_by_page',                  :via=>:get
-  match 'api/v2/quotes_topic_name'      => 'api#quotes_by_topic_id_name',     :via=>:get
-  match 'api/v2/quotes_topic_id'        => 'api#quotes_by_topic_id_name',     :via=>:get
-  match 'api/v2/topic_name'             => 'api#topic_by_id_name',           :via=>:get
-  match 'api/v2/topic_id'               => 'api#topic_by_id_name',           :via=>:get
-  match 'api/v2/topics'                 => 'api#topics_by_page',              :via=>:get
-  match 'api/v2/topics_status'          => 'api#topics_by_status',            :via=>:get
+  match '/api/v2/quotes'                 => 'api#quotes_by_page',                  :via=>:get
+  match '/api/v2/quotes_topic_name'      => 'api#quotes_by_topic_id_name',     :via=>:get
+  match '/api/v2/quotes_topic_id'        => 'api#quotes_by_topic_id_name',     :via=>:get
+  match '/api/v2/topic_name'             => 'api#topic_by_id_name',           :via=>:get
+  match '/api/v2/topic_id'               => 'api#topic_by_id_name',           :via=>:get
+  match '/api/v2/topics'                 => 'api#topics_by_page',              :via=>:get
+  match '/api/v2/topics_status'          => 'api#topics_by_status',            :via=>:get
   #Push
   match 'push/index'                    => 'push#index'
   match 'push/edit_priority'            => 'push#edit_priority',   :via=>:get
