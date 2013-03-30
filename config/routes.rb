@@ -29,7 +29,7 @@ QuotesService::Application.routes.draw do
   match '/api/v2/topic_name'             => 'api#topic_by_id_name',           :via=>:get
   match '/api/v2/topic_id'               => 'api#topic_by_id_name',           :via=>:get
   match '/api/v2/topics'                 => 'api#topics_by_page',              :via=>:get
-  match '/api/v2/topic_status'          => 'api#topic_by_status',            :via=>:get
+  match '/api/v2/topics_status'          => 'api#topics_by_status',            :via=>:get
   #Push
   match 'push/index'                    => 'push#index'
   match 'push/edit_priority'            => 'push#edit_priority',   :via=>:get
