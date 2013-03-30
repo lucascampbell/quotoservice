@@ -11,16 +11,16 @@ QuotesService::Application.routes.draw do
   resources :tags
   
   #API V1
-  match 'api/v1/get_quotes'      => 'api#get_quotes',      :via=>:get
-  match 'api/v1/set_quote'       => 'api#set_quote',       :via=>:post
-  match 'api/v1/register_device' => 'api#register_device', :via =>:post
+  match '/api/v1/get_quotes'      => 'api#get_quotes',      :via=>:get
+  match '/api/v1/set_quote'       => 'api#set_quote',       :via=>:post
+  match '/api/v1/register_device' => 'api#register_device', :via =>:post
   
   #API V2
-  match 'api/v2/get_quotes'         => 'api#get_updates',        :via=>:get
-  match 'api/v2/set_quote'          => 'api#set_quote',          :via=>:post
-  match 'api/v2/register_device'    => 'api#register_device',    :via=>:post
-  match 'api/v2/snapshot'           => 'api#snapshot',           :via=>:get
-  match 'api/v2/add_to_daily_verse' => 'api#add_to_daily_verse', :via=>:get
+  match '/api/v2/get_quotes'         => 'api#get_updates',        :via=>:get
+  match '/api/v2/set_quote'          => 'api#set_quote',          :via=>:post
+  match '/api/v2/register_device'    => 'api#register_device',    :via=>:post
+  match '/api/v2/snapshot'           => 'api#snapshot',           :via=>:get
+  match '/api/v2/add_to_daily_verse' => 'api#add_to_daily_verse', :via=>:get
   
   #website
   match '/api/v2/quotes'                 => 'api#quotes_by_page',                  :via=>:get
@@ -29,7 +29,7 @@ QuotesService::Application.routes.draw do
   match '/api/v2/topic_name'             => 'api#topic_by_id_name',           :via=>:get
   match '/api/v2/topic_id'               => 'api#topic_by_id_name',           :via=>:get
   match '/api/v2/topics'                 => 'api#topics_by_page',              :via=>:get
-  match '/api/v2/topics_status'          => 'api#topics_by_status',            :via=>:get
+  match '/api/v2/topic_status'          => 'api#topic_by_status',            :via=>:get
   #Push
   match 'push/index'                    => 'push#index'
   match 'push/edit_priority'            => 'push#edit_priority',   :via=>:get
