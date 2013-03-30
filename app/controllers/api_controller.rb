@@ -183,8 +183,8 @@ class ApiController < ApplicationController
   end
   
   def topics_by_status
-    id = params[:id] 
-    @topics = Topic.paginate(:page=>params[:page]).select("id,name,status,order_index").where("status = ?",id).order("id DESC") if id
+    status = params[:status] 
+    @topics = Topic.paginate(:page=>params[:page]).select("id,name,status,order_index").where("status = ?",status).order("id DESC") if status
     
     render :json => @topics.to_json, :callback=>params[:callback]
   end
