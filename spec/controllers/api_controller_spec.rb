@@ -476,5 +476,16 @@ describe ApiController do
       resp = JSON.parse(response.body)
       resp.count.should == 1
     end
+    
+    it "should return quote by id" do
+      q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+      q.set_id
+      q.save
+      
+      get "quote_by_id",:id=>q.id
+      resp = JSON.parse(response.body)
+      resp.count.should == 1
+      resp[0]["id"].should == q.id
+    end
       
 end

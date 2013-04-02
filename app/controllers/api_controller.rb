@@ -2,7 +2,7 @@ class ApiController < ApplicationController
   skip_before_filter :authenticate_user!
   #before_filter :authenticate_token! unless ['quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
   before_filter do |controller|
-       controller.send :authenticate_token! unless ['quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
+       controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
   end
   
   def get_quotes
@@ -162,6 +162,11 @@ class ApiController < ApplicationController
   def quotes_by_page
     @quotes = Quote.paginate(:page=>params[:page]).order("id DESC").select("id,quote,citation,book,translation,rating,author,order_index").where(:active=>true)
     render :json => @quotes.to_json, :callback=>params[:callback]
+  end
+  
+  def quote_by_id
+    @quote = Quote.select("id,quote,citation,book,translation,rating,author,order_index").where(:id=>params[:id])
+    render :json => @quote.to_json, :callback=>params[:callback]
   end
   
   def quotes_by_topic_id_name
