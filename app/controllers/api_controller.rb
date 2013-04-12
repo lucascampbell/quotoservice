@@ -98,6 +98,11 @@ class ApiController < ApplicationController
     end
   end
   
+  def create_image
+    raise bad_data_error_action unless params[:device_name]
+    Image.create_device_uploaded_image(params)
+  end
+  
   def register_device
     return not_found_action unless params[:id] and params[:platform]
     begin
@@ -144,9 +149,9 @@ class ApiController < ApplicationController
     id = params[:id]
     if id
       t = Topic.find_by_name("Daily Verse")
-      #TODO look into adding order of +1 greatest to new quote
-      #t.quotes.sort{|a,b|b.order <=> a.order}
+      max = t.quotes.maximum(:order_index)
       q = Quote.find(id)
+      q.update_attributes(:order_index=>max+1)
       t.quotes << q
       t.save
       q.save
