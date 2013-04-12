@@ -99,8 +99,14 @@ class ApiController < ApplicationController
   end
   
   def create_image
-    raise bad_data_error_action unless params[:device_name]
-    Image.create_device_uploaded_image(params)
+    return bad_data_error_action unless params[:device_name]
+    begin
+      Image.create_device_uploaded_image(params)
+      msg = 'success'
+    rescue Exception=>e
+      msg = e.message
+    end
+    render :json => {:text => msg}
   end
   
   def register_device

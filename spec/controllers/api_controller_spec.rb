@@ -12,6 +12,7 @@ describe ApiController do
     TopicDelete.delete_all
     TagCreate.delete_all
     TagDelete.destroy_all
+    Image.destroy_all
     ActiveRecord::Base.connection.reset_pk_sequence!('quotes')
     ActiveRecord::Base.connection.reset_pk_sequence!('quote_creates')
     ActiveRecord::Base.connection.reset_pk_sequence!('quote_deletes')
@@ -487,5 +488,21 @@ describe ApiController do
       resp.count.should == 1
       resp[0]["id"].should == q.id
     end
+    
+    it "should create image record" do
+      Image.all.count.should == 0
+      post "create_image",{:name=>'test',:device_name=>'devicename'}
+      resp = JSON.parse(response.body)
+      resp['text'].should == 'success'
+      Image.first.device_name.should == 'devicename'
+    end
+    
+    it "should fail to create image record" do
+       Image.all.count.should == 0
+       post "create_image",{:name=>'test'}
+       resp = JSON.parse(response.body)
+       resp['text'].should == 'Bad data error'
+       Image.all.count.should == 0
+     end
       
 end

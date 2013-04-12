@@ -38,12 +38,12 @@ class Image < ActiveRecord::Base
   end
   
   def self.create_device_uploaded_image(params)
-    @image                = Image.new
-    @image.name           = params[:name]
-    @image.device_created = true
-    @image.device_name    = params[:device_name]
-    @image.email          = params[:email]
-    @image.description    = params[:description]
+    @image                  = Image.new
+    @image.name             = params[:name]
+    @image.device_submitted = true
+    @image.device_name      = params[:device_name]
+    @image.email            = params[:email]
+    @image.description      = params[:description]
     @image.save!
     
     @image.move_to_approved_dir

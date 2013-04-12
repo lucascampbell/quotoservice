@@ -163,20 +163,20 @@ ActiveRecord::Schema.define(:version => 20130409180439) do
   end
 
   create_table "quote_updates", :force => true do |t|
+    t.integer  "quote_id",                      :null => false
+    t.string   "active",       :default => "f"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.integer  "version"
     t.text     "quote"
-    t.integer  "quote_id"
-    t.string   "abbreviation"
-    t.string   "author"
-    t.string   "translation"
-    t.string   "rating"
-    t.boolean  "active"
-    t.string   "tags"
-    t.string   "topics"
     t.string   "citation"
     t.string   "book"
-    t.boolean  "favorite"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.string   "author"
+    t.string   "translation"
+    t.string   "abbreviation"
+    t.string   "rating"
+    t.string   "tags"
+    t.string   "topics"
   end
 
   create_table "quotes", :force => true do |t|
