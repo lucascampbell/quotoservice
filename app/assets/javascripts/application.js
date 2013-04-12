@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap-tab
 //= require bootstrap-modal
 //= require jquery-ui-1.9.1.custom.min
 //= require timePicker.min

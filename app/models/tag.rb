@@ -4,6 +4,7 @@ class Tag < ActiveRecord::Base
   STARTING_ID = 807
   self.per_page = 200
   has_and_belongs_to_many :quotes
+  has_and_belongs_to_many :images
   before_destroy :log_destroy
   after_update :log_update
   after_create :log_create

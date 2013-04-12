@@ -1,0 +1,31 @@
+<h2>New Image</h2>
+
+<%= form_for @image do |f| %>
+  <% if @image.errors.any? %>
+    <div class="alert alert-error">
+      <h3><%= pluralize(@image.errors.count, "error") %> prohibited this post from being saved:</h3>
+
+      <ul>
+      <% @image.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style='margin-top:10px'>
+	<%= f.label :name %>
+  <%= f.text_field :name %><br/>
+	<%= f.file_field :attachment%>
+	<%= f.label :description %>
+	<%= f.text_area :description %><br/>
+	<%= f.label :location %>
+  <%= f.text_field :location %><br/>
+	<%= f.label :email %>
+  <%= f.text_field :email %><br/>
+	<%= f.label :tags %>
+  <%= f.select('tags',Tag.all.collect{|t| [t.name,t.id]},{:prompt=>"Select topic"},{:multiple=>true,:class=>'t_select'}) %><br/>
+  </div>
+
+  <div><%= f.submit "Save",{:class=>'btn',:style=>'margin-top:10px'} %></div>
+<% end %>

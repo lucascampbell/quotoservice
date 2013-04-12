@@ -20,6 +20,7 @@ gem 'hirefireapp'
 gem 'aws-s3'
 gem 'yamler'
 gem 'jsonp'
+gem "rmagick", :require => "RMagick"
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -11,6 +11,7 @@
 			<li class='<%=@tab == 'home' ? "active" : ""%>'><a href='/quotes'>Quotes</a></li>
 			<li class='<%=@tab == 'topic' ? "active" : ""%>'><a href='/topics'>Topics</a></li>
 		  <li class='<%=@tab == 'tag' ? "active" : ""%>'><a href='/tags'>Tags</a></li>
+			<li class='<%=@tab == 'image' ? "active" : ""%>'><a href='/images'>Images</a></li>
 			<% if user_signed_in? %>
 				<li class='dropdown'>
 					<a id='myTab' class='dropdown-toggle' data-toggle='dropdown' href='#'>New<b class='caret'></b></a>
@@ -18,6 +19,7 @@
 						<li><a id='tab1' href='/quotes/new'>quote</a></li>
 						<li><a href='/tags/new'>tag</a></li>
 						<li><a href='/topics/new'>topic</a></li>
+						<li><a href='/images/new'>image</a></li>
 					</ul>
 				</li>
 				<li><a class='<%=@tab == 'push' ? "active" : ""%>' href='/push/index'>Push</a></li>

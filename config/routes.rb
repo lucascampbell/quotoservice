@@ -9,6 +9,11 @@ QuotesService::Application.routes.draw do
   resources :quotes
   resources :topics
   resources :tags
+  resources :images
+  
+  #Images
+  match 'images/:id/activate'     => 'images#activate',   :via=>:get
+  match 'images/:id/deactivate'   => 'images#deactivate', :via=>:get
   
   #API V1
   match '/api/v1/get_quotes'      => 'api#get_quotes',      :via=>:get
@@ -21,6 +26,7 @@ QuotesService::Application.routes.draw do
   match '/api/v2/register_device'    => 'api#register_device',    :via=>:post
   match '/api/v2/snapshot'           => 'api#snapshot',           :via=>:get
   match '/api/v2/add_to_daily_verse' => 'api#add_to_daily_verse', :via=>:get
+  match '/api/v2/create_image'       => 'api#create_image', :via=>:post
   
   #website
   match '/api/v2/quotes'                 => 'api#quotes_by_page',             :via=>:get
