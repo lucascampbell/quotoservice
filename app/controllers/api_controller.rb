@@ -2,7 +2,7 @@ class ApiController < ApplicationController
   skip_before_filter :authenticate_user!
   #before_filter :authenticate_token! unless ['quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
   before_filter do |controller|
-    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
+    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page','quotes_by_search'].include?(controller.action_name)
   end
   
   def get_quotes
