@@ -26,10 +26,11 @@ QuotesService::Application.routes.draw do
   match '/api/v2/register_device'    => 'api#register_device',    :via=>:post
   match '/api/v2/snapshot'           => 'api#snapshot',           :via=>:get
   match '/api/v2/add_to_daily_verse' => 'api#add_to_daily_verse', :via=>:get
-  match '/api/v2/create_image'       => 'api#create_image', :via=>:post
+  match '/api/v2/create_image'       => 'api#create_image',       :via=>:post
   
   #website
   match '/api/v2/quotes'                 => 'api#quotes_by_page',             :via=>:get
+  match '/api/v2/quotes_search'          => 'api#quotes_by_search',           :via=>:get
   match '/api/v2/quotes_topic_name'      => 'api#quotes_by_topic_id_name',    :via=>:get
   match '/api/v2/quotes_topic_id'        => 'api#quotes_by_topic_id_name',    :via=>:get
   match '/api/v2/topic_name'             => 'api#topic_by_id_name',           :via=>:get

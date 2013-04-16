@@ -478,6 +478,21 @@ describe ApiController do
       resp.count.should == 1
     end
     
+    it "should return quotes by search term" do
+       q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
+       q.set_id
+       q.save
+
+       get "quotes_by_search",:search=>"new"
+       resp = JSON.parse(response.body)
+       resp.count.should == 1
+       resp[0]["id"].should == q.id
+       
+       get "quotes_by_search",:search=>"whatzup"
+       resp = JSON.parse(response.body)
+       resp.count.should == 0
+    end
+    
     it "should return quote by id" do
       q = Quote.new({:quote => 'new test quote1', :citation => "new test citations1", :book => 'new test book1', :active=>true})
       q.set_id
@@ -491,10 +506,10 @@ describe ApiController do
     
     it "should create image record" do
       Image.all.count.should == 0
-      post "create_image",{:name=>'test',:device_name=>'devicename'}
+      post "create_image",{:name=>'test',:device_name=>'test'}
       resp = JSON.parse(response.body)
       resp['text'].should == 'success'
-      Image.first.device_name.should == 'devicename'
+      Image.first.device_name.should == 'test'
     end
     
     it "should fail to create image record" do

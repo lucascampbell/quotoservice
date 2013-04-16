@@ -2,7 +2,7 @@ class ApiController < ApplicationController
   skip_before_filter :authenticate_user!
   #before_filter :authenticate_token! unless ['quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
   before_filter do |controller|
-       controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
+    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
   end
   
   def get_quotes
@@ -104,6 +104,7 @@ class ApiController < ApplicationController
       Image.create_device_uploaded_image(params)
       msg = 'success'
     rescue Exception=>e
+      puts "error #{e.message} \n #{e.backtrace}"
       msg = e.message
     end
     render :json => {:text => msg}
@@ -178,6 +179,13 @@ class ApiController < ApplicationController
   def quote_by_id
     @quote = Quote.select("id,quote,citation,book,translation,rating,author,order_index").where(:id=>params[:id])
     render :json => @quote.to_json, :callback=>params[:callback]
+  end
+  
+  def quotes_by_search
+    search = params[:search]
+    search_ci    = search.downcase if search
+    @quotes = Quote.includes(:tags,:topics).where("lower(quote) LIKE ?","%#{search_ci}%").paginate(:page=>params[:page]).order("topics.name DESC,tags.name")
+    render :json => @quotes.to_json, :callback=>params[:callback]
   end
   
   def quotes_by_topic_id_name
