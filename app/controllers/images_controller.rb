@@ -48,6 +48,8 @@ class ImagesController < ApplicationController
   def update
     @image = Image.find_by_id(params[:id])
     if @image
+      file = params[:image][:attachment]
+      puts "file is #{file.inspect}"
       p,tags = normalize_params(params[:image])
       if tags
         @image.tags = []
@@ -56,6 +58,7 @@ class ImagesController < ApplicationController
         end
       end
       @image.update_attributes(p)
+      @image.upload_to_s3(file) if file
       flash[:notice] = "Image updated successfully"
       redirect_to :action => :index
     else

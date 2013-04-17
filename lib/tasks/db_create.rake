@@ -152,4 +152,17 @@ namespace :db do
     end
   end
   
+  task :create_images do
+    require File.join(File.dirname(__FILE__),'/../../config/environment')
+    (1..36).each do |i|
+      image             = Image.new
+      image.active      = true
+      image.approved_at = Time.now
+      image.s3_link     = "https://s3.amazonaws.com/goverseimages/approved/#{i}.jpg"
+      image.id          = i
+      image.save!
+      puts "finished creating image with id #{i}"
+    end
+  end
+  
 end
