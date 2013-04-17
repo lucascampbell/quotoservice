@@ -19,6 +19,8 @@ class QuotesController < ApplicationController
     session[:search] = @search
     
     @search_type = search_type
+    session['search_type'] = @search_type
+    
     @tab         = 'home'
     search_ci    = nil
     search_ci    = @search.downcase if @search
@@ -181,7 +183,7 @@ class QuotesController < ApplicationController
   end
   
   def search_type
-    ['quote','author','book','citation','topic','tag','quote_push'].include?(params[:search_type]) ? params[:search_type] : 'quote'
+    ['quote','author','book','citation','topic','tag','quote_push'].include?(params[:search_type]) ? params[:search_type] : session['search_type'] ? session['search_type'] : 'quote'
   end
     
 end

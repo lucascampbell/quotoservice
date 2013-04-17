@@ -11,9 +11,9 @@ class TagsController < ApplicationController
   end
   
   def create
-    @tags    = Tag.new(params[:tag])
-    @tags.set_id
-    if @tags.save
+    @tag    = Tag.new(params[:tag])
+    @tag.set_id
+    if @tag.save
       flash[:notice] = "Topic saved successfully"
       redirect_to :action => :index
     else
