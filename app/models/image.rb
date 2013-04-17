@@ -47,6 +47,7 @@ class Image < ActiveRecord::Base
     @image.email            = params[:email]
     @image.description      = params[:description]
     @image.location         = params[:location]
+    @image.set_id           
     @image.save!
     
     @image.move_to_approved_dir
