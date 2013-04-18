@@ -13,6 +13,8 @@ describe ApiController do
     TagCreate.delete_all
     TagDelete.destroy_all
     Image.destroy_all
+    ImageCreate.destroy_all
+    ImageDelete.destroy_all
     ActiveRecord::Base.connection.reset_pk_sequence!('quotes')
     ActiveRecord::Base.connection.reset_pk_sequence!('quote_creates')
     ActiveRecord::Base.connection.reset_pk_sequence!('quote_deletes')
@@ -20,6 +22,8 @@ describe ApiController do
     ActiveRecord::Base.connection.reset_pk_sequence!('topic_deletes')
     ActiveRecord::Base.connection.reset_pk_sequence!('tag_creates')
     ActiveRecord::Base.connection.reset_pk_sequence!('tag_deletes')
+    ActiveRecord::Base.connection.reset_pk_sequence!('image_creates')
+    ActiveRecord::Base.connection.reset_pk_sequence!('image_deletes')
   end
   
   it "should return 500 with bad token" do
@@ -518,6 +522,38 @@ describe ApiController do
        resp = JSON.parse(response.body)
        resp['text'].should == 'Bad data error'
        Image.all.count.should == 0
-     end
+    end
+    
+    it "should return image updates on create" do
+      i = Image.create!(:name=>'test')
+      get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
+      
+      resp = JSON.parse(response.body)
+      resp['images']['image_create'].first['id'].should == i.id
+      resp['images']['image_delete']['ids'].should == nil
+    end
+    
+    it "should return image updates on delete" do
+      Image.any_instance.stub(:remove_from_s3).and_return(true)
+      i = Image.create!(:name=>'test')
+      i.destroy
+      get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
+      
+      resp = JSON.parse(response.body)
+      resp['images']['image_create'].should == "noupdates"
+      resp['images']['image_delete']['ids'].should == [i.id]
+    end
+    
+    it "should return image updates on delete" do
+      Image.any_instance.stub(:remove_from_s3).and_return(true)
+      i = Image.create!(:name=>'test')
+      i.update_attributes(:email=>'updateuseremail')
+      get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
+      
+      resp = JSON.parse(response.body)
+      
+      resp['images']['image_create'].first["id"].should == i.id
+      resp['images']['image_delete']['ids'].should == [i.id]
+    end
       
 end

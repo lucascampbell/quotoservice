@@ -1,15 +1,42 @@
 require "RMagick"
 class Image < ActiveRecord::Base
-  #include AWS::S3
-  BUCKET_APPROVED   = 'goverseimages/approved'
-  BUCKET_SUBMITTED  = 'goverseimages/submitted'
   ACCESS_KEY        = ENV["AWS_ACCESS_KEY_ID"] 
   ACCESS_PSSWRD     = ENV["AWS_SECRET_ACCESS_KEY"] #
   has_and_belongs_to_many :tags
   before_destroy :remove_from_s3
+  #before_destroy :log_destroy
+  #after_update :log_update
+  #after_create :log_create
   STARTING_ID = 37
   self.per_page = 50
   # attr_accessible :title, :body
+  
+  
+  def self.images_new(id)
+    ic     = ImageCreate.where("id > ?",id).order("id ASC")
+    images = Image.select("id,name,email,description,approved_at,s3_link").where(:id => ic.collect(&:image_id)) if ic
+    if images.blank?
+      i_json = {:image_create =>"noupdates",:id => nil}
+    else
+      #loop through images and insert tag ids for json resp
+      i_formatted = format_images(images)
+      i_json = {:image_create => i_formatted, :last_id => ic.last.id}
+    end
+    i_json
+  end
+  
+  def self.images_delete(id)
+    idel = ImageDelete.where("id > ?",id).order("id ASC")
+    unless idel.blank?
+      ids = idel.collect(&:image_id).uniq
+      delete = {:ids => ids, :last_id => idel.last.id.to_s}
+      i_json = {}
+      i_json[:image_delete] = delete
+    else
+      i_json = {:image_delete => 'noupdates'}
+    end
+    i_json
+  end
   
   def set_id
     image = Image.last
@@ -47,17 +74,19 @@ class Image < ActiveRecord::Base
     @image.email            = params[:email]
     @image.description      = params[:description]
     @image.location         = params[:location]
+    @image.s3_link          = "https://s3.amazonaws.com/goverseimages/submitted/#{params[:device_name]}.jpg"
     @image.set_id           
     @image.save!
     
-    @image.move_to_approved_dir
+    #@image.move_to_approved_dir
   end
   
   def activate_s3_image
     if self.device_name
       self.move_to_approved_dir
     end
-    self.active = true
+    self.active      = true
+    self.s3_link     = "https://s3.amazonaws.com/goverseimages/approved/#{self.id}.jpg"
     self.device_name = nil
     self.approved_at = Time.now
     self.save!
@@ -74,24 +103,56 @@ class Image < ActiveRecord::Base
       :access_key_id => ACCESS_KEY,
       :secret_access_key => ACCESS_PSSWRD)
     
-    
-    # Upload a file and set server-side encryption.
     bucket = s3.buckets['goverseimages']
     obj1 = bucket.objects["submitted/#{self.device_name}.jpg"]
     obj2 = bucket.objects["approved/#{self.id}.jpg"]
 
     obj1.copy_to(obj2)
     obj1.delete
-    self.update_attributes({:s3_link=>"https://s3.amazonaws.com/goverseimages/approved/#{self.id}.jpg"})
   end
   
   def remove_from_s3
+    if self.device_name 
+      bucket = 'submitted'
+      name   = self.device_name
+    else
+      bucket = 'approved'
+      name   = self.id
+    end
     s3 = AWS::S3.new(
       :access_key_id => ACCESS_KEY,
       :secret_access_key => ACCESS_PSSWRD)
       
     bucket = s3.buckets['goverseimages']
-    obj1 = bucket.objects["approved/#{self.id}.jpg"]
+    obj1 = bucket.objects["#{bucket}/#{name}.jpg"]
     obj1.delete
   end
+  
+  def log_update
+    return if self.device_name
+    ImageDelete.create!(:image_id => self.id)
+    ImageCreate.create!(:image_id => self.id)
+  end
+  
+  def log_create
+    return if self.device_name
+    ImageCreate.create!(:image_id => self.id)
+  end
+  
+  def log_destroy
+    return if self.device_name
+    ImageCreate.destroy_all("image_id = #{self.id}")
+    ImageDelete.create!(:image_id => self.id)
+  end
+  
+  private
+  
+  def self.format_images(images)
+     images.each do |img|
+       t_ids  = img.tags.collect(&:id)
+       img[:tag_ids] = t_ids
+     end
+     images
+  end
+  
 end

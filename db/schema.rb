@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130409180439) do
+ActiveRecord::Schema.define(:version => 20130417163447) do
 
   create_table "apn_apps", :force => true do |t|
     t.text     "apn_dev_cert"
@@ -108,6 +108,18 @@ ActiveRecord::Schema.define(:version => 20130409180439) do
   add_index "c2dm_notifications", ["device_id"], :name => "index_c2dm_notifications_on_device_id"
 
   create_table "comments", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "image_creates", :force => true do |t|
+    t.integer  "image_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "image_deletes", :force => true do |t|
+    t.integer  "image_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

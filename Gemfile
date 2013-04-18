@@ -46,6 +46,7 @@ end
 group :development, :test do
 	gem 'sqlite3'
 	gem "rspec-rails", "~> 2.6"
+	gem "rspec-mocks"
 	gem "factory_girl_rails", ">= 3.1.0", :require => 'factory_girl'
 	gem "email_spec", ">= 1.2.1"
 	gem "capybara", ">= 1.1.2"

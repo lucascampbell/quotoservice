@@ -1,6 +1,6 @@
 class ApiController < ApplicationController
   skip_before_filter :authenticate_user!
-  #before_filter :authenticate_token! unless ['quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page'].include?(controller.action_name)
+  
   before_filter do |controller|
     controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page','quotes_by_search'].include?(controller.action_name)
   end
@@ -69,6 +69,16 @@ class ApiController < ApplicationController
     
     #check for deleted_topics
     json[:topics].merge!(Topic.topics_delete(params[:topic_delete_id]))
+    
+    render :json => json
+  end
+  
+  def get_image_updates
+    return not_found unless params[:i_delete_id] and params[:i_create_id]
+    json = {}
+    json[:images] = {}
+    json[:images] = Image.images_new(params[:i_create_id])
+    json[:images].merge!(Image.images_delete(params[:i_delete_id]))
     
     render :json => json
   end
