@@ -75,10 +75,9 @@ class Image < ActiveRecord::Base
     @image.description      = params[:description]
     @image.location         = params[:location]
     @image.s3_link          = "https://s3.amazonaws.com/goverseimages/submitted/#{params[:device_name]}.jpg"
+    @image.add_tags(params[:tags]) if params[:tags]
     @image.set_id           
     @image.save!
-    
-    #@image.move_to_approved_dir
   end
   
   def activate_s3_image
@@ -106,6 +105,8 @@ class Image < ActiveRecord::Base
     bucket = s3.buckets['goverseimages']
     obj1 = bucket.objects["submitted/#{self.device_name}.jpg"]
     obj2 = bucket.objects["approved/#{self.id}.jpg"]
+
+    #resize images here if appropriate
 
     obj1.copy_to(obj2)
     obj1.delete
@@ -143,6 +144,13 @@ class Image < ActiveRecord::Base
     return if self.device_name
     ImageCreate.destroy_all("image_id = #{self.id}")
     ImageDelete.create!(:image_id => self.id)
+  end
+  
+  def add_tags(tags)
+    tags.split(",").each do |id|
+      t = Tag.find(id)
+      self.tags << t if t
+    end
   end
   
   private

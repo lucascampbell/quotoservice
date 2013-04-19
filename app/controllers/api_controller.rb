@@ -94,6 +94,7 @@ class ApiController < ApplicationController
     end
     quote.citation = params['citation']
     quote.book = params['book']
+    
     quote.set_id
     
     # quote should only fail if quote already exists if so return updates
