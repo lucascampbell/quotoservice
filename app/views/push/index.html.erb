@@ -12,19 +12,20 @@
 	</tr>
 	<% @remote_notifications.each do |gn| %>
 		<tr>
+			<%name = gn['custom_properties'] ? "APN_PROD" : "C2DM"%>
 			<td><%=gn['id']%></td>
-			<td><%=gn['name']%></td>
-			<td><%=gn['name'] == 'APN_PROD' ? gn['alert'] : gn['data']%></td>
+			<td><%=name%></td>
+			<td><%=gn['custom_properties'] ? gn['alert'] : gn['data']%></td>
 			<td><%=gn['badge']%></td>
 			<td><%=gn['custom_properties']%></td>
 			<td>
 				<input type='text' style='width:20px' id='priority_<%=gn["id"]%>' value='<%=gn["priority"]%>' />
-				<input type='hidden' id='klss_<%=gn["id"]%>' value='<%=gn["name"]%>' />
+				<input type='hidden' id='klss_<%=gn["id"]%>' value='<%=name%>' />
 				<a id='<%=gn["id"]%>' class='btn btn-primary priority_edit' style='display:inline'>save</a>
 			</td>
 			<td><%=Date.parse(gn['created_at']).strftime("%m/%d/%Y")%></td>
 			<td>
-				<div class='label label-important' style='display:inline'><%= link_to("Delete",  "/push/delete_remote/#{gn['id']}/#{gn['name']}", :method => :delete, :style => 'color:white;text-decoration:none') %></div>
+				<div class='label label-important' style='display:inline'><%= link_to("Delete",  "/push/delete_remote/#{gn['id']}/#{name}", :method => :delete, :style => 'color:white;text-decoration:none') %></div>
 			</td>
 		</tr>
 	<%end%>

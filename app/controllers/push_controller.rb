@@ -9,6 +9,7 @@ class PushController < ApplicationController
     @tab = 'push'
     #@notifications = APN::GroupNotification.where("sent_at IS NULL").order("id DESC")
     resp = RestClient.get(URL + "/daily_notifications/#{APPNAME}",{:AUTHORIZATION => API_TOKEN})
+    puts JSON.parse(resp)
     @remote_notifications = JSON.parse(resp)
   end
   
