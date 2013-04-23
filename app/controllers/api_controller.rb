@@ -202,7 +202,7 @@ class ApiController < ApplicationController
   def quotes_by_topic_id_name
     id   = params[:id]
     name = params[:name] 
-    @quotes = Quote.paginate(:page=>params[:page]).includes(:topics).select("id,quote,citation,book,translation,rating,author,order_index").where("topics.name = ? and quotes.active = ? ",name,true).order("quotes.id DESC") if name
+    @quotes = Quote.paginate(:page=>params[:page]).includes(:topics).select("id,quote,citation,book,translation,rating,author,order_index").where("lower(topics.name) = ? and quotes.active = ? ",name.downcase,true).order("quotes.id DESC") if name
     @quotes = Quote.paginate(:page=>params[:page]).includes(:topics).select("id,quote,citation,book,translation,rating,author,order_index").where("topics.id = ? and quotes.active = ? ",id,true).order("quotes.id DESC") if id
     
     render :json => @quotes.to_json, :callback=>params[:callback]
@@ -212,7 +212,7 @@ class ApiController < ApplicationController
     id   = params[:id]
     name = params[:name]
     @topic = Topic.select("id,name,status,order_index").where("id = ?",id).order("id DESC") if id
-    @topic = Topic.select("id,name,status,order_index").where("name = ?",name).order("id DESC") if name
+    @topic = Topic.select("id,name,status,order_index").where("lower(name) = ?",name.downcase).order("id DESC") if name
     
     render :json => @topic.to_json, :callback=>params[:callback]
   end
