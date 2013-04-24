@@ -2,7 +2,7 @@ class ApiController < ApplicationController
   skip_before_filter :authenticate_user!
   
   before_filter do |controller|
-    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page','quotes_by_search'].include?(controller.action_name)
+    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page','quotes_by_search','images_by_page','images_by_tag','images_by_email'].include?(controller.action_name)
   end
   
   def get_quotes
@@ -230,6 +230,23 @@ class ApiController < ApplicationController
     render :json => @topics.to_json, :callback=>params[:callback]
   end
   
+  def images_by_page
+    @images = Image.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where(:active=>true).order("approved_at ASC")
+    render :json => @images.to_json, :callback=>params[:callback]
+  end
+  
+  def images_by_tag
+    tag = Tag.find(params[:tag_id])
+    @images = tag.images.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where({:active=>true}).order("approved_at ASC")
+    render :json => @images.to_json, :callback=>params[:callback]
+  end
+  
+  def images_by_email
+    email = params[:email]
+    @images = Image.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where({:active=>true,:email=>email}).order("approved_at ASC")
+    render :json => @images.to_json, :callback=>params[:callback]
+  end
+   
   def random_standard_quotes
     #no hidden or featured topics
   end

@@ -16,11 +16,11 @@ class Image < ActiveRecord::Base
     ic     = ImageCreate.where("id > ?",id).order("id ASC")
     images = Image.select("id,name,email,description,approved_at,s3_link").where(:id => ic.collect(&:image_id)) if ic
     if images.blank?
-      i_json = {:image_create =>"noupdates",:id => nil}
+      i_json = {:image_create =>"noupdates"}
     else
       #loop through images and insert tag ids for json resp
       i_formatted = format_images(images)
-      i_json = {:image_create => i_formatted, :last_id => ic.last.id}
+      i_json = {:image_create => i_formatted, :image_create_last_id => ic.last.id}
     end
     i_json
   end
@@ -29,7 +29,7 @@ class Image < ActiveRecord::Base
     idel = ImageDelete.where("id > ?",id).order("id ASC")
     unless idel.blank?
       ids = idel.collect(&:image_id).uniq
-      delete = {:ids => ids, :last_id => idel.last.id.to_s}
+      delete = {:ids => ids, :image_delete_last_id => idel.last.id.to_s}
       i_json = {}
       i_json[:image_delete] = delete
     else

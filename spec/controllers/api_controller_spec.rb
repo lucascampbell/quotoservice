@@ -427,12 +427,12 @@ describe ApiController do
       t1.save
       Topic.per_page = 1
       
-      get "topics_by_status",:id=>'featured'
+      get "topics_by_status",:status=>'featured'
       resp = JSON.parse(response.body)
       resp.count.should == 1
       resp[0]["status"].should == 'featured'
       
-      get "topics_by_status",:id=>'standard'
+      get "topics_by_status",:status=>'standard'
       resp = JSON.parse(response.body)
       resp.count.should == 1
       resp[0]["status"].should == 'standard'
@@ -525,17 +525,18 @@ describe ApiController do
     end
     
     it "should return image updates on create" do
-      i = Image.create!(:name=>'test')
+      i = Image.create!(:name=>'test',:active=>true)
       get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
       
       resp = JSON.parse(response.body)
+      puts resp
       resp['images']['image_create'].first['id'].should == i.id
       resp['images']['image_delete']['ids'].should == nil
     end
     
     it "should return image updates on delete" do
       Image.any_instance.stub(:remove_from_s3).and_return(true)
-      i = Image.create!(:name=>'test')
+      i = Image.create!(:name=>'test',:active=>true)
       i.destroy
       get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
       
@@ -546,7 +547,7 @@ describe ApiController do
     
     it "should return image updates on delete" do
       Image.any_instance.stub(:remove_from_s3).and_return(true)
-      i = Image.create!(:name=>'test')
+      i = Image.create!(:name=>'test',:active=>true)
       i.update_attributes(:email=>'updateuseremail')
       get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
       
@@ -554,6 +555,35 @@ describe ApiController do
       
       resp['images']['image_create'].first["id"].should == i.id
       resp['images']['image_delete']['ids'].should == [i.id]
+    end
+    
+    it "should return images by page" do
+      i = Image.create!(:name=>'test',:active=>true)
+      get "images_by_page"
+      resp = JSON.parse(response.body)
+      resp.first["id"].should == i.id
+    end
+    
+    it "should return images by email" do
+      i  = Image.create!(:name=>'test',:active=>true,:email=>'lucas')
+      i2 = Image.create!(:name=>'test2',:active=>true,:email=>'ben')
+      get "images_by_email",{:email=>'lucas'}
+      resp = JSON.parse(response.body)
+      resp.first["id"].should == i.id
+      resp.count.should == 1
+    end
+    
+    it "should return images by tag id" do
+      t = Tag.create!(:name => 'testtag')
+      i  = Image.create!(:name=>'test',:active=>true,:email=>'lucas')
+      i.tags << t
+      i.save
+      i2 = Image.create!(:name=>'test2',:active=>true,:email=>'ben')
+      get "images_by_tag",{:tag_id=> t.id}
+      resp = JSON.parse(response.body)
+     
+      resp.first["id"].should == i.id
+      resp.count.should == 1
     end
       
 end
