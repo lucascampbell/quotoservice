@@ -94,7 +94,7 @@ class Image < ActiveRecord::Base
       self.move_to_approved_dir
     end
     self.active      = true
-    self.s3_link     = "https://s3.amazonaws.com/goverseimages/approved/#{self.id}.jpg"
+    self.s3_link     = "https://s3.amazonaws.com/goverseimages/approved/#{self.id}"
     self.device_name = nil
     self.approved_at = Time.now
     self.save!
@@ -118,7 +118,7 @@ class Image < ActiveRecord::Base
     obj1.copy_to(obj2)
     obj1.delete
       
-    urlimage = open(self.s3_link)
+    urlimage = open(self.s3_link + ".jpg")
     file     = urlimage.read
     [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]].each do |ary|
       obj = bucket.objects["approved/#{self.id}_#{ary[0]}x#{ary[1]}.jpg"]
