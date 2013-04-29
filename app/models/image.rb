@@ -1,12 +1,13 @@
 require "RMagick"
+require "open-uri"
 class Image < ActiveRecord::Base
-  ACCESS_KEY        = ENV["AWS_ACCESS_KEY_ID"] 
-  ACCESS_PSSWRD     = ENV["AWS_SECRET_ACCESS_KEY"] #
+  ACCESS_KEY        = "AKIAIFCIXLO37BMPBVVA"#ENV["AWS_ACCESS_KEY_ID"] 
+  ACCESS_PSSWRD     = "ZnMfJvlcYnvretJrEysj5ydFnP20cFtjp+8ibduP"#ENV["AWS_SECRET_ACCESS_KEY"]
   has_and_belongs_to_many :tags
   before_destroy :remove_from_s3
-  #before_destroy :log_destroy
-  #after_update :log_update
-  #after_create :log_create
+  before_destroy :log_destroy
+  after_update :log_update
+  after_create :log_create
   STARTING_ID = 37
   self.per_page = 50
   # attr_accessible :title, :body
@@ -51,14 +52,22 @@ class Image < ActiveRecord::Base
         :access_key_id => ACCESS_KEY,
         :secret_access_key => ACCESS_PSSWRD)
     
-      #TODO 
-      #add image magick resize and landscape/portrait views
       
       bucket = s3.buckets['goverseimages']
+      file   = upload.read
+      #create original
       obj1 = bucket.objects["approved/#{self.id}.jpg"]
-      obj1.write(upload.read,:acl=>:public_read)
+      obj1.write(file,:acl=>:public_read)
+     
+      [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]].each do |ary|
+        obj = bucket.objects["approved/#{self.id}_#{ary[0]}x#{ary[1]}.jpg"]
+        image = Magick::ImageList.new
+        image.from_blob(file)
+        image.resize_to_fill!(ary[0],ary[1])
+        obj.write(image.to_blob,:acl=>:public_read)
+      end
       
-      self.s3_link = "https://s3.amazonaws.com/goverseimages/approved/#{self.id}.jpg"
+      self.s3_link = "https://s3.amazonaws.com/goverseimages/approved/#{self.id}"
       self.approved_at = Time.now
       self.active = true
       self.save!
@@ -103,13 +112,21 @@ class Image < ActiveRecord::Base
       :secret_access_key => ACCESS_PSSWRD)
     
     bucket = s3.buckets['goverseimages']
-    obj1 = bucket.objects["submitted/#{self.device_name}.jpg"]
-    obj2 = bucket.objects["approved/#{self.id}.jpg"]
-
-    #resize images here if appropriate
-
+    obj1   = bucket.objects["submitted/#{self.device_name}.jpg"]
+    obj2   = bucket.objects["approved/#{self.id}.jpg"]
+      
     obj1.copy_to(obj2)
     obj1.delete
+      
+    urlimage = open(self.s3_link)
+    file     = urlimage.read
+    [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]].each do |ary|
+      obj = bucket.objects["approved/#{self.id}_#{ary[0]}x#{ary[1]}.jpg"]
+      image = Magick::ImageList.new
+      image.from_blob(file)
+      image.resize_to_fill!(ary[0],ary[1])
+      obj.write(image.to_blob,:acl=>:public_read)
+    end
   end
   
   def remove_from_s3
@@ -117,7 +134,7 @@ class Image < ActiveRecord::Base
       bucket = 'submitted'
       name   = self.device_name
     else
-      bucket = 'approved'
+      bucket_name = 'approved'
       name   = self.id
     end
     s3 = AWS::S3.new(
@@ -125,8 +142,15 @@ class Image < ActiveRecord::Base
       :secret_access_key => ACCESS_PSSWRD)
       
     bucket = s3.buckets['goverseimages']
-    obj1 = bucket.objects["#{bucket}/#{name}.jpg"]
+    obj1 = bucket.objects["#{bucket_name}/#{name}.jpg"]
     obj1.delete
+    
+    if bucket_name == 'approved'
+      [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]].each do |ary|
+        obj = bucket.objects["approved/#{name}_#{ary[0]}x#{ary[1]}.jpg"]
+        obj.delete if obj
+      end
+    end
   end
   
   def log_update

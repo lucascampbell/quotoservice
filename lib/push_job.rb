@@ -4,7 +4,7 @@ class PushJob
   @queue = :push_job
   BATCH_SIZE = 50
   
-  def self.perform()
+  def self.perform
     begin
       #send for iphone
       app   = APN::App.first

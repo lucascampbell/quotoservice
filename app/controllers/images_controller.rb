@@ -12,7 +12,6 @@ class ImagesController < ApplicationController
   
   def create
     file = params[:image][:attachment]
-    puts "file is #{file.inspect}"
     p,tags = normalize_params(params[:image])
     
     @image = Image.new(p)
