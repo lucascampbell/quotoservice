@@ -165,4 +165,29 @@ namespace :db do
     end
   end
   
+  
+  task :move_images do 
+    require File.join(File.dirname(__FILE__),'/../../config/environment')
+    require 'open-uri'
+    ACCESS_KEY        = "AKIAIFCIXLO37BMPBVVA"#ENV["AWS_ACCESS_KEY_ID"] 
+    ACCESS_PSSWRD     = "ZnMfJvlcYnvretJrEysj5ydFnP20cFtjp+8ibduP"#ENV["AWS_SECRET_ACCESS_KEY"]
+    s3 = AWS::S3.new(
+      :access_key_id => ACCESS_KEY,
+      :secret_access_key => ACCESS_PSSWRD)
+    bucket = s3.buckets['goverseimages']
+    (2..36).each do |i|
+      img = Image.find(i)
+      img.s3_link = img.s3_link.gsub(".jpg","")
+      img.save
+      urlimage = open(img.s3_link + ".jpg")
+      file     = urlimage.read
+      [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]].each do |ary|
+        obj = bucket.objects["approved/#{img.id}_#{ary[0]}x#{ary[1]}.jpg"]
+        image = Magick::ImageList.new
+        image.from_blob(file)
+        image.resize_to_fill!(ary[0],ary[1])
+        obj.write(image.to_blob,:acl=>:public_read)
+      end
+    end
+  end
 end
