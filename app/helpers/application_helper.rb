@@ -19,4 +19,13 @@ module ApplicationHelper
     book</option><option #{@search_type == 'tag' ? 'selected' : ''}>tag</option>
     <option #{@search_type == 'topic' ? 'selected' : ''}>topic</option>".html_safe
   end
+  
+  def get_link(link)
+    if link =~ /submitted/
+      l = link
+    else
+      l ="#{link}_100x100.jpg"
+    end
+    l
+  end
 end

@@ -21,7 +21,7 @@
 				<td><%=image.id%></td>
 				<td><%=image.name%></td>
 				<td><%=image.description%></td>
-				<td><%=image_tag "#{image.s3_link}_100x100.jpg",:size=>"50x50"%></td>
+				<td><%=image_tag get_link(image.s3_link),:size=>"50x50"%></td>
 				<td><%=image.location%></td>
 				<td><%=image.email%></td>
 				<td>
