@@ -2,7 +2,7 @@ class ApiController < ApplicationController
   skip_before_filter :authenticate_user!
   
   before_filter do |controller|
-    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page','quotes_by_search','images_by_page','images_by_tag','images_by_email'].include?(controller.action_name)
+    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page','quotes_by_search','images_by_page','images_by_tag','images_by_email','tag_by_id_name'].include?(controller.action_name)
   end
   
   def get_quotes
@@ -110,7 +110,7 @@ class ApiController < ApplicationController
   end
   
   def create_image
-    return bad_data_error_action unless params[:device_name]
+    return bad_data_error_action unless params[:device_name] and params[:orientation]
     begin
       Image.create_device_uploaded_image(params)
       msg = 'success'
@@ -215,6 +215,15 @@ class ApiController < ApplicationController
     @topic = Topic.select("id,name,status,order_index").where("lower(name) = ?",name.downcase).order("id DESC") if name
     
     render :json => @topic.to_json, :callback=>params[:callback]
+  end
+  
+  def tag_by_id_name
+    id   = params[:id]
+    name = params[:name]
+    @tag = Tag.select("id,name").where("id = ?",id).order("id DESC") if id
+    @tag = Tag.select("id,name").where("lower(name) = ?",name.downcase).order("id DESC") if name
+    
+    render :json => @tag.to_json, :callback=>params[:callback]
   end
   
   def topics_by_status

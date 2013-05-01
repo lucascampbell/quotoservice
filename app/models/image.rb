@@ -80,6 +80,7 @@ class Image < ActiveRecord::Base
     @image.name             = params[:name]
     @image.device_submitted = true
     @image.device_name      = params[:device_name]
+    @image.orientation      = params[:orientation]
     @image.email            = params[:email]
     @image.description      = params[:description]
     @image.location         = params[:location]
@@ -172,6 +173,7 @@ class Image < ActiveRecord::Base
   
   def add_tags(tags)
     tags.split(",").each do |id|
+      puts "id is #{id}"
       t = Tag.find(id)
       self.tags << t if t
     end

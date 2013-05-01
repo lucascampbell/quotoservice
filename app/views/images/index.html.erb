@@ -9,6 +9,7 @@
 			<th style='text-align:center'>Description</th>
 			<th style='text-align:center'>URL</th>
 			<th style='text-align:center'>Location</th>
+			<th style='text-align:center'>Orientation</th>
 			<th style='text-align:center'>Email</th>
 			<th style='text-align:center'>Tags</th>
 			<th style='text-align:center'>Created</th>
@@ -23,6 +24,7 @@
 				<td><%=image.description%></td>
 				<td><%=image_tag get_link(image.s3_link),:size=>"50x50"%></td>
 				<td><%=image.location%></td>
+				<td><%=image.orientation%></td>
 				<td><%=image.email%></td>
 				<td>
 				<% image.tags.each do |t| %>

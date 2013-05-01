@@ -36,6 +36,8 @@ QuotesService::Application.routes.draw do
   match '/api/v2/quotes_topic_id'        => 'api#quotes_by_topic_id_name',    :via=>:get
   match '/api/v2/topic_name'             => 'api#topic_by_id_name',           :via=>:get
   match '/api/v2/topic_id'               => 'api#topic_by_id_name',           :via=>:get
+  match '/api/v2/tag_name'               => 'api#tag_by_id_name',           :via=>:get
+  match '/api/v2/tag_id'                 => 'api#tag_by_id_name',           :via=>:get
   match '/api/v2/topics'                 => 'api#topics_by_page',             :via=>:get
   match '/api/v2/topics_status'          => 'api#topics_by_status',           :via=>:get
   match '/api/v2/quote_id'               => 'api#quote_by_id',                :via=>:get

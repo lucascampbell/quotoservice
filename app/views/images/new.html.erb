@@ -21,6 +21,8 @@
 	<%= f.text_area :description %><br/>
 	<%= f.label :location %>
   <%= f.text_field :location %><br/>
+	<%= f.label :orientation %>
+  <%= f.select(:orientation,[['landscape'],['portrait'],['both']]) %><br/>
 	<%= f.label :email %>
   <%= f.text_field :email %><br/>
 	<%= f.label :tags %>
