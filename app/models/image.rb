@@ -14,6 +14,8 @@ class Image < ActiveRecord::Base
   after_create :log_create
   STARTING_ID = 37
   self.per_page = 50
+  
+  validates :orientation, :presence => true
   # attr_accessible :title, :body
   
   
