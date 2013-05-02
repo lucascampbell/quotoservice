@@ -233,14 +233,18 @@ class ApiController < ApplicationController
     render :json => @topics.to_json, :callback=>params[:callback]
   end
   
+  #return all with limit passed Brett's request
   def topics_by_page
-    @topics = Topic.paginate(:page=>params[:page]).select("id,name,status,order_index").order("id DESC")
+    limit = params[:limit] || Topic.count
+    @topics = Topic.select("id,name,status,order_index").limit(limit).order("id DESC")
     
     render :json => @topics.to_json, :callback=>params[:callback]
   end
   
+  #return all with limit passed Brett's request
   def tags_by_page
-    @tags = Tag.paginate(:page=>params[:page]).select("id,name").order("id DESC")
+    limit = params[:limit] || Tag.count
+    @tags = Tag.select("id,name").limit(limit).order("id DESC")
     
     render :json => @tags.to_json, :callback=>params[:callback]
   end
