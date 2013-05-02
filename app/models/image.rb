@@ -1,8 +1,12 @@
 require "RMagick"
 require "open-uri"
 class Image < ActiveRecord::Base
-  ACCESS_KEY        = "AKIAIFCIXLO37BMPBVVA"#ENV["AWS_ACCESS_KEY_ID"] 
-  ACCESS_PSSWRD     = "ZnMfJvlcYnvretJrEysj5ydFnP20cFtjp+8ibduP"#ENV["AWS_SECRET_ACCESS_KEY"]
+  ACCESS_KEY      = "AKIAIFCIXLO37BMPBVVA"#ENV["AWS_ACCESS_KEY_ID"] 
+  ACCESS_PSSWRD   = "ZnMfJvlcYnvretJrEysj5ydFnP20cFtjp+8ibduP"#ENV["AWS_SECRET_ACCESS_KEY"]
+  #wxh
+  LANDSCAPE       =  [[100,100],[480,320],[1024,768],[2048,1536]]
+  PORTRAIT        =  [[100,100],[320,480],[768,1024],[1536,2048]]
+  BOTH            =  [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]]
   has_and_belongs_to_many :tags
   before_destroy :remove_from_s3
   before_destroy :log_destroy
@@ -121,7 +125,10 @@ class Image < ActiveRecord::Base
       
     urlimage = open(self.s3_link + ".jpg")
     file     = urlimage.read
-    [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]].each do |ary|
+    
+    image_array = image_size_array
+      
+    image_array.each do |ary|
       obj = bucket.objects["approved/#{self.id}_#{ary[0]}x#{ary[1]}.jpg"]
       image = Magick::ImageList.new
       image.from_blob(file)
@@ -146,8 +153,10 @@ class Image < ActiveRecord::Base
     obj1 = bucket.objects["#{bucket_name}/#{name}.jpg"]
     obj1.delete
     
+    image_array = image_size_array
+    
     if bucket_name == 'approved'
-      [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]].each do |ary|
+      image_array.each do |ary|
         obj = bucket.objects["approved/#{name}_#{ary[0]}x#{ary[1]}.jpg"]
         obj.delete if obj
       end
@@ -180,6 +189,19 @@ class Image < ActiveRecord::Base
   end
   
   private
+  
+  def image_size_array
+    image_sizes = ''
+    case self.orientation
+    when "portrait"
+      image_sizes = PORTRAIT
+    when "landscape"
+      image_sizes = LANDSCAPE
+    else
+      image_sizes = BOTH
+    end
+    image_sizes
+  end
   
   def self.format_images(images)
      images.each do |img|
