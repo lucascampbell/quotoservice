@@ -52,7 +52,7 @@ class Image < ActiveRecord::Base
   
   def upload_to_s3(upload)
     errors = nil
-    errors = "Must be a valid .jpg file" unless upload.original_filename =~ /.jpg/
+    errors = "Must be a valid .jpg file" unless upload.original_filename =~ /.jpg|.JPG/
     unless errors
       s3 = AWS::S3.new(
         :access_key_id => ACCESS_KEY,
