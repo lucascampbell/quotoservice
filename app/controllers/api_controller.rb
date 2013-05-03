@@ -267,8 +267,10 @@ class ApiController < ApplicationController
   end
   
   def images_by_orientation
-    orientation = params[:orientation]
-    @images = Image.paginate(:page=>params[:page]).select("id,name,email,orientation,location,description,approved_at,s3_link").where({:active=>true,:orientation=>orientation}).order("approved_at DESC")
+    orientations = []
+    orientations << params[:orientation]
+    orientations << "both" unless orientations.include?"both"
+    @images = Image.paginate(:page=>params[:page]).select("id,name,email,orientation,location,description,approved_at,s3_link").where({"active = ? and orientation in (?)",true,orientations}).order("approved_at DESC")
     render :json => @images.to_json, :callback=>params[:callback]
   end
    
