@@ -21,7 +21,7 @@ class Image < ActiveRecord::Base
   
   def self.images_new(id)
     ic     = ImageCreate.where("id > ?",id).order("id ASC")
-    images = Image.select("id,name,email,description,approved_at,s3_link,orientation").where(:id => ic.collect(&:image_id)) if ic
+    images = Image.select("id,name,email,description,approved_at,s3_link,orientation,location").where(:id => ic.collect(&:image_id)) if ic
     if images.blank?
       i_json = {:image_create =>"noupdates"}
     else
@@ -64,8 +64,10 @@ class Image < ActiveRecord::Base
       #create original
       obj1 = bucket.objects["approved/#{self.id}.jpg"]
       obj1.write(file,:acl=>:public_read)
-     
-      [[100,100],[320,480],[480,320],[768,1024],[1024,768],[1536,2048],[2048,1536]].each do |ary|
+      
+      image_array = image_size_array
+
+      image_array.each do |ary|
         obj = bucket.objects["approved/#{self.id}_#{ary[0]}x#{ary[1]}.jpg"]
         image = Magick::ImageList.new
         image.from_blob(file)
