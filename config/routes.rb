@@ -29,23 +29,23 @@ QuotesService::Application.routes.draw do
   match '/api/v2/create_image'       => 'api#create_image',       :via=>:post
   match '/api/v2/get_image_updates'  => 'api#get_image_updates',  :via=>:get
   
-  #website
-  match '/api/v2/quotes'                 => 'api#quotes_by_page',             :via=>:get
-  match '/api/v2/quotes_search'          => 'api#quotes_by_search',           :via=>:get
-  match '/api/v2/quotes_topic_name'      => 'api#quotes_by_topic_id_name',    :via=>:get
-  match '/api/v2/quotes_topic_id'        => 'api#quotes_by_topic_id_name',    :via=>:get
-  match '/api/v2/topic_name'             => 'api#topic_by_id_name',           :via=>:get
-  match '/api/v2/topic_id'               => 'api#topic_by_id_name',           :via=>:get
-  match '/api/v2/tag_name'               => 'api#tag_by_id_name',           :via=>:get
-  match '/api/v2/tag_id'                 => 'api#tag_by_id_name',           :via=>:get
-  match '/api/v2/topics'                 => 'api#topics_by_page',             :via=>:get
-  match '/api/v2/tags'                   => 'api#tags_by_page',             :via=>:get
-  match '/api/v2/topics_status'          => 'api#topics_by_status',           :via=>:get
-  match '/api/v2/quote_id'               => 'api#quote_by_id',                :via=>:get
-  match '/api/v2/images_tag_id'          => 'api#images_by_tag',              :via=>:get
-  match '/api/v2/images'                 => 'api#images_by_page',             :via=>:get
-  match '/api/v2/images_email'           => 'api#images_by_email',            :via=>:get
-  
+  #website                                                                   
+  get '/api/v2/quotes'                 => 'api#quotes_by_page'        
+  get '/api/v2/quotes_search'          => 'api#quotes_by_search'        
+  get '/api/v2/quotes_topic_name'      => 'api#quotes_by_topic_id_name'
+  get '/api/v2/quotes_topic_id'        => 'api#quotes_by_topic_id_name'
+  get '/api/v2/topic_name'             => 'api#topic_by_id_name'        
+  get '/api/v2/topic_id'               => 'api#topic_by_id_name'        
+  get '/api/v2/tag_name'               => 'api#tag_by_id_name'       
+  get '/api/v2/tag_id'                 => 'api#tag_by_id_name'
+  get '/api/v2/topics'                 => 'api#topics_by_page'         
+  get '/api/v2/tags'                   => 'api#tags_by_page'
+  get '/api/v2/topics_status'          => 'api#topics_by_status'      
+  get '/api/v2/quote_id'               => 'api#quote_by_id'       
+  get '/api/v2/images_tag_id'          => 'api#images_by_tag'      
+  get '/api/v2/images'                 => 'api#images_by_page'       
+  get '/api/v2/images_email'           => 'api#images_by_email'      
+  get '/api/v2/images_orientation'     => 'api#images_by_orientation'
   #Push
   match 'push/index'                    => 'push#index'
   match 'push/edit_priority'            => 'push#edit_priority',   :via=>:get
