@@ -11,7 +11,7 @@ class Image < ActiveRecord::Base
   before_destroy :remove_from_s3
   before_destroy :log_destroy
   after_update :log_update
-  after_create :log_create
+  after_create :log_create,:send_email
   STARTING_ID = 37
   self.per_page = 50
   
@@ -171,6 +171,10 @@ class Image < ActiveRecord::Base
     return if self.device_name
     ImageDelete.create!(:image_id => self.id)
     ImageCreate.create!(:image_id => self.id)
+  end
+  
+  def send_email
+    SubmissionMailer.image_submission(self.email).deliver
   end
   
   def log_create
