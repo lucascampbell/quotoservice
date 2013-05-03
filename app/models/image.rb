@@ -21,7 +21,7 @@ class Image < ActiveRecord::Base
   
   def self.images_new(id)
     ic     = ImageCreate.where("id > ?",id).order("id ASC")
-    images = Image.select("id,name,email,description,approved_at,s3_link").where(:id => ic.collect(&:image_id)) if ic
+    images = Image.select("id,name,email,description,approved_at,s3_link,orientation").where(:id => ic.collect(&:image_id)) if ic
     if images.blank?
       i_json = {:image_create =>"noupdates"}
     else
