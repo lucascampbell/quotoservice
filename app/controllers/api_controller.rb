@@ -250,19 +250,19 @@ class ApiController < ApplicationController
   end
   
   def images_by_page
-    @images = Image.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where(:active=>true).order("approved_at ASC")
+    @images = Image.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where(:active=>true).order("approved_at DESC")
     render :json => @images.to_json, :callback=>params[:callback]
   end
   
   def images_by_tag
     tag = Tag.find(params[:tag_id])
-    @images = tag.images.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where({:active=>true}).order("approved_at ASC")
+    @images = tag.images.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where({:active=>true}).order("approved_at DESC")
     render :json => @images.to_json, :callback=>params[:callback]
   end
   
   def images_by_email
     email = params[:email]
-    @images = Image.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where({:active=>true,:email=>email}).order("approved_at ASC")
+    @images = Image.paginate(:page=>params[:page]).select("id,name,email,description,approved_at,s3_link").where({:active=>true,:email=>email}).order("approved_at DESC")
     render :json => @images.to_json, :callback=>params[:callback]
   end
    
