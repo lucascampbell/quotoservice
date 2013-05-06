@@ -174,7 +174,7 @@ class Image < ActiveRecord::Base
   end
   
   def send_email
-    SubmissionMailer.image_submission(self.email).deliver
+    #SubmissionMailer.image_submission(self.email).deliver
   end
   
   def log_create

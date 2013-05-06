@@ -525,7 +525,7 @@ describe ApiController do
     end
     
     it "should return image updates on create" do
-      i = Image.create!(:name=>'test',:active=>true)
+      i = Image.create!(:name=>'test',:active=>true,:orientation=>'both')
       get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
       
       resp = JSON.parse(response.body)
@@ -536,7 +536,7 @@ describe ApiController do
     
     it "should return image updates on delete" do
       Image.any_instance.stub(:remove_from_s3).and_return(true)
-      i = Image.create!(:name=>'test',:active=>true)
+      i = Image.create!(:name=>'test',:active=>true,:orientation=>'both')
       i.destroy
       get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
       
@@ -547,7 +547,7 @@ describe ApiController do
     
     it "should return image updates on delete" do
       Image.any_instance.stub(:remove_from_s3).and_return(true)
-      i = Image.create!(:name=>'test',:active=>true)
+      i = Image.create!(:name=>'test',:active=>true,:orientation=>'both')
       i.update_attributes(:email=>'updateuseremail')
       get "get_image_updates",{:i_create_id=>0,:i_delete_id=>0}
       
@@ -558,15 +558,15 @@ describe ApiController do
     end
     
     it "should return images by page" do
-      i = Image.create!(:name=>'test',:active=>true)
+      i = Image.create!(:name=>'test',:active=>true,:orientation=>'both')
       get "images_by_page"
       resp = JSON.parse(response.body)
       resp.first["id"].should == i.id
     end
     
     it "should return images by email" do
-      i  = Image.create!(:name=>'test',:active=>true,:email=>'lucas')
-      i2 = Image.create!(:name=>'test2',:active=>true,:email=>'ben')
+      i  = Image.create!(:name=>'test',:active=>true,:email=>'lucas@yahoo.com',:orientation=>'both')
+      i2 = Image.create!(:name=>'test2',:active=>true,:email=>'ben@yahoo.com',:orientation=>'both')
       get "images_by_email",{:email=>'lucas'}
       resp = JSON.parse(response.body)
       resp.first["id"].should == i.id
@@ -575,15 +575,23 @@ describe ApiController do
     
     it "should return images by tag id" do
       t = Tag.create!(:name => 'testtag')
-      i  = Image.create!(:name=>'test',:active=>true,:email=>'lucas')
+      i  = Image.create!(:name=>'test',:active=>true,:email=>'lucas@yahoo.com',:orientation=>'both')
       i.tags << t
       i.save
-      i2 = Image.create!(:name=>'test2',:active=>true,:email=>'ben')
+      i2 = Image.create!(:name=>'test2',:active=>true,:email=>'ben@yahoo.com',:orientation=>'both')
       get "images_by_tag",{:tag_id=> t.id}
       resp = JSON.parse(response.body)
      
       resp.first["id"].should == i.id
       resp.count.should == 1
+    end
+    
+    it "should return emails and count" do
+      i  = Image.create!(:name=>'test',:active=>true,:email=>'lucas@yahoo.com',:orientation=>'both')
+      i2 = Image.create!(:name=>'test2',:active=>true,:email=>'lucas@yahoo.com',:orientation=>'both')
+      get "image_emails_all"
+      resp = JSON.parse(response.body)
+      puts resp
     end
       
 end

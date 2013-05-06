@@ -46,6 +46,7 @@ QuotesService::Application.routes.draw do
   get '/api/v2/images'                 => 'api#images_by_page'       
   get '/api/v2/images_email'           => 'api#images_by_email'      
   get '/api/v2/images_orientation'     => 'api#images_by_orientation'
+  get '/api/v2/images_emails'          => 'api#image_emails_all'
   #Push
   match 'push/index'                    => 'push#index'
   match 'push/edit_priority'            => 'push#edit_priority',   :via=>:get

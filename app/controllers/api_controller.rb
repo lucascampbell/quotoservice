@@ -2,7 +2,7 @@ class ApiController < ApplicationController
   skip_before_filter :authenticate_user!
   
   before_filter do |controller|
-    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page','quotes_by_search','images_by_page','images_by_tag','images_by_email','tag_by_id_name','tags_by_page','images_by_orientation'].include?(controller.action_name)
+    controller.send :authenticate_token! unless ['quote_by_id','quotes_by_page','quotes_by_topic_id_name','topic_by_id_name','topics_by_status','topics_by_page','quotes_by_search','images_by_page','images_by_tag','images_by_email','tag_by_id_name','tags_by_page','images_by_orientation','image_emails_all'].include?(controller.action_name)
   end
   
   def get_quotes
@@ -264,6 +264,24 @@ class ApiController < ApplicationController
     email = params[:email]
     @images = Image.paginate(:page=>params[:page]).select("id,name,email,orientation,location,description,approved_at,s3_link").where({:active=>true,:email=>email}).order("approved_at DESC")
     render :json => @images.to_json, :callback=>params[:callback]
+  end
+  
+  def image_emails_all
+    emails = Image.select('id,s3_link,email').where({:active=>true}).inject({}) do |result,element|
+      if result[element.email]
+        result[element.email][:count] += 1
+      else
+        result[element.email] = {:count=>1,:s3_link=>element.s3_link}
+      end
+      result
+    end
+    final_hash = []
+  
+    emails.each do |index,item|
+      final_hash << item.merge({:email=>index})
+    end
+    
+    render :json =>final_hash.to_json, :callback=>params[:callback]
   end
   
   def images_by_orientation
