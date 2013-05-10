@@ -236,7 +236,7 @@ class ApiController < ApplicationController
   #return all with limit passed Brett's request
   def topics_by_page
     limit = params[:limit] || Topic.count
-    @topics = Topic.select("id,name,status,order_index").limit(limit).order("id DESC")
+    @topics = Topic.select("id,name,status,order_index").where(:visible=>true).limit(limit).order("id DESC")
     
     render :json => @topics.to_json, :callback=>params[:callback]
   end
@@ -244,7 +244,7 @@ class ApiController < ApplicationController
   #return all with limit passed Brett's request
   def tags_by_page
     limit = params[:limit] || Tag.count
-    @tags = Tag.select("id,name").limit(limit).order("id DESC")
+    @tags = Tag.select("id,name").limit(limit).where(:visible=>true).order("id DESC")
     
     render :json => @tags.to_json, :callback=>params[:callback]
   end
