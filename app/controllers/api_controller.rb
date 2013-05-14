@@ -271,7 +271,7 @@ class ApiController < ApplicationController
       if result[element.email]
         result[element.email][:count] += 1
       else
-        result[element.email] = {:count=>1,:s3_link=>element.s3_link}
+        result[element.email] = {:count=>1,:s3_link=>element.s3_link,:name=>element.name}
       end
       result
     end
