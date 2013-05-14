@@ -267,7 +267,7 @@ class ApiController < ApplicationController
   end
   
   def image_emails_all
-    emails = Image.select('id,s3_link,email').where({:active=>true}).inject({}) do |result,element|
+    emails = Image.select('id,s3_link,email,name').where({:active=>true}).inject({}) do |result,element|
       if result[element.email]
         result[element.email][:count] += 1
       else
