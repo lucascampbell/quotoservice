@@ -28,4 +28,10 @@ module ApplicationHelper
     end
     l
   end
+  
+  def verse_ratio(t)
+    nonbible = t.quotes.where(:author=>"Mary Baker Eddy").count
+    bible    = t.quotes.count - nonbible
+    "#{bible}/#{nonbible}"
+  end
 end

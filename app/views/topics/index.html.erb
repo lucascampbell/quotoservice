@@ -3,6 +3,7 @@
 	<tr>
 		<th style='text-align:center'>ID</th>
 		<th style='text-align:center'>Name</th>
+		<th style='text-align:center'>Bible/Non</th>
 		<th style='text-align:center'>Visible</th>
 		<th style='text-align:center'>Status</th>
 		<th style='text-align:center'>Expires</th>
@@ -13,6 +14,7 @@
 		<tr>
 			<td><%=topic.id%></td>
 			<td><%=topic.name%></td>
+			<td><%=verse_ratio(topic)%></td>
 			<td width='15%'>
 		    <% if topic.visible == 1%>
 		   	  <div class='label label-success'>visible</div>
