@@ -28,7 +28,7 @@ QuotesService::Application.routes.draw do
   match '/api/v2/add_to_daily_verse' => 'api#add_to_daily_verse', :via=>:get
   match '/api/v2/create_image'       => 'api#create_image',       :via=>:post
   match '/api/v2/get_image_updates'  => 'api#get_image_updates',  :via=>:get
-  get   '/api/v2/get_version'          => 'api#get_version'
+  get   '/api/v2/get_version'        => 'api#get_version'
   
   #website                                                                   
   get '/api/v2/quotes'                 => 'api#quotes_by_page'        

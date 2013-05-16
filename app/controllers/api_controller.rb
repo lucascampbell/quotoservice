@@ -164,9 +164,7 @@ class ApiController < ApplicationController
   end
   
   def get_version
-    version =     {
-     	"version_num" = 2;
-     }
+    version = {:version_num => 2}
      render :json => {:version=>version}
   end
   
