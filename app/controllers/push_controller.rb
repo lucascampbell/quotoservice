@@ -97,7 +97,7 @@ class PushController < ApplicationController
     priority = next_one
     queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
     sub_groups = "daily_pst,daily_est,daily_cst"
-    {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME,:queues=>queues,:sub_groups=>subgroups}
+    {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
   end
   
   def set_c2dm_params(params,next_one)
@@ -105,7 +105,7 @@ class PushController < ApplicationController
     alert = quote.quote_push.to_s.force_encoding("UTF-8")
     queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
     sub_groups = "daily_pst,daily_est,daily_cst"
-    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queues=>queues,:sub_groups=>subgroups}
+    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
   end
   
 end
