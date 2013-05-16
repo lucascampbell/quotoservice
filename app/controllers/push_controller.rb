@@ -1,7 +1,6 @@
 class PushController < ApplicationController
   API_TOKEN = 'b6e04f6b8833a50edd3768f773899f4f3a61dbbdb1c241cc73'
   URL       = 'https://secure.pushhero.com/api/v1'
-  KINGS_DAY = Time.parse("09-10-1979")
   APPNAME   = 'goverse'
   skip_before_filter :authenticate_user!, :only=>[:index,:edit_priority]
   
@@ -17,10 +16,12 @@ class PushController < ApplicationController
     begin
       resp       = RestClient.get URL + "/daily_notifications_count/#{APPNAME}",{:AUTHORIZATION => API_TOKEN}
       next_one   = resp.strip.to_i + 1
+      unid1 = SecureRandom.uuid.gsub("-","")
+      unid2 = SecureRandom.uuid.gsub("-","")
       params_apn = set_apn_params(params,next_one)
-      params_apn[:notification].merge!(:date=>KINGS_DAY)
+      params_apn[:notification].merge!(:unid=>unid)
       params_c2dm = set_c2dm_params(params,next_one)
-      params_c2dm[:notification].merge!(:date=>KINGS_DAY)
+      params_c2dm[:notification].merge!(:unid=>unid2)
       resp1 = RestClient.post URL + '/notification', params_apn.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
       resp2 = RestClient.post URL + '/notification', params_c2dm.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
       r1 = JSON.parse(resp1)
@@ -94,13 +95,17 @@ class PushController < ApplicationController
     quote = Quote.find(params[:id].to_i)
     alert = quote.quote_push.to_s.force_encoding("UTF-8")
     priority = next_one
-    {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME,:queue=>'Daily 8:00am EST'}
+    queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
+    sub_groups = "daily_pst,daily_est,daily_cst"
+    {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME,:queues=>queues,:sub_groups=>subgroups}
   end
   
   def set_c2dm_params(params,next_one)
     quote = Quote.find(params[:id].to_i)
     alert = quote.quote_push.to_s.force_encoding("UTF-8")
-    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queue=>'Daily 8:00am EST'}
+    queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
+    sub_groups = "daily_pst,daily_est,daily_cst"
+    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queues=>queues,:sub_groups=>subgroups}
   end
   
 end

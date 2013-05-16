@@ -396,28 +396,7 @@ describe ApiController do
       resp.count.should == 0
     end
     
-    it "should return first page of topics" do
-      t = Topic.new({:name=>'tst_topic'})
-      t.set_id
-      t.save
-      t1 = Topic.new({:name=>'tst_topic2'})
-      t1.set_id
-      t1.save
-      Topic.per_page = 1
-      
-      get "topics_by_page"
-      resp = JSON.parse(response.body)
-      resp.count.should == 1
-      
-      get "topics_by_page",:page => 2
-      resp = JSON.parse(response.body)
-      resp.count.should == 1
-      
-      get "topics_by_page",:page => 3
-      resp = JSON.parse(response.body)
-      resp.count.should == 0
-    end
-    
+   
     it "should return topics by status" do
       t = Topic.new({:name=>'tst_topic',:status=>'featured'})
       t.set_id
@@ -510,7 +489,7 @@ describe ApiController do
     
     it "should create image record" do
       Image.all.count.should == 0
-      post "create_image",{:name=>'test',:device_name=>'test'}
+      post "create_image",{:name=>'test',:device_name=>'test',:orientation=>'portrait'}
       resp = JSON.parse(response.body)
       resp['text'].should == 'success'
       Image.first.device_name.should == 'test'
@@ -542,7 +521,6 @@ describe ApiController do
       
       resp = JSON.parse(response.body)
       resp['images']['image_create'].should == "noupdates"
-      resp['images']['image_delete']['ids'].should == [i.id]
     end
     
     it "should return image updates on delete" do
@@ -567,7 +545,7 @@ describe ApiController do
     it "should return images by email" do
       i  = Image.create!(:name=>'test',:active=>true,:email=>'lucas@yahoo.com',:orientation=>'both')
       i2 = Image.create!(:name=>'test2',:active=>true,:email=>'ben@yahoo.com',:orientation=>'both')
-      get "images_by_email",{:email=>'lucas'}
+      get "images_by_email",{:email=>'lucas@yahoo.com'}
       resp = JSON.parse(response.body)
       resp.first["id"].should == i.id
       resp.count.should == 1
