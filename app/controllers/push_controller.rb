@@ -96,7 +96,7 @@ class PushController < ApplicationController
     alert = quote.quote_push.to_s.force_encoding("UTF-8")
     priority = next_one
     queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
-    sub_groups = "daily_pst,daily_est,daily_cst"
+    sub_groups = "goverse_pst,goverse_est,goverse_cst"
     {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
   end
   
@@ -104,7 +104,7 @@ class PushController < ApplicationController
     quote = Quote.find(params[:id].to_i)
     alert = quote.quote_push.to_s.force_encoding("UTF-8")
     queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
-    sub_groups = "daily_pst,daily_est,daily_cst"
+    sub_groups = "goverse_pst,goverse_est,goverse_cst"
     {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
   end
   
