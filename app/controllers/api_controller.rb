@@ -163,6 +163,13 @@ class ApiController < ApplicationController
     render :json => json
   end
   
+  def get_version
+    version =     {
+     	"version_num" = 2;
+     }
+     render :json => {:version=>version}
+  end
+  
   def add_to_daily_verse
     id = params[:id]
     if id
