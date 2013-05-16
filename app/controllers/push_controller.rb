@@ -19,7 +19,7 @@ class PushController < ApplicationController
       unid1 = SecureRandom.uuid.gsub("-","")
       unid2 = SecureRandom.uuid.gsub("-","")
       params_apn = set_apn_params(params,next_one)
-      params_apn[:notification].merge!(:unid=>unid)
+      params_apn[:notification].merge!(:unid=>unid1)
       params_c2dm = set_c2dm_params(params,next_one)
       params_c2dm[:notification].merge!(:unid=>unid2)
       resp1 = RestClient.post URL + '/notification', params_apn.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
