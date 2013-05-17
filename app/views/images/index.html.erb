@@ -22,7 +22,7 @@
 				<td><%=image.id%></td>
 				<td><%=image.name%></td>
 				<td><%=image.description%></td>
-				<td><%=link_to image_tag(get_link(image.s3_link),:size=>"50x50"),get_big_link(image.s3_link,image.orientation)%></td>
+				<td><%=link_to image_tag(get_link(image.s3_link),:size=>"50x50"),get_big_link(image.s3_link,image.orientation),:target=>'_blank'%></td>
 				<td><%=image.location%></td>
 				<td><%=image.orientation%></td>
 				<td><%=image.email%></td>
