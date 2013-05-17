@@ -29,6 +29,19 @@ module ApplicationHelper
     l
   end
   
+  def get_big_link(link,orientation)
+     if link =~ /submitted/
+        l = link
+      else
+        if orientation == "portrait"
+          l ="#{link}_768x1024.jpg"
+        else
+          l ="#{link}_1024x768.jpg"
+        end
+      end
+      l
+  end
+  
   def verse_ratio(t)
     nonbible = t.quotes.where(:author=>"Mary Baker Eddy").count
     bible    = t.quotes.count - nonbible
