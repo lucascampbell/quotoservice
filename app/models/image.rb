@@ -120,24 +120,28 @@ class Image < ActiveRecord::Base
       :access_key_id => ACCESS_KEY,
       :secret_access_key => ACCESS_PSSWRD)
     
-    bucket = s3.buckets['goverseimages']
-    obj1   = bucket.objects["submitted/#{self.device_name}.jpg"]
-    obj2   = bucket.objects["approved/#{self.id}.jpg"]
+    begin
+      bucket = s3.buckets['goverseimages']
+      obj1   = bucket.objects["submitted/#{self.device_name}.jpg"]
+      obj2   = bucket.objects["approved/#{self.id}.jpg"]
       
-    obj1.copy_to(obj2)
-    obj1.delete
+      obj1.copy_to(obj2)
+      #obj1.delete
       
-    urlimage = open(self.s3_link + ".jpg")
-    file     = urlimage.read
+      urlimage = open(self.s3_link + ".jpg")
+      file     = urlimage.read
     
-    image_array = image_size_array
+      image_array = image_size_array
       
-    image_array.each do |ary|
-      obj = bucket.objects["approved/#{self.id}_#{ary[0]}x#{ary[1]}.jpg"]
-      image = Magick::ImageList.new
-      image.from_blob(file)
-      image.resize_to_fill!(ary[0],ary[1])
-      obj.write(image.to_blob,:acl=>:public_read)
+      image_array.each do |ary|
+        obj = bucket.objects["approved/#{self.id}_#{ary[0]}x#{ary[1]}.jpg"]
+        image = Magick::ImageList.new
+        image.from_blob(file)
+        image.resize_to_fill!(ary[0],ary[1])
+        obj.write(image.to_blob,:acl=>:public_read)
+      end
+    rescue Exception=>e
+      puts "Error: **** #{e.message}\n#{e.backtrace}"
     end
   end
   
