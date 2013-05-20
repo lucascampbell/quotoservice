@@ -126,9 +126,13 @@ class Image < ActiveRecord::Base
       obj2   = bucket.objects["approved/#{self.id}.jpg"]
       
       obj1.copy_to(obj2)
-      #obj1.delete
       
-      urlimage = open(self.s3_link + ".jpg")
+      if self.s3_link =~ /.jpg|.JPG/
+        link = self.s3_link
+      else
+        link = self.s3_link + ".jpg"
+      end
+      urlimage = open(link)
       file     = urlimage.read
     
       image_array = image_size_array
@@ -143,6 +147,7 @@ class Image < ActiveRecord::Base
     rescue Exception=>e
       puts "Error: **** #{e.message}\n#{e.backtrace}"
     end
+    obj1.delete
   end
   
   def remove_from_s3
