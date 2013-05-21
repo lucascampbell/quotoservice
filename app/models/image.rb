@@ -190,7 +190,7 @@ class Image < ActiveRecord::Base
   def log_destroy
     return if self.device_name
     ImageCreate.destroy_all("image_id = #{self.id}")
-    #ImageDelete.create!(:image_id => self.id)
+    ImageDelete.create!(:image_id => self.id)
   end
   
   def add_tags(tags)
