@@ -113,6 +113,7 @@ class Image < ActiveRecord::Base
      self.active = false
      self.approved_at = nil
      self.save!
+     log_destroy
   end
   
   def move_to_approved_dir
