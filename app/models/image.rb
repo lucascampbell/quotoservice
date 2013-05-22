@@ -10,8 +10,9 @@ class Image < ActiveRecord::Base
   has_and_belongs_to_many :tags
   before_destroy :remove_from_s3
   before_destroy :log_destroy
+  after_destroy :denied_email
   after_update :log_update
-  after_create :log_create,:send_email
+  after_create :log_create,:submission_email
   STARTING_ID = 37
   self.per_page = 50
   
@@ -107,6 +108,7 @@ class Image < ActiveRecord::Base
     self.device_name = nil
     self.approved_at = Time.now
     self.save!
+    accepted_email
   end
   
   def deactivate_s3_image
@@ -179,8 +181,16 @@ class Image < ActiveRecord::Base
     ImageCreate.create!(:image_id => self.id)
   end
   
-  def send_email
+  def submission_email
     SubmissionMailer.image_submission(self.email).deliver
+  end
+  
+  def accepted_email
+    SubmissionMailer.image_accepted(self.email).deliver
+  end
+  
+  def denied_email
+    SubmissionMailer.image_denied(self.email).deliver
   end
   
   def log_create
