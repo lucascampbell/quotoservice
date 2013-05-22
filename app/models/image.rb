@@ -108,6 +108,7 @@ class Image < ActiveRecord::Base
     self.device_name = nil
     self.approved_at = Time.now
     self.save!
+    log_create
     accepted_email
   end
   
@@ -175,12 +176,6 @@ class Image < ActiveRecord::Base
     end
   end
   
-  def log_update
-    return if self.device_name
-    #ImageDelete.create!(:image_id => self.id)
-    ImageCreate.create!(:image_id => self.id)
-  end
-  
   def submission_email
     SubmissionMailer.image_submission(self.email).deliver
   end
@@ -195,6 +190,13 @@ class Image < ActiveRecord::Base
   
   def log_create
     return if self.device_name
+    ImageDelete.destroy_all("image_id = #{self.id}")
+    ImageCreate.create!(:image_id => self.id)
+  end
+  
+  def log_update
+    return if self.device_name
+    #ImageDelete.create!(:image_id => self.id)
     ImageCreate.create!(:image_id => self.id)
   end
   
