@@ -64,7 +64,7 @@ $(function() {
 	})
 	$('.priority_edit').click(function(){
 		var id = this.id;
-		var klss = $('#klss_' + id ).val();
+		var klss = this.previousElementSibling.value;
 		var priority = $('#priority_' + id ).val();
 		$.ajax({ 
 				url: '/push/edit_priority',
