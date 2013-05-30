@@ -10,7 +10,6 @@ class Image < ActiveRecord::Base
   has_and_belongs_to_many :tags
   before_destroy :remove_from_s3
   before_destroy :log_destroy
-  after_destroy :denied_email
   after_update :log_update
   after_create :log_create,:submission_email
   STARTING_ID = 37

@@ -42,7 +42,7 @@
 				</td>
 				<td width='15%'>
 				<div class='label' style='display:inline'><a href="/images/<%=image.id%>/edit" style='color:white;text-decoration:none'>edit</a></div>
-				<div class='label label-important' style='display:inline'><%= link_to("Delete", image, :method => :delete, :style => 'color:white;text-decoration:none') %></div>
+				<div class='label label-important email_confirm' style='display:inline'><%= link_to("Delete", image, :method => :delete, :style => 'color:white;text-decoration:none') %></div>
 				<% if image.active %>
 					<div class='label label-warning' style='display:inline'>
 						<a href='/images/<%=image.id%>/deactivate' style='color:white;text-decoration:none'>deactivate</a>

@@ -3,16 +3,24 @@ $(function() {
 	$('#myTab').click(function(e){
 		e.stopPropagation();
 		$('.dropdown-menu').css('display','block');
-	})
-	
+	});
 	$('body').click(function(){
 		if($('.dropdown-menu').is(':visible')){
 			$('.dropdown-menu').css('display','none');
 		}
-	})
-	
+	});
+	$('.email_confirm').click(function(){
+		var answer = confirm('Should I send out a not accepted email?');
+		if(answer){
+			this.firstChild.href += "?mail=true";
+		}
+		else{
+			this.firstChild.href += "?mail=false";
+		}
+		return true;
+	});
 	$('.push_quote_confirm').click(function(){
-		var answer = confirm('Quote is above apple push limit and will be truncated.  Do you want to continue?')
+		var answer = confirm('Quote is above apple push limit and will be truncated.  Do you want to continue?');
 		if(answer){
 			var href = this.href;
 			var link = this;
@@ -34,10 +42,10 @@ $(function() {
 					link.href = href;
 					link.innerHTML = "push";
 				}
-			})
+			});
 		}
 		return false;
-	})
+	});
 	$('.push_quote').click(function(){
 		var href = this.href;
 		var link = this;
