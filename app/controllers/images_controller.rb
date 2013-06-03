@@ -69,7 +69,7 @@ class ImagesController < ApplicationController
   def destroy
     image = Image.find(params[:id])
     image.denied_email if params[:mail] == 'true'
-    #image.destroy
+    image.destroy
     flash[:notice] = "Image deleted successfully"
     redirect_to :action => :index
   end
