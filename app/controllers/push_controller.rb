@@ -70,13 +70,13 @@ class PushController < ApplicationController
   
   def delete
     gn = APN::GroupNotification.find_by_id(params[:id])
-    id = gn.id
-    c2_gn = nil
-    C2dm::Notification.where("sent_at is NULL").each do |c2|
-       c2_gn = c2 if c2.data['q_id'].to_i == id 
-    end
+    #id = gn.id
+    # c2_gn = nil
+    # C2dm::Notification.where("sent_at is NULL").each do |c2|
+    #    c2_gn = c2 if c2.data['q_id'].to_i == id 
+    # end
     gn.destroy
-    c2_gn.destroy if c2_gn
+    #c2_gn.destroy if c2_gn
     redirect_to :action=>'index'
   end
   
@@ -100,12 +100,12 @@ class PushController < ApplicationController
     {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
   end
   
-  def set_c2dm_params(params,next_one)
-    quote = Quote.find(params[:id].to_i)
-    alert = quote.quote_push.to_s.force_encoding("UTF-8")
-    queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
-    sub_groups = "goverse_pst,goverse_est,goverse_cst"
-    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
-  end
+  # def set_c2dm_params(params,next_one)
+  #   quote = Quote.find(params[:id].to_i)
+  #   alert = quote.quote_push.to_s.force_encoding("UTF-8")
+  #   queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
+  #   sub_groups = "goverse_pst,goverse_est,goverse_cst"
+  #   {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
+  # end
   
 end
