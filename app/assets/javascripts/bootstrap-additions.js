@@ -108,6 +108,6 @@ function NotesSubmit(d){
 				$('.success_bar')[0].innerHTML = resp['text'];
 				$('.success_bar').fadeIn(2000).fadeOut(3000);
 		}
-	})
+	});
 	return false;
 }
