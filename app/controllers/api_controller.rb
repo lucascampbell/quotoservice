@@ -200,7 +200,7 @@ class ApiController < ApplicationController
   def quotes_by_search
     search = params[:search]
     search_ci    = search.downcase if search
-    @quotes = Quote.includes(:tags,:topics).where("lower(quote) LIKE ?","%#{search_ci}%").paginate(:page=>params[:page]).order("topics.name DESC,tags.name")
+    @quotes = Quote.includes(:tags,:topics).where("lower(quote) LIKE ? and quotes.active = ?","%#{search_ci}%",true).paginate(:page=>params[:page]).order("topics.name DESC,tags.name")
     render :json => @quotes.to_json, :callback=>params[:callback]
   end
   
