@@ -17,17 +17,17 @@ class PushController < ApplicationController
       resp       = RestClient.get URL + "/daily_notifications_count/#{APPNAME}",{:AUTHORIZATION => API_TOKEN}
       next_one   = resp.strip.to_i + 1
       unid1 = SecureRandom.uuid.gsub("-","")
-      unid2 = SecureRandom.uuid.gsub("-","")
+      #unid2 = SecureRandom.uuid.gsub("-","")
       params_apn = set_apn_params(params,next_one)
       params_apn.merge!(:unid=>unid1)
-      params_c2dm = set_c2dm_params(params,next_one)
-      params_c2dm.merge!(:unid=>unid2)
+      #params_c2dm = set_c2dm_params(params,next_one)
+      #params_c2dm.merge!(:unid=>unid2)
       resp1 = RestClient.post URL + '/notification', params_apn.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
-      resp2 = RestClient.post URL + '/notification', params_c2dm.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
+      #resp2 = RestClient.post URL + '/notification', params_c2dm.to_json, {:AUTHORIZATION => API_TOKEN,:content_type => :json, :accept => :json}
       r1 = JSON.parse(resp1)
-      r2 = JSON.parse(resp2)
+      #r2 = JSON.parse(resp2)
       
-      msg = "#{r1['text']} - #{r2['text']}"
+      msg = "#{r1['text']}"
     rescue Exception => e
       puts "error #{e.message}"
       msg = e.message.size > 200 ? e.message[0..200] : e.message
@@ -70,13 +70,13 @@ class PushController < ApplicationController
   
   def delete
     gn = APN::GroupNotification.find_by_id(params[:id])
-    id = gn.id
-    c2_gn = nil
-    C2dm::Notification.where("sent_at is NULL").each do |c2|
-       c2_gn = c2 if c2.data['q_id'].to_i == id 
-    end
+    #id = gn.id
+    # c2_gn = nil
+    # C2dm::Notification.where("sent_at is NULL").each do |c2|
+    #    c2_gn = c2 if c2.data['q_id'].to_i == id 
+    # end
     gn.destroy
-    c2_gn.destroy if c2_gn
+    #c2_gn.destroy if c2_gn
     redirect_to :action=>'index'
   end
   
@@ -100,12 +100,12 @@ class PushController < ApplicationController
     {:notification=>{:badge => 1,:custom_properties =>{:id =>params[:id]},:alert=>alert,:priority=>next_one},:group=>'APN_PROD',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
   end
   
-  def set_c2dm_params(params,next_one)
-    quote = Quote.find(params[:id].to_i)
-    alert = quote.quote_push.to_s.force_encoding("UTF-8")
-    queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
-    sub_groups = "goverse_pst,goverse_est,goverse_cst"
-    {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
-  end
+  # def set_c2dm_params(params,next_one)
+  #   quote = Quote.find(params[:id].to_i)
+  #   alert = quote.quote_push.to_s.force_encoding("UTF-8")
+  #   queues = 'Daily 8:00am PST,Daily 8:00am EST,Daily 8:00am CST'
+  #   sub_groups = "goverse_pst,goverse_est,goverse_cst"
+  #   {:notification=>{:data=>{:alert=>alert},:priority=>next_one},:group=>'C2DM',:app_name=>APPNAME,:queues=>queues,:sub_groups=>sub_groups}
+  # end
   
 end
