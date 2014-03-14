@@ -1,5 +1,5 @@
 class PushController < ApplicationController
-  API_TOKEN = 'b6e04f6b8833a50edd3768f773899f4f3a61dbbdb1c241cc73'
+  API_TOKEN = ENV['PUSH_TOKEN']
   URL       = 'https://secure.pushhero.com/api/v1'
   APPNAME   = 'goverse'
   skip_before_filter :authenticate_user!, :only=>[:index,:edit_priority]

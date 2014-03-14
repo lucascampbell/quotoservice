@@ -1,8 +1,8 @@
 require "RMagick"
 require "open-uri"
 class Image < ActiveRecord::Base
-  ACCESS_KEY      = "AKIAIFCIXLO37BMPBVVA"#ENV["AWS_ACCESS_KEY_ID"] 
-  ACCESS_PSSWRD   = "ZnMfJvlcYnvretJrEysj5ydFnP20cFtjp+8ibduP"#ENV["AWS_SECRET_ACCESS_KEY"]
+  ACCESS_KEY      = ENV["AWS_ACCESS_KEY_ID"] 
+  ACCESS_PSSWRD   = ENV["AWS_SECRET_ACCESS_KEY"]
   #wxh
   LANDSCAPE       =  [[100,100],[480,320],[1024,768],[2048,1536]]
   PORTRAIT        =  [[100,100],[320,480],[768,1024],[1536,2048]]
