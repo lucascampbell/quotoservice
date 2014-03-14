@@ -169,8 +169,8 @@ namespace :db do
   task :move_images do 
     require File.join(File.dirname(__FILE__),'/../../config/environment')
     require 'open-uri'
-    ACCESS_KEY        = "AKIAIFCIXLO37BMPBVVA"#ENV["AWS_ACCESS_KEY_ID"] 
-    ACCESS_PSSWRD     = "ZnMfJvlcYnvretJrEysj5ydFnP20cFtjp+8ibduP"#ENV["AWS_SECRET_ACCESS_KEY"]
+    ACCESS_KEY        = ENV["AWS_ACCESS_KEY_ID"] 
+    ACCESS_PSSWRD     = ENV["AWS_SECRET_ACCESS_KEY"]
     s3 = AWS::S3.new(
       :access_key_id => ACCESS_KEY,
       :secret_access_key => ACCESS_PSSWRD)
